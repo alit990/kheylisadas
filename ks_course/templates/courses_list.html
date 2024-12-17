@@ -1,0 +1,95 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% block title %} ا فروشگاه «خیلی ساده‌ست» ا {% endblock %}
+
+{% block content %}
+    <br><br>
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">فروشگاه دوره های نقدی «خیلی ساده‌ست»</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">فروشگاه «خیلی ساده‌ست»</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+
+    <!-- ============================ Full Width Courses  ================================== -->
+    <section class="pt-0">
+        <div class="container">
+
+            <!-- Onclick Sidebar -->
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div id="filter-sidebar" class="filter-sidebar">
+                        <div class="show-hide-sidebar">
+
+                            <!-- Find New Property -->
+                            <div class="sidebar-widgets">
+
+                                <!-- Search Form -->
+                                <form class="form-inline addons mb-3">
+                                    <input class="form-control" type="search" placeholder="جستجو دوره"
+                                           aria-label="Search">
+                                    <button class="btn my-2 my-sm-0" type="submit"><i class="ti-search"></i></button>
+                                </form>
+
+
+                                <button class="btn btn-theme full-width mb-2">فیلتر کن</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row -->
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+
+                    <!-- Row -->
+                    <div class="row align-items-center mb-3">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <strong> {{ object_list.count }} </strong> دوره آموزشی یافت شد.
+                        </div>
+                    </div>
+                    <!-- /Row -->
+
+                    <div class="row">
+                        {% for course in object_list %}
+                            <!-- Cource Grid 1 -->
+                            {% include 'components/course_card_component.html' with course=course %}
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <!-- Row -->
+
+        </div>
+    </section>
+    <!-- ============================ Full Width Courses End ================================== -->
+
+
+
+{% endblock %}

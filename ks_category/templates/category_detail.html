@@ -1,0 +1,80 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block title %} {{ category.name }} {% endblock %}
+{% block content %}
+    <!-- ============================ Course header Info Start================================== -->
+    <div class="ed_detail_head lg bg-light py-5">
+        <div class="container py-5">
+            <h4 class="text-center"> {{ category.name }} / {{ category.title }} </h4>
+            <div class="row align-items-center">
+
+                <div class="col-lg-6 col-md-6">
+
+                    <div class="img-responsive">
+                        {% thumbnail category.image "960" quality=90 as im %}
+                            <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ category.alt_image }}">
+                        {% endthumbnail %}
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="ed_detail_wrap">
+                        <ul class="list_ed_detail2">
+                            {% if WEEK_AUDIO_URL %}
+                                <a href="{% url 'weekly' %}">
+                                    <li class="tag-4">
+                                        <audio id="playerChapterWeek"
+                                               onplay="onplay_audio('Week')"
+                                               onpause="onpause_play('Week')"
+                                               src="{{  WEEK_AUDIO_URL }}"></audio>
+                                        <i class="ti-headphone"></i>
+                                         هفته به هفته
+                                        <a class="btn align-to-left demo-audio"
+                                           id="aChapterWeek"
+                                           onclick="play_onclick('Week')">
+                                            <i class="fa fa-play" id="iChapterWeek"></i>
+                                            معرفی
+                                        </a>
+
+                                           {% comment %}<i id="timeChapterWeek" class="align-to-left">00:24</i>{% endcomment %}
+                                    </li>
+
+                                </a>
+                                <br>
+                            {% endif %}
+                            {% for chapter in data.chapters %}
+{#                                todo: href url is not standard#}
+                                <a href="/{{ category.id }}/{{ chapter.id }}/{{ chapter.slug }}">
+                                    <li class="tag-{{ forloop.counter }}">
+                                        <audio id="playerChapter{{ chapter.id }}"
+                                               onplay="onplay_audio({{ chapter.id }})"
+                                               onpause="onpause_play({{ chapter.id }})"
+                                               src="{{ chapter.audio_url }}"></audio>
+                                        <i class="ti-headphone"></i>
+                                        {{ chapter.name }}
+
+                                        <a class="btn align-to-left demo-audio"
+                                           id="aChapterWeek"
+                                           onclick="play_onclick({{ chapter.id }})">
+                                            <i class="fa fa-play" id="iChapter{{ chapter.id }}"></i>
+                                            معرفی
+                                        </a>
+                                        {% comment %}<i id="timeChapter{{ chapter.id }}" class="align-to-left">00:24</i>{% endcomment %}
+                                    </li>
+                                </a>
+                                <br>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ Course Header Info End ================================== -->
+
+
+    {% block footer_ref_top %}
+        <script src="{% static 'assets/js/ks-audio-in-category.js' %}"></script>
+    {% endblock %}
+{% endblock %}

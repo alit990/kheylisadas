@@ -1,0 +1,17 @@
+<h4 class="title">این مطلب برای شما مفید بود؟</h4>
+<div class=" reviews-reaction">
+    <a
+       class="btn btn-light comment-like like {% if ccdetail_user_vote == 1 %}active{% endif %}"
+        onclick="voteCCDetail({{ ccdetail.id }} , 1)">
+        بله
+        <i class="icofont-thumbs-up"></i>
+        {{ ccdetail_likes_count|add:ccdetail.fake_like_count }}
+    </a>
+    <a
+       class="btn btn-light comment-like like {% if ccdetail_user_vote == 0 %}active{% endif %}"
+        onclick="voteCCDetail({{ ccdetail.id }} , 0)">
+        خیر
+        <i class="icofont-thumbs-down"></i>
+        {{ ccdetail_dislikes_count|add:ccdetail.fake_dislike_count }}
+    </a>
+</div>

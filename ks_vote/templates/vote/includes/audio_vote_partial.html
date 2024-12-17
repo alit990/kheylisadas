@@ -1,0 +1,62 @@
+{% if page == 'COURSE' %}
+    <a onclick="voteAudioCourse({{ audio.id }}, 1)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 1 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 1 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-up"> {{ like_count|add:audio.fake_like_count }} </i> </a>
+    <a onclick="voteAudioCourse({{ audio.id }}, 0)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 0 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 0 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
+
+{% elif page == 'WEEK' %}
+
+    <a onclick="voteAudioWeek({{ audio.id }}, 1)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 1 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 1 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-up"> {{ like_count|add:audio.fake_like_count }} </i> </a>
+    <a onclick="voteAudioWeek({{ audio.id }}, 0)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 0 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 0 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
+
+    {% if request.user.is_authenticated %}
+        <div id="addToPlaylist{{ audio.id }}">
+            {% include 'vote/includes/audio_playlist_button_partial.html' with audio=audio added_playlist=added_playlist page=page %}
+        </div>
+    {% endif %}
+{% elif page == 'ARTICLE' %}
+
+    <a onclick="voteAudioArticle({{ audio.id }}, 1)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 1 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 1 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-up"> {{ like_count|add:audio.fake_like_count }} </i> </a>
+    <a onclick="voteAudioArticle({{ audio.id }}, 0)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 0 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 0 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
+
+{% else %}
+    <a onclick="voteAudio({{ audio.id }}, 1)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 1 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 1 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-up"> {{ like_count|add:audio.fake_like_count }} </i> </a>
+    <a onclick="voteAudio({{ audio.id }}, 0)"
+       class="_cr_detail_arrow btn btn-over-light {% if user_vote == 0 %} btn-gray-vote {% endif %}"
+            {% if user_vote == 0 %}
+       style="pointer-events: none" {% endif %}><i
+            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
+
+    {% if request.user.is_authenticated %}
+        <div id="addToPlaylist{{ audio.id }}">
+            {% include 'vote/includes/audio_playlist_button_partial.html' with audio=audio added_playlist=added_playlist page=page %}
+        </div>
+    {% endif %}
+
+{% endif %}

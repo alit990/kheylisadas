@@ -1,0 +1,56 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %} عملیات موفق {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title"> عملیات با خطا مواجه شد! </h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+    <!-- ============================ Agency List Start ================================== -->
+    <!-- ============================ Agency List End ================================== -->
+    <div class="row m-0 align-content-center ">
+        <div class="col-lg-12 col-md-12">
+            <div class="edu_wraper border align-content-center text-center">
+                <h4 class="edu_title">توضیحات</h4>
+                <h>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div {% if message.tags %}
+                                class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show" {% endif %}>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </h>
+                <div class="text-center">
+                    <a href="{% url 'home_page' %}" class="btn btn-modern">صفحه اول سایت<span><i class="ti-arrow-left"></i></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block header_ref_top %}
+
+    <script src="{% static 'bundle.js' %}"></script>
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}

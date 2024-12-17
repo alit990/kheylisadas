@@ -1,0 +1,35 @@
+{% load smooth_timedelta %}
+{% load thumbnail %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+<div class="single_widgets widget_thumb_post">
+    <h4 class="title"> دوره های مرتبط برای یادگیری بیشتر </h4>
+    <ul>
+        {% for course in related_courses %}
+            <li>
+                <a href="{{ course.get_absolute_url }}">
+                    <span class="left">
+                        {% thumbnail course.image "128" quality=90 as im %}
+                            <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ course.alt_image }}">
+
+                        {% endthumbnail %}
+                    </span>
+                </a>
+                <span class="right">
+                    <a class="feed-title"
+                       href="{{ course.get_absolute_url }}"> {{ course.name }} </a>
+                    <span class="course-duration">
+
+                        <i class="ti-time"></i>
+                        <strong>
+                            {% comment %}{{ course.audios_duration|time:"H:i" }}{% endcomment %}
+                            {{ course.audios_duration|smooth_timedelta }}
+                        </strong>
+                    </span>
+                </span>
+            </li>
+        {% endfor %}
+
+
+    </ul>
+</div>

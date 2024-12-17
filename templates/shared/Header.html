@@ -1,0 +1,94 @@
+{% load thumbnail %}
+{% load static %}
+
+
+<!-- ============================================================== -->
+<!-- Top header  -->
+<!-- ============================================================== -->
+<!-- Start Navigation -->
+<div class="header dark-text header-transparent change-logo">
+    <div class="container">
+        <nav id="navigation" class="navigation navigation-landscape">
+            <div class="nav-header">
+                <a class="nav-brand static-logo"
+                   href="{% if request.resolver_match.url_name == 'home_page' %}#{% else %}{% url 'home_page' %}{% endif %}">
+
+                    {% thumbnail site_setting.site_logo2 "x40" quality=95 format="PNG" as im %}
+                        <img src="{{ im.url }}" class="img-fluid" alt="">
+
+                    {% endthumbnail %}
+                </a>
+                <a class="nav-brand fixed-logo"
+                   href="{% if request.resolver_match.url_name == 'home_page' %}#{% else %}{% url 'home_page' %}{% endif %}">
+
+                    {% thumbnail site_setting.site_logo1 "x40" quality=95 format="PNG" as im %}
+                        <img src="{{ im.url }}" class="img-fluid" alt="">
+
+                    {% endthumbnail %}
+                </a>
+                <div class="nav-toggle"></div>
+            </div>
+            <div class="nav-menus-wrapper" style="transition-property: none;">
+                <ul class="nav-menu">
+                    {#                    خانه#}
+                    <li class="{% if request.resolver_match.url_name == 'home_page' %}active{% endif %}">
+                        <a href="{% if request.resolver_match.url_name == 'home_page' %}#{% else %}{% url 'home_page' %}{% endif %}">خانه</a>
+                    </li>
+
+
+                    <li class="{% if request.resolver_match.url_name == 'courses_list' %}active{% endif %}">
+                        <a class="{% if request.resolver_match.url_name == 'courses_list' %}active{% endif %}"
+                           href="{% if request.resolver_match.url_name == 'courses_list' %}#{% else %}{% url 'courses_list' %}{% endif %}">دوره‌های جامع</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'articles_list' %}active{% endif %}">
+                        <a href="{% if request.resolver_match.url_name == 'articles_list' %}#{% else %}{% url 'articles_list' %}{% endif %}">مقاله‌ها</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'plans_list' %}active{% endif %}">
+                        <a href="{% if request.resolver_match.url_name == 'plans_list' %}#{% else %}{% url 'plans_list' %}{% endif %}">خرید
+                            اشتراک</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'contact_us' %}active{% endif %}">
+                        <a href="{% if request.resolver_match.url_name == 'contact_us' %}#{% else %}{% url 'contact_us' %}{% endif %}">تماس
+                            با ما</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'frequent_questions' %}active{% endif %}">
+                        <a href="{% if request.resolver_match.url_name == 'frequent_questions' %}#{% else %}{% url 'frequent_questions' %}{% endif %}">سوالات
+                            متداول</a>
+                    </li>
+                    {% if request.user.is_staff %}
+                        <li class="">
+                            <a href="/ks-admin-panel/">ادمین</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+                <ul id="ulUserStatus" class="nav-menu nav-menu-social align-to-left">
+                    {% if request.user.is_authenticated %}
+                        <!-- Small button groups (default and split) -->
+                        <li class="login_click light ">
+                            <a href="{% url 'user_panel_dashboard' %}" class="ti-user"
+                               type="button"> {{ request.user.username }}</a>
+                        </li>
+
+                        <li class="login_click">
+                            <a href="{% url 'logout_page' %}">خروج</a>
+                        </li>
+                    {% else %}
+                        <li class="login_click bg-red">
+                            {#                            <a href="{% url 'login_page' %}">ورود</a>#}
+                            <a href="{% url 'login_page' %}?next={{ request.path|urlencode }}">ورود</a>
+
+                        </li>
+                        <li class="login_click">
+                            <a href="{% url 'mobile_register_view' %}">ثبت
+                                نام</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- End Navigation -->
+<div class="clearfix"></div>

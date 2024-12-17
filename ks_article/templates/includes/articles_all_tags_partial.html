@@ -1,0 +1,9 @@
+<div class="single_widgets widget_tags">
+    <h4 class="title">برچسب ها</h4>
+    <ul>
+        {% for tag in tags %}
+{#            <li><a href="/articles/tag/{{ tag.slug }}"> {{ tag.title }} </a></li>#}
+            <li><a href="{% url 'articles_list_by_tag' slug=tag.slug %}"> {{ tag.title }} </a></li>
+        {% endfor %}
+    </ul>
+</div>

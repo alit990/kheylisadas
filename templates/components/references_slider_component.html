@@ -1,0 +1,32 @@
+{% load thumbnail %}
+<section>
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="sec-heading center">
+                        <p>منابع</p>
+                        <h2><span class="theme-cl">منابع مطالعاتی</span> «خیلی ساده‌ست»</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="single_brand" id="brand-slide">
+                        {% for ref in references %}
+                            <div class="single_brands text-center">
+                                {% thumbnail ref.image "x400" quality=90 format="PNG" as im %}
+                                    <img src="{{ im.url }}" class="img-fluid" alt="{{ ref.alt }}">
+
+                                {% endthumbnail %}
+                                <h>{{ ref.name }}</h>
+                                {% comment %}<p>{{ ref.description }}</p>{% endcomment %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

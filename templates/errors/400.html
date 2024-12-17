@@ -1,0 +1,30 @@
+{% extends 'shared/_MainLayout.html' %}
+
+{% load static %}
+{% block title%} صفحه اصلی {% endblock %}
+{% block content %}
+    <!-- ========================== Error handling start =============================== -->
+    <section class="error-wrap py-5">
+				<div class="container py-5">
+					<div class="row justify-content-center">
+
+						<div class="col-lg-6 col-md-10">
+							<div class="text-center">
+
+								<img src="{% static 'assets/img/400.png' %}" class="img-fluid" alt="خطای 400">
+								<h2>400 Bad Request</h2>
+                                <h2> درخواست بد یا نامناسب </h2>
+                                <p>
+                                    ابتدا مطمئن باشید آدرس صفحه وبسایت را درست وارد می کنید و سپس کوکی و کش سیستم خود را پاک کنید و دوباره تلاش کنید.
+                                </p>
+                                <a class="btn btn-theme" href="index.html">بازگشت به خانه</a>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+    <!-- ============================ Error end ================================== -->
+
+{% endblock %}

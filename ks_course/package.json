@@ -1,0 +1,80 @@
+ {
+ 	"name": "marahel roshd",
+ 	"sections": [{
+ 		"title": "1 years old",
+ 		"name": "یک سالگی",
+ 		"description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.",
+ 		"audios": [{
+ 			"id": 1,
+ 			"title": "audio 1",
+ 			"name": "audio 1",
+ 			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ 			"image_url": "/media/audio/None-audio_1.jpg",
+ 			"audio_url": "/media/audio/courses/None-audio_1.mp3",
+ 			"is_lock": "False",
+ 			"chapters": [{
+ 				"title": "intro",
+ 				"name": "intro",
+ 				"start_time": "00:00",
+ 				"end_time": "00:54"
+ 			}, {
+ 				"title": "chaptere asli",
+ 				"name": "chaptere asli",
+ 				"start_time": "00:54",
+ 				"end_time": "03:00"
+ 			}]
+ 		}, {
+ 			"id": 2,
+ 			"title": "audio 2",
+ 			"name": "audio 2",
+ 			"description": "When large fortunes fall into the hands of some people, they become strong in the light of it, and in the shadow of strength and wealth they dream that they can live out of their homeland and be happy and proud, they will soon realize that they have made mistakes, and the greatness of every nation On the ruins of his homeland and cease!",
+ 			"image_url": "/media/audio/None-audio_2.jpg",
+ 			"audio_url": "/media/audio/courses/None-audio_2.mp3",
+ 			"is_lock": "False",
+ 			"chapters": [{
+ 				"title": "introoo",
+ 				"name": "introoo",
+ 				"start_time": "00:00",
+ 				"end_time": "00:24"
+ 			}]
+ 		}]
+ 	}, {
+ 		"title": "2 years old",
+ 		"name": "دو سالگی",
+ 		"description": "خالد حسینی تو رمان باد بادک باز مینویسه : ﻣﺮﺩ ﺁﻫﺴﺘﻪ ﺩﺭ ﮔﻮﺵ ﻓﺮﺯﻧﺪ ﺗﺎﺯﻩ ﺑﻪ ﺑﻠﻮﻍ ﺭﺳﯿﺪﻩ ﺍﺵ ﺑﺮﺍﯼ ﭘﻨﺪ ﭼﻨﯿﻦ ﻧﺠﻮﺍ ﮐﺮﺩ : ” ﭘﺴﺮﻡ ﺩﺭ ﺯﻧﺪﮔﯽ ﻫﺮﮔﺰ ﺩﺯﺩﯼ ﻧﮑﻦ ” ﭘﺴﺮ ﻣﺘﻌﺠﺐ ﻭ ﻣﺒﻬﻮﺕ ﺑﻪ ﭘﺪﺭ ﻧﮕﺎﻩ ﮐﺮﺩ ﺑﺪﯾﻦ ﻣﻌﻨﺎ ﮐﻪ ﺍﻭ ﻫﺮﮔﺰ ﺩﺳﺖ ﮐﺞ ﻧﺪﺍﺷﺘﻪ ﭘﺪﺭ ﺑﻪ ﻧﮕﺎﻩ ﻣﺘﻌﺠﺐ ﻓﺮﺯﻧﺪ ﻟﺒﺨﻨﺪﯼ ﺯﺩ ﻭ ﺍﺩﺍﻣﻪ ﺩﺍﺩ : ﺩﺭ ﺯﻧﺪﮔﯽ ﺩﺭﻭﻍ ﻧﮕﻮ ﭼﺮﺍ ﮐﻪ ﺍﮔﺮ ﮔﻔﺘﯽ ﺻﺪﺍﻗﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺧﯿﺎﻧﺖ ﻧﮑﻦ ﮐﻪ ﺍﮔﺮ ﮐﺮﺩﯼ ﻋﺸﻖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺧﺸﻮﻧﺖ ﻧﮑﻦ ﺍﮔﺮ ﮐﺮﺩﯼ ﻣﺤﺒﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﻧﺎ ﺣﻖ ﻧﮕﻮ ﺍﮔﺮ ﮔﻔﺘﯽ ﺣﻖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺑﯽ ﺣﯿﺎﯾﯽ ﻧﮑﻦ ﺍﮔﺮ ﮐﺮﺩﯼ ﺷﺮﺍﻓﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍی... ﭘﺲ ﺩﺭ ﺯﻧﺪﮔﯽ ﻓﻘﻂ ﺩﺯﺩﯼ نکن !",
+ 		"audios": [{
+ 			"id": 3,
+ 			"title": "audio 3",
+ 			"name": "audio 3",
+ 			"description": "An old man would see you in the neighborhood every day. A boy with tattered shoes and naked feet playing with plastic balls, went shopping some day and went to the boy and told the boy to put on these shoe pants ... he was wearing a shoe box and happy He said to the old old man picked his lips and said no! The boy , because last night I just said to God that I had no shoes ...",
+ 			"image_url": "/media/audio/None-audio_3.jpg",
+ 			"audio_url": "/media/audio/courses/None-audio_3.mp3",
+ 			"is_lock": "False",
+ 			"chapters": [{
+ 				"title": "introoooooo",
+ 				"name": "introoooooo",
+ 				"start_time": "00:00",
+ 				"end_time": "00:54"
+ 			}]
+ 		}]
+ 	}, {
+ 		"title": "3 years old",
+ 		"name": "سه سالگی",
+ 		"description": "پیر مردی هر روز تو محله می دید پسر کی با کفش های پاره و پای برهنه با توپ پلاستیکی فوتبال بازی می کند، روزی رفت ی کتانی نو خرید و اومد و به پسرک گفت بیا این کفشا رو بپوش…پسرک کفشا رو پوشید و خوشحال رو به پیر مرد کرد و گفت: شما خدایید؟! پیر مرد لبش را گزید و گفت نه! پسرک گفت پس دوست خدایی، چون من دیشب فقط به خدا گفتم كه کفش ندارم…",
+ 		"audios": [{
+ 			"id": 4,
+ 			"title": "audio 4",
+ 			"name": "audio 4",
+ 			"description": "Colored pencils were busy except for the white pencil, no one worked for him, everyone said: you do not feel any pain, one night, when the pencil was lost in the darkness of the night, the white pencil stretched out until the morning of the moon and starred so much. That small and small, in the morning he did not fill in his colored pencil box with no color, remember, maybe tomorrow we will not be together ...",
+ 			"image_url": "/media/audio/None-audio_4.jpg",
+ 			"audio_url": "/media/audio/courses/None-audio_4.mp3",
+ 			"is_lock": "False",
+ 			"chapters": [{
+ 				"title": "introooooooooooooooooo",
+ 				"name": "introooooooooooooooooo",
+ 				"start_time": "00:00",
+ 				"end_time": "00:24"
+ 			}]
+ 		}]
+ 	}]
+ }

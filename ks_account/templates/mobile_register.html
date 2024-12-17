@@ -1,0 +1,37 @@
+{% extends 'shared/_MainAccountLayout.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block account_title %} شماره موبایل {% endblock %}
+{% block form %}
+
+    <div class="text-center">
+        <a href="{% url 'home_page' %}" class="margin-bottom-custom">
+            {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
+                <img src="{{ im.url }}" class="img-fluid"
+                     alt="{{ setting.title_ks }}">
+            {% endthumbnail %}
+        </a>
+        <h4 id="title_register" class="logs_title margin-top-custom">ثبت نام با
+            <span class="theme-cl"> تلفن همراه </span>
+
+        </h4>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
+            <a href="/"> خانه </a>
+        </div>
+    {% else %}
+        <form id="register_form" method="post" action="{% url 'mobile_register_view' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="text-center pt-1 mb-5 pb-1">
+                <button class=" btn-primary btn-block   mb-3 btn  btn-rounded" type="submit">
+                    ارسال کد
+                </button>
+            </div>
+        </form>
+    {% endif %}
+
+{% endblock %}
+{% block account_text %} <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}

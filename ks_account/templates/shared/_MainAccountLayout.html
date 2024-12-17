@@ -1,0 +1,84 @@
+{% load thumbnail %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content=""/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <title> {% block account_title %}{% endblock %} </title>
+    <!-- Custom CSS -->
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/my-custom.css' %}" rel="stylesheet">
+
+    <!-- Custom Color Option -->
+    <link href="{% static 'assets/css/colors.css' %}" rel="stylesheet">
+
+    <!-- login register styles -->
+    <link href="{% static 'assets/css/login_register.css' %}" rel="stylesheet">
+</head>
+<body class="log-bg rtl">
+<!-- ========================== REGISTER START ============================= -->
+<div id="main-wrapper">
+    <div class="clearfix"></div>
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-5 mx-md-4">
+
+                                    {% block form %}
+
+                                    {% endblock %}
+
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6 align-items-center gradient-custom-kh">
+                                <div class="text-center text-white px-3 py-4 p-md-5 mx-md-4">
+                                    <a href="{% url 'home_page' %}" class="">
+                                        {% thumbnail setting.icon_ks "x150" quality=95 format="PNG" as im %}
+                                            <img src="{{ im.url }}" class="img-fluid"
+                                                 alt="{{ setting.title_ks }}">
+
+                                        {% endthumbnail %}
+                                    </a>
+                                    <h4 class="mb-4 color-ks3"> {{ setting.title_ks }} </h4>
+                                    {% block account_text %} {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================== End Mobile Activation ============================= -->
+
+
+</div>
+<!-- ========================== REGISTER END ============================= -->
+
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+{% include 'shared/_FooteRefernces.html' %}
+{% block script_block %}
+
+{% endblock %}
+<script src="{% static 'assets/js/ks-redirect-user-onback-pressed.js' %}"></script>
+<script src="{% static 'assets/js/ks-account-styles.js' %}"></script>
+
+
+
+</body>
+
+</html>

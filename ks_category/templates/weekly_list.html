@@ -1,0 +1,84 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% block title %} اطلاعات هفته به هفته بارداری {% endblock %}
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title"> اطلاعات هفته به هفته بارداری </h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">اطلاعات هفته به هفته بارداری</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+
+    <!-- ============================ Full Width Courses  ================================== -->
+    <section class="pt-0">
+        <div class="container">
+
+
+            <!-- Row -->
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+
+                    <!-- Row -->
+                    <div class="row align-items-center mb-3">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <strong>{{ object_list.count }}</strong> دوره آموزشی یافت شد.
+                        </div>
+                    </div>
+                    <!-- /Row -->
+
+                    <div class="row">
+                        {% for week in object_list %}
+                            <!-- Cource Grid 1 -->
+                            {% comment %}{% for i in "x"|rjust:"10" %}{% endcomment %}
+                                {% include 'components/week_card_component.html' with week=week %}
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- Row -->
+                    {% comment %}<div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+
+                            <!-- Pagination -->
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                                    <button type="button" class="btn btn-loader"><i class="ti-reload ml-3"></i> فهرست
+                                        کامل
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>{% endcomment %}
+                    <!-- /Row -->
+
+                </div>
+
+            </div>
+            <!-- Row -->
+
+        </div>
+    </section>
+    <!-- ============================ Full Width Courses End ================================== -->
+
+
+
+{% endblock %}

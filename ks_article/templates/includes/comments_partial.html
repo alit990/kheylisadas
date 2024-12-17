@@ -1,0 +1,119 @@
+{% load thumbnail %}
+{% load jalali_tags %}
+{% load static %}
+{% load poll_extras %}
+
+<div class="list-single-main-item-title fl-wrap">
+    <h3>{{ comments_count }} نظر </h3>
+</div>
+<hr>
+<div>
+    <ul>
+        {% for comment in comments %}
+            <li class="reviews-comments-item" id="single_comment_box_{{ comment.id }}">
+                {#  comment#}
+                <article>
+                    <div class="review-comments-avatar">
+                        {% if comment.user.is_superuser %}
+                            {% thumbnail avatar.avatar_admin "x120" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid avater" alt="{{ comment.user.username }}">
+
+                            {% endthumbnail %}
+                        {% elif comment.user.is_staff %}
+                            {% thumbnail avatar.avatar_staff "x120" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid avater" alt="{{ comment.user.username }}">
+
+                            {% endthumbnail %}
+                        {% else %}
+                            {% thumbnail avatar.avatar "x120" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid avater" alt="{{ comment.user.username }}">
+                            {% endthumbnail %}
+                        {% endif %}
+                    </div>
+                    <div class="reviews-comments-item-text">
+                        <h4><a href="#">{{ comment.user }}</a>
+                            <span class="reviews-comments-item-date">
+                                <i class="ti-calendar ml-2"> <span class=" ml-2">
+                                                            {{ comment.create_date|to_jalali:'%d %B %Y' }}
+                                                            {% comment %}{{ comment.create_date|to_jalali:'%B' }}
+                                                            {{ comment.create_date|to_jalali:'%Y' }}{% endcomment %}
+                                                        </span> </i>
+{#                                <i class="ti-calendar ml-2"> {{ comment.create_date|show_jalali_date }} </i>#}
+                                <i class="ti-alarm-clock ml-2"> {{ comment.create_date | time }}   </i>
+                            </span>
+                        </h4>
+
+                        <div class="clearfix"></div>
+                        <p> {{ comment.text }} </p>
+                        <div class="align-to-right reviews-reaction">
+                            {#                                                            <a href="#" class="comment-like active"><i#}
+                            {#                                                                    class="ti-thumb-up"></i> 12</a>#}
+                            {#                                                            <a href="#" class="comment-dislike active"><i#}
+                            {#                                                                    class="ti-thumb-down"></i> 1</a>#}
+                            <a class="btn" onclick="fillParentId({{ comment.id }})">
+                                                                <span class="icona">
+                                                                    <i class="ti-back-right"></i>
+                                                                </span> پاسخ
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <ul>
+                    {% for sub_comment in comment.articlecomment_set.all %}
+                        <li class="reviews-comments-item"
+                            id="single_comment_box_{{ comment.id }}">
+                            {#  sub commnet#}
+                            <article>
+                                <div class="review-comments-avatar">
+                                    {% if sub_comment.user.is_superuser %}
+                                        {% thumbnail avatar.avatar_admin "x120" quality=90 as im %}
+                                            <img src="{{ im.url }}" class="img-fluid avater"
+                                                 alt="{{ sub_comment.user.username }}">
+
+                                        {% endthumbnail %}
+                                    {% elif sub_comment.user.is_staff %}
+                                        {% thumbnail avatar.avatar_staff "x120" quality=90 as im %}
+                                            <img src="{{ im.url }}" class="img-fluid avater"
+                                                 alt="{{ sub_comment.user.username }}">
+
+                                        {% endthumbnail %}
+                                    {% else %}
+                                        {% thumbnail avatar.avatar "x120" quality=90 as im %}
+                                            <img src="{{ im.url }}" class="img-fluid avater"
+                                                 alt="{{ sub_comment.user.username }}">
+                                        {% endthumbnail %}
+                                    {% endif %}
+
+                                </div>
+                                <div class="reviews-comments-item-text">
+                                    <h4><a href="#">{{ sub_comment.user }}</a>
+                                        <span class="reviews-comments-item-date">
+                                                                        <i class="ti-calendar ml-2">
+                                                                            <span class=" ml-2">
+                                                                                {{ sub_comment.create_date|to_jalali:'%d' }}
+                                                                                {{ sub_comment.create_date|to_jalali:'%B' }}
+                                                                                {{ sub_comment.create_date|to_jalali:'%Y' }}
+                                                                            </span>
+                                                                        </i>
+                                                                        <i class="ti-alarm-clock ml-2"> {{ sub_comment.create_date | time }} </i>
+                                                                    </span>
+                                    </h4>
+
+                                    <div class="clearfix"></div>
+                                    <p> {{ sub_comment.text }} </p>
+                                    {#                                                                    <div class="align-to-left reviews-reaction">#}
+                                    {#                                                                        <a href="#" class="comment-like active"><i#}
+                                    {#                                                                                class="ti-thumb-up"></i> 12</a>#}
+                                    {#                                                                        <a href="#" class="comment-dislike active"><i#}
+                                    {#                                                                                class="ti-thumb-down"></i> 1</a>#}
+                                    {#                                                                    </div>#}
+                                </div>
+                            </article>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

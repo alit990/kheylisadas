@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="dashboard_container">
+            <div class="dashboard_container_body p-4">
+                <h><strong> دوره های خریداری شده توسط شما </strong></h>
+                <br>
+                <div class="row">
+                    {% for course in courses %}
+                        <!-- Cource Grid 1 -->
+                        {% include 'components/course_card_component_for_panel.html' with course=course %}
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

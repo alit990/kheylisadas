@@ -1,0 +1,29 @@
+{% load thumbnail %}
+{% load static %}
+{% load sorl_thumbnail %}
+<div class="singles_items">
+    <div class="instructor_wrap mid">
+
+        <a href="{{ article.get_absolute_url }}">
+            {% thumbnail article.image "300" quality=90 as im %}
+                <img src="{{ im.url }}" class="img-fluid" alt="{{ article.alt_image }}">
+
+            {% endthumbnail %}
+
+        </a>
+
+        <div class="instructor_caption">
+            <h4><a href="{{ article.get_absolute_url }}">{{ article.name }}</a></h4>
+            <span class="skills-min">{{ article.category }}</span>
+
+        </div>
+
+        <div class="courses_info_style3">
+            <ul>
+                <li><i class="ti-eye ml-2"></i>{{ article.articlevisit_set.count }}</li>
+{#                <li><i class="ti-book ml-2"></i>3 دوره</li>#}
+            </ul>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<h4 class="title">این مطلب برای شما مفید بود؟</h4>
+<div class=" reviews-reaction">
+    <a
+       class="btn btn-light comment-like like {% if course_user_vote == 1 %}active{% endif %}"
+        onclick="voteCourse({{ course.id }} , 1)">
+        بله
+        <i class="icofont-thumbs-up"></i>
+        {{ course_likes_count|add:course.fake_like_count }}
+    </a>
+    <a
+       class="btn btn-light comment-like like {% if course_user_vote == 0 %}active{% endif %}"
+        onclick="voteCourse({{ course.id }} , 0)">
+        نه
+        <i class="icofont-thumbs-down"></i>
+        {{ course_dislikes_count|add:course.fake_dislike_count }}
+    </a>
+</div>

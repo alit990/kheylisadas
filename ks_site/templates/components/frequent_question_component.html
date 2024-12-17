@@ -1,0 +1,13 @@
+<div class="single_instructor border">
+    <div class="single_instructor_caption ">
+        <h4><button class="card-header" onclick="showAnswer('{{ question.id }}')"> {{ question.question}} </button></h4>
+        <ul class="instructor_info">
+            <li><i class="ti-tag"></i> دسته {{ question.category}} </li>
+        </ul>
+        <p id="answerParagraph{{ question.id }}">
+            <strong> پاسخ </strong> <br>
+            {{ question.answer}}
+        </p>
+
+    </div>
+</div>

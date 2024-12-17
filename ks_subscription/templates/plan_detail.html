@@ -1,0 +1,197 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %} اطلاعات پرداخت {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">تسویه حساب</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">تسویه حساب</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+
+    <!-- ============================ Add To cart ================================== -->
+    <section class="pt-0">
+        <div class="container">
+            {% if has_perm %}
+                <div class="row">
+                    <div class="col-md-12 cart_totals checkout  mb-4 ">
+                        <div class="text-center">
+                            <h5 class="alert alert-danger col-lg-12 col-md-12 col-sm-12 ">
+                                شما در حال حاضر دارای یک
+                                اشتراک فعال می باشید و نیاز به خرید اشتراک مجدد ندارید.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="cart_totals checkout light_form mb-4">
+                        <h4>اطلاعات فاکتور</h4>
+                        <div class="row">
+                            <div class="packages_middlebody pr-3">
+                                {% if plan.courses.all %}
+                                    <p> شما با خرید این اشتراک علاوه بر اینکه به مدت
+                                        {{ plan.duration }} + {{ plan.plan_gift }}
+                                        روز به <strong>درس های اشتراکی سایت</strong> دسترسی دارید،
+                                        به عنوان <strong>هدیه ویژه</strong> به <strong>دوره های زیر</strong> نیز دسترسی
+                                        کامل خواهید داشت.
+                                    </p>
+                                {% else %}
+                                    <p> شما با خرید این اشتراک به مدت
+                                        {{ plan.duration }} + {{ plan.plan_gift }}
+                                        روز به <strong>درس های اشتراکی سایت</strong>
+                                        دسترسی کامل خواهید داشت.
+                                    </p>
+                                {% endif %}
+                                <ul class="plan_items_ul">
+                                    {% for course in plan.courses.all %}
+                                        <li class="fa fa-check">
+                                            <a href="{{ course.get_absolute_url }}" class="btn-browse-btn">
+                                                دوره {{ course.name }}  </a>
+
+                                        </li>
+                                        <br>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart_totals checkout light_form">
+                        <h>روش پرداخت</h>
+                        <h4> زرین پال </h4>
+
+                        <div class="row ">
+                            <div class="col-lg-6 col-md-6 col-sm-6 ">
+                                <div class="choose_payment_mt">
+                                    <img src="{% static 'assets/img/zarin-pal.png' %}" alt=""/>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 col-md-12">
+                    <!-- Total Cart -->
+                    <div class="cart_totals checkout">
+                        <h4>صورت حساب</h4>
+                        <div class="cart-wrap">
+                            <ul class="cart_list">
+                                <li>قیمت اصلی<strong> <s>
+                                    {% if plan.fake_price %}
+                                        {{ plan.fake_price }} تومان
+                                    {% else %}
+                                        0 تومان
+                                    {% endif %}
+                                </s> </strong></li>
+                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>
+                                <li>تخفیف<strong>
+                                    {% if plan.off %}
+                                        {{ plan.off }} تومان
+                                    {% else %}
+                                        0 تومان
+                                    {% endif %}
+                                </strong></li>
+                            </ul>
+                            <div class="flex_cart">
+                                <div class="flex_cart_1">
+                                    جمع کل
+                                </div>
+                                <div class="flex_cart_2">
+                                    {% if code_valid %}
+                                        {{ plan.off_price }} تومان
+                                    {% else %}
+                                        {{ plan.price }} تومان
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if not has_perm %}
+                                <div class="flex_cart text-center">
+                                    {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
+                                    {% csrf_token %}
+                                    {{ gift_form.as_p }}
+                                    <button class="btn btn-theme" type="submit">بررسی کد</button>
+                                </form>{% endcomment %}
+
+                                    <form action="{{ plan.get_absolute_url }}" method="post">
+                                        {% csrf_token %}
+                                        {{ gift_form.code.label }}
+                                        {{ gift_form.code }}
+                                        {% if gift_form.errors %}
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    {% for field in gift_form %}
+                                                        {% for error in field.errors %}
+                                                            <li><strong>{{ field.label }}:</strong> <span
+                                                                    class="text-danger">{{ error }}</span></li>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                        <button class="btn btn-theme m-2" type="submit">
+                                            بررسی کد
+                                        </button>
+                                    </form>
+                                    <p class="text-success">{{ code_valid }}</p>
+                                </div>
+
+                                <hr>
+                                <div class="flex_cart">
+                                    <div class="flex_cart_1">
+                                        مبلغ قابل پرداخت
+                                    </div>
+                                    <div class="flex_cart_2">
+                                        {% if code_valid %}
+                                            {{ plan.off_price }} تومان
+                                        {% else %}
+                                            {{ plan.price }} تومان
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if plan.off_price == 0 %}
+                                    <a href="{% url 'plan_free_gift' plan_id=plan.id code=gift_code %}"
+                                       class="btn checkout_btn btn-light">دریافت رایگان اشتراک</a>
+                                {% else %}
+                                    <a href="{% url 'request_payment' plan_id=plan.id code=gift_code %}"
+                                       class="btn checkout_btn btn-light">پرداخت</a>
+                                {% endif %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <!-- ============================ Add To cart End ================================== -->
+
+{% endblock %}

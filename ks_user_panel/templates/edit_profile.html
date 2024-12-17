@@ -1,0 +1,157 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load render_partial %}
+{% load sorl_thumbnail %}
+{% load static %}
+{% block content %}
+    <br><br><br>
+    <section class="gray pt-5">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-3 col-md-3">
+                    <div class="dashboard-navbar">
+                        <div class="d-user-avater">
+                            {% if current_user.avatar %}
+                                {% thumbnail current_user.avatar "120x120" quality=75 format="PNG" as im %}
+                                    <img src="{{ im.url }}" class="img-fluid" alt="">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/user-3.jpg' %}" class="img-fluid avater" alt="">
+                            {% endif %}
+                            <h4>{{ current_user.username }}</h4>
+                            {% if current_user.get_full_name %}
+                                <span>{{ current_user.get_full_name }}</span>
+                            {% endif %}
+                        </div>
+                        {% render_partial 'ks_user_panel.views.user_panel_menu_parial' %}
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-9 col-sm-12">
+
+                    <!-- Row برد کرامپ-->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 pb-4">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">داشبورد</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- /Row -->
+
+                    <!--  edit form فرم ویرایش اطلاعات-->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="dashboard_container">
+                                <div class="dashboard_container_header">
+                                    <div class="dashboard_fl_1">
+                                        <h4> ویرایش اطلاعات شما </h4>
+                                    </div>
+                                </div>
+                                <div class="dashboard_container_body p-4">
+
+                                    <!-- Basic info -->
+                                    <form enctype="multipart/form-data" action="{% url 'edit_profile_page' %}"
+                                          method="post">
+                                        <div class="submit-section">
+
+                                            <div class="form-row">
+                                                {% csrf_token %}
+                                                <div class="form-group col-md-6">
+                                                    <label>{{ form.first_name.label }}</label>
+                                                    {{ form.first_name }}
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>{{ form.last_name.label }}</label>
+                                                    {{ form.last_name }}
+                                                </div>
+                                                <ul class="no-ul-list">
+
+                                                    {% for choice in form.gender %}
+                                                        <li>
+                                                            <input id="a-p{{ forloop.counter }}" class="checkbox-custom"
+                                                                   name="a-p" type="radio">
+                                                            <label for="a-p{{ forloop.counter }}"
+                                                                   class="checkbox-custom-label">{{ choice.choice_label }}</label>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+
+                                                {#                                                <div class="form-group col-md-6">#}
+                                                {#                                                    <label>{{ form.gender.label }}</label>#}
+                                                {#                                                    {{ form.gender }}#}
+                                                {#                                                </div>#}
+                                                <div class="form-group col-md-6">
+                                                    <label>{{ form.address.label }}</label>
+                                                    {{ form.address }}
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>{{ form.avatar.label }}</label>
+                                                    {{ form.avatar }}
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>{{ form.birthday.label }}</label>
+                                                    {{ form.birthday }}
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label>{{ form.about_user.label }}</label>
+                                                    {{ form.about_user }}
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-theme btn-rounded"> ثبت تغییرات
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- Basic info -->
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+{% block footer_ref %}
+    <script src="{% static 'assets/js/dropzone.js' %}"></script>
+
+    <!-- Date Booking Script -->
+    <script src="{% static 'assets/js/moment.js' %}"></script>
+    <script src="{% static 'assets/js/moment-jalaali.js' %}"></script>
+    <script src="{% static 'assets/js/daterangepicker-fa-ex.js' %}"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugins -->
+    <!-- ============================================================== -->
+    <script src="{% static 'assets/js/metisMenu.min.js' %}"></script>
+    <script>
+        $('#side-menu').metisMenu();
+    </script>
+
+    <script>
+        // Course Expire and Start Daterange Script
+
+        $(function () {
+            $('input[id="birthday"]').daterangepicker({
+                singleDatePicker: true,
+                format: 'jYYYY/jMM/jDD',
+                jalaali: true,
+
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% load thumbnail %}
+{% load static %}
+<footer class="dark-footer skin-dark-footer">
+    <div>
+        <div class="container">
+            <div class="row">
+                {% comment %}todo:  sharayet  {% endcomment %}
+                <div class="col-lg-3 col-md-3">
+                    <div class="footer-widget">
+                        {% thumbnail site_setting.site_logo_footer "x40" quality=95 format="PNG" as im %}
+                            <img src="{{ im.url }}" class="img-fluid" alt="">
+
+                        {% endthumbnail %}
+                        <div class="footer-add">
+                            {#                            <p>تهران، خیابان سعادت آباد، خیابان کاج</p>#}
+                            {#                            <p>02188888888</p>#}
+                            <p>ایمیل: info@kheylisadas.ir</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <div class="footer-widget">
+                        <h4 class="widget-title">لینک های مفید</h4>
+                        <ul class="footer-menu">
+                            <li><a href="{% url 'courses_list' %}">فروشگاه خیلی‌ ساده‌ست</a></li>
+                            <li><a href="{% url 'articles_list' %}">بلاگ خیلی‌ ساده‌ست</a></li>
+                            <li><a href="{% url 'plans_list' %}">خرید اشتراک</a></li>
+                            <li><a href="{% url 'frequent_questions' %}">سوالات متداول</a></li>
+                            <li><a href="{% url 'contact_us' %}">تماس با ما</a></li>
+                            <li><a href="{% url 'about_us' %}">درباره ما</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3">
+                    <div class="footer-widget">
+                        <h4 class="widget-title">دسته بندی «خیلی ساده‌ست»</h4>
+                        <ul class="footer-menu">
+                            {% for category in categories %}
+                                <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3">
+                    <div class="footer-widget">
+                        <h4 class="widget-title">فروشگاه «خیلی ساده‌ست»</h4>
+                        <ul class="footer-menu">
+                            {% for course in courses %}
+                                <li><a href="{{ course.get_absolute_url }}">دوره {{ course.name }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+                    <div class="footer-widget">
+                        <h4 class="widget-title">«خیلی ساده‌ست» در شبکه های اجتماعی</h4>
+                        <a href="tg://resolve?domain={{ site_setting.telegram }}" class="other-social-network-link">
+                            <div class="other-social-network">
+                                <div class="social-network-logo">
+                                    <img src="{% static 'assets/img/logo-telegram.png' %}" alt="">
+                                </div>
+                                <div class="social-network-name">
+                                    تلگرام
+                                    <span>{{ site_setting.telegram }}</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://ig.me/m/{{ site_setting.instagram }}" class="other-social-network-link">
+                            <div class="other-social-network">
+                                <div class="social-network-logo">
+                                    <img src="{% static 'assets/img/logo-instagram.png' %}" alt="">
+                                </div>
+                                <div class="social-network-name">
+                                    اینستاگرام
+                                    <span>آدرس ما در اینستاگرام</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://eitaa.com/{{ site_setting.eitaa }}" class="other-social-network-link">
+                            <div class="other-social-network">
+                                <div class="social-network-logo">
+                                    <img src="{% static 'assets/img/logo-eitaa.png' %}" alt="">
+                                </div>
+                                <div class="social-network-name">
+                                    پیامرسان ایتا
+                                    <span>{{ site_setting.eitaa }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-lg-6 col-md-6">
+                    <p class="mb-0">© 2023 Kheylisadas طراحی و توسعه توسط <a href="#">علی طبسی</a></p>
+                </div>
+
+                <div class="col-lg-6 col-md-6 text-left">
+                    <ul class="footer-bottom-social">
+                        <li><a href="tg://resolve?domain=ali_t990"><i class="lni-telegram"></i></a></li>
+                        <li><a href="https://ig.me/m/ali.t990"><i class="lni-instagram"></i></a></li>
+                        <li><a href="https://www.linkedin.com/in/ali-tabasi-74a107297"><i class="lni-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</footer>

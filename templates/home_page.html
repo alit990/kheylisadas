@@ -1,0 +1,62 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+
+{% load static %}
+{% block title %} |
+    {{ site_setting.site_name }}
+    |
+{% endblock %}
+{% block content %}
+    <!-- ========================== Banner start =============================== -->
+    {% include 'components/banner_component.html' %}
+    <!-- ========================== Banner End =============================== -->
+
+
+    <!-- ============================ Trips Facts Start ================================== -->
+    {% include 'components/trips_facts_component.html' %}
+    <!-- ============================ Trips Facts End ================================== -->
+
+
+    <!-- ========================== Featured Category Section =============================== -->
+    {% include 'components/category_list_component.html' with category=category %}
+    <hr class="shine">
+    <!-- ============================ بخش کراسول یااسلیک اسلایدر دوره ها ================================== -->
+    {% include 'components/courses_slider_component.html' with courses=courses %}
+
+    <!-- ===== DIVIDER ========== -->
+    <hr>
+    {#    <hr class="accessory">#}
+    {#    <hr class="bookends">#}
+    {#    <hr class="bookends-dots">#}
+    {#    <hr class="flair">#}
+    {#    <hr class="shine">#}
+    {% comment %}<div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Section Title -->
+                {#                <h1>Welcome to Next Bootstrap</h1>#}
+                <div class="section-title">
+
+                </div>
+            </div>
+        </div>
+    </div>{% endcomment %}
+
+
+    <!-- ============================ Articles Section Start ================================== -->
+    {% include 'components/articles_slider_component.html' with articles=articles %}
+    <!-- ============================ Articles Section End ================================== -->
+    <hr class="shine">
+    <!-- ========================== References Section Start =============================== -->
+    {% include 'components/references_slider_component.html' with references=references %}
+    <!-- ========================== References Section End =============================== -->
+    <hr>
+    <!-- ============================ Horizontal lebels Start ================================== -->
+    {% comment %}{% include 'components/horizontal_stepper_labels_component.html' %}{% endcomment %}
+    <!-- ============================ Horizontal labels End ================================== -->
+
+
+{% endblock %}
+{% block footer_ref %}
+    <script src="{% static 'assets/js/ks-custom-divider.js' %}"></script>
+{% endblock %}

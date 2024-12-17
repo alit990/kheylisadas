@@ -1,0 +1,145 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %} ا درباره «خیلی ساده‌ست» ا {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">درباره ما</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">درباره ما</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+    <!-- ========================== About Facts List Section =============================== -->
+    <section class="pt-0">
+        <div class="text-center">
+            <h4>{{ site_setting.site_name }}</h4>
+        </div>
+        <div class="container">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="list_facts_wrap">
+
+                        <div class="sec-heading mb-3 f-24">
+                            <h2><span class="theme-cl">مأموریت ما </span> در مجموعه خیلی‌ ساده‌ست:</h2>
+                        </div>
+                        <div class="list_facts">
+                            <div class="list_facts_icons"><i class="fa fa-book"></i></div>
+                            <div class="list_facts_caption">
+                                <h4>علم محور بودن مطالب</h4>
+                                <p>هر کجای ایران یا دنیا که هستید، معلم های ما به صورت زنده به شما تدریس می کنند.</p>
+                            </div>
+                        </div>
+                        <div class="list_facts">
+                            <div class="list_facts_icons"><i class="ti-face-smile"></i></div>
+                            <div class="list_facts_caption">
+                                <h4>زبان ساده و همه فهم</h4>
+                                <p>در زمان ثبت درخواست امکان نحوه برگزاری کلاس بصورت حضوری یا آنلاین وجود دارد.</p>
+                            </div>
+                        </div>
+                        <div class="list_facts">
+                            <div class="list_facts_icons"><i class="ti-headphone"></i></div>
+                            <div class="list_facts_caption">
+                                <h4>ارائه مطالب در قالب پادکست</h4>
+                                <p>از بین بیش از 2000 معلم فعال با استفاده از فیلتر‌ها بهترین استاد متناسب با شرایط خود
+                                    را بیابید.</p>
+                            </div>
+                        </div>
+                        <div class="list_facts">
+                            <div class="list_facts_icons"><i class="ti-star"></i></div>
+                            <div class="list_facts_caption">
+                                <h4>رایگان و ارزان</h4>
+                                <p>از بین بیش از 2000 معلم فعال با استفاده از فیلتر‌ها بهترین استاد متناسب با شرایط خود
+                                    را بیابید.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="list_facts_wrap_img">
+
+                        <img src="{% static 'assets/img/about.png' %}" class="img-fluid"
+                             alt="تربیت فرزند خیلی ساده ست"/>
+
+                    </div>
+                </div>
+                {% comment %}<div class="row">
+                    <div class=" col-md-12">
+                        <div class="edu_wraper border">
+                            <div class="about_us ck-content">
+                                <p>{{ site_setting.about_us_rich|safe }}</p>
+                                <p> {{ site_setting.about_us_text }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>{% endcomment %}
+                {#                <section style="background:url('{% static "assets/assets/img/about-back.png" %}')">#}
+
+
+
+            </div>
+
+        </div>
+    </section>
+    <hr>
+    <section style="background-image: url('{% static "assets/img/about-back.png" %}');">
+
+                    <div class="container">
+
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <div class="sec-heading center">
+{#                                    <p> اینجا چه مواردی ارائه میشه!؟ </p>#}
+                                    <h2>
+                                        اینجا همه چیز،
+                                        <span class="theme-cl"> «خیلی ساده‌ست» </span> </h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 " >
+                                <div class="about_us ck-content">
+                                    <p>{{ site_setting.about_us_rich|safe }}</p>
+                                    {% comment %}<p> {{ site_setting.about_us_text }}</p>{% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+    <!-- ========================== About Facts List Section =============================== -->
+
+
+    <script src="{% static 'assets/js/ks-captcha.js' %}"></script>
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'assets/css/ckeditor-content-styles.css' %}" type="text/css">
+
+{% endblock %}

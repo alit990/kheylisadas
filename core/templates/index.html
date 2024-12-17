@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Django Webpack template</title>
+    {#    <script src="{% static 'test.js' %}"></script>#}
+    <script src="{% static 'bundle.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/chapter.css' %}">
+    <style>
+        .container {
+            margin-top: 400px;
+        }
+    </style>
+
+</head>
+<body>
+
+<p id="message">Hello</p>
+<div class="container1"></div>
+<div class="container2"></div>
+<div class="container3"></div>
+<script type="module">
+    const chapters = [
+        {
+            'id': 'chp0',
+            'startTime': 0,
+            'endTime': 16,
+            'title': 'مقدمه',
+        },
+        {
+            'id': 'chp1',
+            'startTime': 16,
+            'endTime': 22,
+            'title': 'بخش اول',
+        },
+        {
+            'id': 'chp2',
+            'startTime': 22,
+            'endTime': 50,
+            'title': 'chapter 2',
+        },
+    ]
+
+    Player.use(Chapter)
+    const player1 = new Player({
+        container: document.querySelector('.container1'),
+        audio: {
+            title: 'آهنگ زنگ باحال',
+            artist: 'علی طبسی',
+            chapters: chapters,
+            src: "http://dl.songlove.ir/rington-mobile/3.mp3",
+        },
+        themeColor: '#025428',
+        theme: 'dark',
+        preload: 'metadata',
+        fixed: {
+            type: 'static',
+        },
+    })
+
+    const player2 = new Player({
+        container: document.querySelector('.container2'),
+        audio: {
+            title: 'تربیت فرزند سخت نیست',
+            artist: 'مسعود نصیری',
+            chapters: chapters,
+            src: "http://dl.songlove.ir/rington-mobile/1.mp3",
+            cover: '{% static 'assets/img/zarin-pal.png' %}',
+        },
+        themeColor: '#025428',
+        theme: 'dark',
+        preload: 'metadata',
+        fixed: {
+            type: 'static',
+        },
+     })
+
+    const player3 = new Player({
+        container: document.querySelector('.container3'),
+        audio: {
+            title: 'تربیت فرزند خیلی ساد ست',
+            artist: 'مسعود رضایی',
+            chapters: chapters,
+            src: "http://dl.songlove.ir/rington-mobile/2.mp3",
+            cover: '{% static 'assets/img/zarin-pal.png' %}',
+        },
+        themeColor: '#025428',
+        theme: 'dark',
+        preload: 'metadata',
+        fixed: {
+            type: 'static',
+        },
+     })
+
+
+</script>
+
+</body>
+</html>

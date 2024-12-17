@@ -1,0 +1,29 @@
+<section class="pt-0">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6 col-sm-12">
+                <div class="sec-heading center">
+                    <p>فروشگاه</p>
+                    <h2><span class="theme-cl">دوره‌های جامع</span> «خیلی ساده‌ست»</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <div class="four_slide-dots articles arrow_middle" dir="rtl">
+                    {% for course in courses %}
+                        <!-- Single Slide -->
+                        {% include 'components/course_card_component.html' with course=course %}
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>

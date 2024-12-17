@@ -1,0 +1,180 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %} ارتباط با ما {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">تماس با ما</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">تماس با ما</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+    <!-- ============================ Agency List Start ================================== -->
+    <section class="bg-light">
+
+        <div class="container">
+
+            <!-- row Start -->
+            <div class="row">
+
+                <div class="col-lg-8 col-md-7">
+
+                    {% if request.user.is_authenticated %}
+                        <form id="main-contact-form" class="contact-form row" action="{% url 'contact_us' %}"
+                              method="post">
+                            {% csrf_token %}
+
+                            <div class="prc_wrap">
+
+                                <div class="prc_wrap_header">
+                                    <h4 class="property_block_title"> ارسال پیام </h4>
+                                </div>
+
+                                <div class="prc_wrap-body">
+
+                                    <div class="form-group">
+                                        {{ form.title.label_tag }}
+                                        {{ form.title }}
+                                        {{ form.title.errors }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.mobile }}
+                                        {{ form.mobile.errors }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.message.label_tag }}
+                                        {{ form.message }}
+                                        {{ form.message.errors }}
+                                    </div>
+                                    <div class="form-outline mb-4 align-content-lg-center">
+
+                                        <label>{{ form.captcha_field.label_tag }}</label><br>
+                                        {{ form.captcha_field }}
+                                        {{ form.captcha_field.errors }}
+                                        <a class='btn-light  js-captcha-refresh '> <span class="ti-reload"></span>
+                                            تغییر تصویر
+                                        </a>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-theme" type="submit">ارسال درخواست</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="prc_wrap">
+
+                            <div class="prc_wrap_header">
+                                <h4 class="property_block_title"> ارسال پیام </h4>
+                            </div>
+
+                            <div class="prc_wrap-body">
+
+                                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12">
+                                    برای ارسال پیام می بایست
+                                    <a href="{% url 'login_page' %}">لاگین</a>
+                                    کنید
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-lg-4 col-md-5">
+
+                    <div class="prc_wrap">
+
+                        <div class="prc_wrap_header">
+                            <h4 class="property_block_title">راه های ارتباطی</h4>
+                        </div>
+
+                        <div class="prc_wrap-body">
+                            <div class="contact-info">
+                                <p>
+                                    از این طریق با ما در ارتباط باشید
+                                </p>
+
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-email.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        پست الکترونیک
+                                        <span>{{ site_setting.email }}</span>
+                                    </div>
+                                </div>
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-telegram.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        تلگرام
+                                        <span>{{ site_setting.telegram }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-instagram.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        اینستاگرام
+                                        <span>{{ site_setting.instagram }}</span>
+                                    </div>
+                                </div>
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-eitaa.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        پیامرسان ایتا
+                                        <span>{{ site_setting.eitaa }}</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /row -->
+
+        </div>
+
+    </section>
+    <!-- ============================ Agency List End ================================== -->
+    <script src="{% static 'assets/js/ks-captcha.js' %}"></script>
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}

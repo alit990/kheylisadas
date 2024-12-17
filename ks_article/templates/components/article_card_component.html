@@ -1,0 +1,44 @@
+{% load thumbnail %}
+<!-- Cource Grid 1 -->
+<div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="education_block_grid style_2">
+
+        <div class="education_block_thumb n-shadow">
+            <a href="{{ article.get_absolute_url }}">
+                {% thumbnail article.image "300" quality=90 as im %}
+                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ article.alt_image }}">
+                {% endthumbnail %}
+            </a>
+            {% if request.user.is_staff %}
+                <div class="number_visits_real"><i class="fa fa-eye"></i>
+                    {{ article.articlevisit_set.count }}
+                </div>
+            {% endif %}
+
+            <div class="number_visits"><i class="fa fa-eye"></i>
+                {{ article.articlevisit_set.count|add:article.fake_visit_count }}
+            </div>
+        </div>
+
+
+        <div class="article_block_body">
+            {% comment %}<h4 class="bl-title text-center"><a href="{{ article.get_absolute_url }}">{{ article.name }}</a></h4>{% endcomment %}
+            <div class="article_title">
+                <h4><a href="{{ article.get_absolute_url }}">{{ article.name }}</a></h4>
+                <span class="summary">{{ article.description|truncatewords:7 }}</span>
+                <br>
+                <span class="category">{{ article.category }}</span>
+
+            </div>
+        </div>
+
+{#        <div class="education_block_footer">#}
+{#            <div class="education_block_author"><h5> {{ article.category }} </h5></div>#}
+{#            {% comment %}<div>#}
+{#                <h><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h>#}
+{#            </div>{% endcomment %}#}
+{##}
+{#        </div>#}
+
+    </div>
+</div>

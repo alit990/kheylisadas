@@ -1,0 +1,48 @@
+{% load thumbnail %}
+{% load static %}
+{% load sorl_thumbnail %}
+<section class=" py-5"> {% comment %}bg-light{% endcomment %}
+    <div class="container py-5">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6 col-sm-12">
+                <div class="sec-heading center">
+                    <p>درس‌های اشتراکی</p>
+                    <h2>دسته‌بندی بر اساس <span class="theme-cl">مراحل رشد فرزند</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="edu_cat_2 cat-{{ forloop.counter }}">
+                        <div class="edu_cat_icons">
+                            <a class="pic-main" href="{{ category.get_absolute_url }}">
+
+                                {% thumbnail category.thumb "x40" quality=75 format="PNG" as im %}
+                                    <img src="{{ im.url }}" class="img-fluid" alt="{{ category.alt_thumb_image }}">
+
+                                {% endthumbnail %}
+                            </a>
+                        </div>
+                        <div class="edu_cat_data">
+                            <h4 class="title"><a
+                                    href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </h4>
+                            <h5 class="border-age-category"><a
+                                    href="{{ category.get_absolute_url }}">{{ category.age_range }}</a>
+                            </h5>
+                            <ul class="meta">
+                                <li class="video"><i class="ti-headphone"></i>{{ category.audio_category_count }} درس
+                                    صوتی
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>

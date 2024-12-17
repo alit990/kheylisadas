@@ -1,0 +1,51 @@
+{% load smooth_timedelta %}
+{% load thumbnail %}
+<div class="col-lg-4 col-md-6">
+    <div class="education_block_grid style_2">
+        <div class="education_block_thumb n-shadow">
+            <a href="{{ course.get_absolute_url }}">
+                {% thumbnail course.image "400" quality=90 as im %}
+                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ course.alt_image }}">
+                {% endthumbnail %}
+            </a>
+        </div>
+
+        <div class="education_block_body">
+            <h4 class="bl-title"><a href="{{ course.get_absolute_url }}">دوره {{ course.name }}</a></h4>
+        </div>
+
+        <div class="courses_info_style3 ">
+            <ul>
+{#                <li>#}
+{#                    <i class="ti-eye ml-2"></i>{{ course.coursevisit_set.count|add:course.fake_visit_count }}#}
+{#                </li>#}
+                <li class="audio_count">
+                    <div class="foot_features ">
+                            <i class="ti-headphone  "></i>
+                            {{ course.audio_count }}
+                    </div>
+                </li>
+                <li class="duration">
+                    <div class="foot_features ">
+                            <i class="ti-timer  "></i>
+
+                            {{ course.audios_duration|smooth_timedelta  }}
+                    </div>
+{#                    <i class="ti-time ml-2 duration"></i>{{ course.audios_duration|smooth_timedelta  }}#}
+                </li>
+            </ul>
+        </div>
+
+        {% comment %}<div class="education_block_footer">
+
+            <div class="foot_lecture">
+                <a href="{{ course.get_absolute_url }}">
+
+                    <i class="ti-headphone ml-2"></i>
+                    {{ course.audio_count }}
+                </a>
+
+            </div>
+        </div>{% endcomment %}
+    </div>
+</div>

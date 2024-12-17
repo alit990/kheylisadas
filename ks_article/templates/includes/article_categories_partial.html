@@ -1,0 +1,16 @@
+<div class="single_widgets widget_category">
+    <h4 class="title">دسته بندی ها</h4>
+    <ul>
+        <li><a href="/articles">همه </a> </li>
+        {% for category in categories %}
+            <li>
+{#                <a href="/articles/{{ category.id }}/{{ category.slug }}">#}
+                <a href="{% url 'articles_list_by_category' category_slug=category.slug %}">
+                    {{ category.name }}
+                    <span>{{ category.get_count }}</span>
+                </a>
+            </li>
+        {% endfor %}
+
+    </ul>
+</div>

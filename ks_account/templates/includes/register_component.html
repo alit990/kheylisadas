@@ -1,0 +1,11 @@
+<div id="divRegisterComponent">
+
+{% if not request.user.is_authenticated %}
+    <div class="single_widgets text-center">
+        <form>
+            <h4 class="title">اکنون ثبت نام کنید</h4>
+            <a class="btn btn-theme btn-rounded" href="{% url 'mobile_register_view' %}"> ثبت نام </a>
+        </form>
+    </div>
+{% endif %}
+</div>

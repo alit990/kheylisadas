@@ -1,0 +1,13 @@
+{% if request.user.is_authenticated %}
+
+    <a onclick="{% if page == 'WEEK' %}addToWeekPlaylist({{ audio.id }}){% else %}addToPlaylist({{ audio.id }}){% endif %}"
+       class=" _cr_detail_arrow btn-over-light ">
+        {% comment %}<a onclick="addToPlaylist({{ audio.id }})" class=" _cr_detail_arrow btn-over-light ">{% endcomment %}
+            {% if added_playlist == "True" %}
+
+                <i class="fa fa-trash"></i>
+            {% elif added_playlist == "False" %}
+                <i class="fa fa-plus"></i>
+            {% endif %}
+        </a>
+{% endif %}

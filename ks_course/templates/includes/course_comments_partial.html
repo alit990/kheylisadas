@@ -1,0 +1,72 @@
+{% load static %}
+{% load poll_extras %}
+
+<div class="list-single-main-item-title fl-wrap">
+    <h3>{{ comments_count }} نظر </h3>
+</div>
+<hr>
+<div>
+    <ul>
+        {% for comment in comments %}
+            <li class="reviews-comments-item" id="single_comment_box_{{ comment.id }}">
+                {#  comment#}
+                <article>
+                    <div class="review-comments-avatar">
+                        <img src="{% static 'assets/img/user-1.jpg' %}"
+                             class="img-fluid" alt="">
+                    </div>
+                    <div class="reviews-comments-item-text">
+                        <h4><a href="#">{{ comment.user }}</a>
+                            <span class="reviews-comments-item-date">
+                                                                        <i class="ti-calendar theme-cl"> {{ comment.create_date|show_jalali_date }} </i>
+                                                                        <i class="ti-alarm-clock theme-cl"> {{ comment.create_date | time }} </i>
+                                                                    </span>
+                        </h4>
+
+                        <div class="clearfix"></div>
+                        <p> {{ comment.text }} </p>
+                        <div class="pull-left reviews-reaction">
+                            <a href="#" class="comment-like active"><i
+                                    class="ti-thumb-up"></i> 12</a>
+                            <a href="#" class="comment-dislike active"><i
+                                    class="ti-thumb-down"></i> 1</a>
+                        </div>
+                    </div>
+                </article>
+
+                <ul>
+                    {% for sub_comment in comment.coursecomment_set.all %}
+                        <li class="reviews-comments-item"
+                            id="single_comment_box_{{ comment.id }}">
+                            {#  sub commnet#}
+                            <article>
+                                <div class="review-comments-avatar">
+                                    <img src="{% static 'assets/img/avatar.jpg' %}"
+                                         class="img-fluid" alt="">
+                                </div>
+                                <div class="reviews-comments-item-text">
+                                    <h4><a href="#">{{ sub_comment.user }}</a>
+                                        <span class="reviews-comments-item-date">
+                                                                        <i class="ti-calendar theme-cl"> {{ sub_comment.create_date|show_jalali_date }} </i>
+                                                                        <i class="ti-alarm-clock theme-cl"> {{ sub_comment.create_date | time }} </i>
+                                                                    </span>
+                                    </h4>
+
+                                    <div class="clearfix"></div>
+                                    <p> {{ sub_comment.text }} </p>
+                                    <div class="pull-left reviews-reaction">
+                                        <a href="#" class="comment-like active"><i
+                                                class="ti-thumb-up"></i> 12</a>
+                                        <a href="#" class="comment-dislike active"><i
+                                                class="ti-thumb-down"></i> 1</a>
+                                    </div>
+                                </div>
+                            </article>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

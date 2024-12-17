@@ -1,0 +1,30 @@
+{% extends 'shared/_MainLayout.html' %}
+
+{% load static %}
+{% block title%} صفحه اصلی {% endblock %}
+{% block content %}
+    <!-- ========================== Error handling start =============================== -->
+    <section class="error-wrap py-5">
+				<div class="container py-5">
+					<div class="row justify-content-center">
+
+						<div class="col-lg-6 col-md-10">
+							<div class="text-center">
+
+								<img src="{% static 'assets/img/500.png' %}" class="img-fluid" alt="">
+                                <h2>500 Internal Server Error</h2>
+                                <h2> مشکلات سرور سایت (محل نگهداری اطلاعات سایت) </h2>
+								<p>
+متأسفانه خطایی رخ داده. لطفا با پشتیبانی سایت در تماس باشید.
+                                </p>
+								<a class="btn btn-theme" href="index.html">بازگشت به خانه</a>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+    <!-- ============================ Error end ================================== -->
+
+{% endblock %}

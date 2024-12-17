@@ -1,0 +1,63 @@
+{% load static %}
+{% load render_partial %}
+
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="مرجع صوتی تربیت فرزند «خیلی ساده‌ست»"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'assets/img/favicon.png' %}" >
+    <title> {% block title%}{% endblock %} </title>
+    {% block header_ref_top %}{% endblock %}
+    {% include 'shared/_HeaderReferences.html' %}
+    {% block header_ref %}{% endblock %}
+</head>
+
+<body class="red-skin rtl">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div id="preloader">
+    <div class="preloader"><span></span><span></span></div>
+</div>
+
+
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    {% render_partial 'header' %}
+{#    {% include 'shared/Header.html' with site_setting=site_setting %}#}
+
+    <!-- ============================================================== -->
+    <!-- Top header  -->
+    <!-- ============================================================== -->
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- ============================ Footer Start ================================== -->
+    {% render_partial 'footer' %}
+
+    <!-- ============================ Footer End ================================== -->
+
+
+    <a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+
+
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+
+{% block footer_ref_top %}{% endblock %}
+{% include 'shared/_FooteRefernces.html' %}
+{% block footer_ref %}{% endblock %}
+
+</body>
+
+<!-- Mirrored from themezhub.net/learnup-demo-2/learnup/home-10.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 01 Apr 2022 09:38:46 GMT -->
+</html>

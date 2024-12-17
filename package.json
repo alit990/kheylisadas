@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "dev": "webpack --watch --mode development"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "shikwasa": "^2.2.1",
+    "sweetalert2": "^11.7.31"
+  }
+}

@@ -1,0 +1,169 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load jalali_tags %}
+{% load render_partial %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+
+{% load static %}
+{% block content %}
+    <br><br><br>
+    <section class="gray pt-5">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="dashboard-navbar">
+                        <div class="d-user-avater">
+
+                            {% if current_user.is_superuser %}
+                                {% thumbnail avatar.avatar_admin "x120" quality=90  as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+
+                                {% endthumbnail %}
+                            {% elif current_user.is_staff %}
+                                {% thumbnail avatar.avatar_staff "x120" quality=90  as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+
+                                {% endthumbnail %}
+                            {% else %}
+                                {% thumbnail avatar.avatar "x120" quality=90  as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+                                {% endthumbnail %}
+                            {% endif %}
+
+                            <h4>{{ current_user.username }}</h4>
+                            {% if current_user.get_full_name %}
+                                <span>{{ current_user.get_full_name }}</span>
+                            {% endif %}
+                        </div>
+                        {% render_partial 'ks_user_panel.views.user_panel_menu_parial' %}
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12">
+
+                    <!-- Row برد کرامپ-->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 pb-4">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">داشبورد</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- /Row -->
+
+                    <!-- میزان اعتبار2 -->
+                    {% if transaction %}
+                        <div class="row">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="dashboard_container">
+                                    <div class="dashboard_container_body p-4">
+                                        <h><strong> میزان اعتبار اشتراک شما </strong></h>
+                                        <div class="viewer_detail_wraps">
+
+                                            <div class="caption">
+
+                                                <div>
+                                                    {% if transaction.left_days < 10 %}
+                                                        <h4>
+                                                        <span class="text-danger">
+                                                            {{ transaction.left_days }} روز دیگر منقضی می شود..
+                                                        </span>
+                                                        </h4>
+                                                    {% else %}
+                                                        <h4>
+                                                        <span class="text-info">
+                                                            {{ transaction.left_days }} روز دیگر منقضی می شود..
+                                                        </span>
+                                                        </h4>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="viewer_header">
+                                                    {#  <h> {{date_now|to_jalali:'%H:%M - %B- %Y/%m/%d'}}</h>#}
+                                                    <h4> {{ current.username }} </h4>
+                                                    <h>
+                                                        اشتراک ویژه شما از
+                                                        <span class=" ml-2">
+                                                            {{ transaction.start_date|to_jalali:'%B' }}
+                                                            {{ transaction.start_date|to_jalali:'%d' }}
+                                                        </span>
+                                                        فعال شده است و تا
+                                                        <span class=" ml-2">
+                                                            {{ transaction.end_date|to_jalali:'%B' }}
+                                                            {{ transaction.end_date|to_jalali:'%d' }}
+                                                        </span>
+                                                        به مدت
+                                                        {{ transaction.plan.duration }}
+                                                        روز فعال است.
+
+                                                    </h>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- دوره های خریداری شده توسط شما -->
+                    {% if courses %}
+
+                        {% include 'includes/user_courses_include.html' with courses=courses %}
+                    {% endif %}
+
+                    <!-- Row 4 بخش مثلا اعتبار زمانی باقیمانده - تعداد فایل شنیده شده توسط شما - تعداد نظرات ثبت شده-->
+                    <div class="row">
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                            <a {% if playlist_count > 0 %} href="{% url 'user_panel_playlist_page' %}" {% endif %}>
+                                <div class="dashboard_stats_wrap">
+                                <div class="dashboard_stats_wrap_content">
+                                    <h4 class="text-success"> {{ playlist_count }} </h4>
+                                    <span>لیست پخش ما</span>
+                                </div>
+                                <div class="dashboard_stats_wrap-icon"><i class="ti-music"></i></div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                            <div class="dashboard_stats_wrap">
+                                <div class="dashboard_stats_wrap_content"><h4 class="text-warning">42</h4> <span>تکمیل شده</span>
+                                </div>
+                                <div class="dashboard_stats_wrap-icon"><i class="ti-headphone"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                            <div class="dashboard_stats_wrap">
+                                <div class="dashboard_stats_wrap_content"><h4 class="text-danger">70h</h4> <span>مدت کل دوره</span>
+                                </div>
+                                <div class="dashboard_stats_wrap-icon"><i class="ti-heart-broken"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                            <div class="dashboard_stats_wrap">
+                                <div class="dashboard_stats_wrap_content"><h4 class="text-info">22</h4> <span>تدریس آنلاین</span>
+                                </div>
+                                <div class="dashboard_stats_wrap-icon"><i class="ti-user"></i></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /Row -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

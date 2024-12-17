@@ -1,0 +1,57 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+{% block title %} نتیجه پرداخت {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">نتیجه پرداخت</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}"> خانه </a></li>
+                                <li class="breadcrumb-item active" aria-current="page"> نتیجه پرداخت </li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+
+    <!-- ============================ info Start ================================== -->
+    <section class="pt-0">
+        <div class="container" >
+            {% if info %}
+                <div class="alert alert-info ">
+                    {{ info }}
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="alert alert-danger  ">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            {% if success %}
+                <div class="alert alert-success  ">
+                    {% include 'components/payment/success.html' with transation=transaction %}
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+    <!-- ============================ info End ================================== -->
+
+{% endblock %}

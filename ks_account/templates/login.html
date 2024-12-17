@@ -1,0 +1,177 @@
+{% load thumbnail %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content=""/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <title>|
+        ورود به
+        {{ setting.title}}
+        |</title>
+
+    <!-- Custom CSS -->
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/my-custom.css' %}" rel="stylesheet">
+
+    <!-- Custom Color Option -->
+    <link href="{% static 'assets/css/colors.css' %}" rel="stylesheet">
+
+    <!-- login register styles -->
+    <link href="{% static 'assets/css/login_register.css' %}" rel="stylesheet">
+</head>
+
+<body class="log-bg rtl">
+
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+{#<div id="preloader">#}
+{#    <div class="preloader"><span></span><span></span></div>#}
+{#</div>#}
+
+
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+
+<!-- ========================== LOGIN START ============================= -->
+<div id="main-wrapper">
+    <div class="clearfix"></div>
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+        <div class="container h-100">
+            <div id="divLoginForm" class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-5 mx-md-4">
+
+                                    <div class="text-center">
+                                        <a href="{% url 'home_page' %}" class="margin-bottom-custom" >
+                                            {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
+                                                <img src="{{ im.url }}" class="img-fluid"
+                                                     alt="{{ setting.title_ks }}">
+
+                                            {% endthumbnail %}
+                                        </a>
+
+                                        <h4 id="title_register" class="logs_title margin-top-custom">
+                                            ورود به
+                                            <span class="theme-cl">  «خیلی ساده‌ست» </span>
+
+                                        </h4>
+                                        <p id="mobileNumber">{{ mobile_number }}</p>
+                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                        <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
+                                            <a href="/"> خانه </a>
+                                        </div>
+
+                                    {% else %}
+                                        <form id="login_form" method="post" action="{% url 'login_page' %}">
+                                            {% csrf_token %}
+
+                                            <input type="hidden" name="next"
+                                                   value="{{ request.GET.next }}">
+                                            <div class="form-outline mb-4">
+                                                <label>{{ login_form.username.label_tag }}</label>
+                                                {{ login_form.username }}
+                                                {{ login_form.username.errors }}
+                                            </div>
+                                            <div class="form-outline mb-4">
+                                                <label>{{ login_form.password.label_tag }}</label>
+                                                {{ login_form.password }}
+                                                {{ login_form.password.errors }}
+                                            </div>
+                                            <div class="form-outline mb-4 align-content-lg-center">
+
+                                                <label>{{ login_form.captcha_field.label_tag }}</label>
+                                                {{ login_form.captcha_field }}
+                                                {{ login_form.captcha_field.errors }}
+                                                <a class='btn-light  js-captcha-refresh '> <span
+                                                        class="ti-reload"></span>
+                                                    تغییر تصویر
+                                                </a>
+                                            </div>
+
+
+                                            {#                                            <div class="form-outline mb-4">#}
+                                            {#                                                <label>{{ login_form.captcha.label_tag }}</label>#}
+                                            {#                                                {{ login_form.captcha }}#}
+                                            {#                                                {{ login_form.captcha.errors }}#}
+                                            {#                                            </div>#}
+                                            <div class="form-outline mb-4">
+                                                {{ login_form.remember_me }}
+                                                <label>{{ login_form.remember_me.label_tag }}</label>
+                                                {{ login_form.remember_me.errors }}
+                                            </div>
+
+                                            <h id="infoAlert" class="text-warning"></h>
+                                            <div class="text-center pt-1 mb-5 pb-1">
+                                                <button class=" btn-primary btn-block   mb-3 btn  btn-rounded"
+                                                        type="submit"> ورود
+                                                </button>
+
+                                            </div>
+                                            <div class="form-group text-center mb-0 mt-3">
+                                                <p> کلمه عبور خود را فراموش کرده اید؟
+                                                    <br>
+                                                    <strong>
+                                                        کلمه عبور پیش فرض در ابتدا
+                                                    شماره تلفن شما به همراه صفر ابتدایی است.
+                                                    </strong>
+                                                    <br>
+                                                    <a href="{% url 'forget_pass_view' %}" class="theme-cl link">
+                                                        فراموشی کلمه عبور </a>
+                                                </p>
+                                            </div>
+                                        </form>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 d-flex align-items-center gradient-custom-kh">
+                                <div class="text-center text-white px-3 py-4 p-md-5 mx-md-4">
+                                    <a href="{% url 'home_page' %}" class="">
+                                        {% thumbnail setting.icon_ks "x150" quality=95 format="PNG" as im %}
+                                            <img src="{{ im.url }}" class="img-fluid"
+                                                 alt="{{ setting.title_ks }}">
+
+                                        {% endthumbnail %}
+                                    </a>
+                                    <h4 class="mb-4 color-ks3"> {{ setting.title_ks }} </h4>
+                                    <p class="small mb-0 color-ks4">{{ setting.login_text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================== End Mobile Activation ============================= -->
+
+
+</div>
+<!-- ========================== LOGIN END ============================= -->
+
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+{% include 'shared/_FooteRefernces.html' %}
+<script src="{% static 'assets/js/ks-captcha.js' %}"></script>
+<script src="{% static 'assets/js/ks-redirect-user-onback-pressed.js' %}"></script>
+<script src="{% static 'assets/js/ks-account-styles.js' %}"></script>
+
+</body>
+
+</html>

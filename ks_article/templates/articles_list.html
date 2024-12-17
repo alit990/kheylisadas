@@ -1,0 +1,144 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load render_partial %}
+{% block title %} ا بلاگ «خیلی ساده‌ست» ا {% endblock %}
+
+{% block content %}
+    <br><br>
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">لیست مقالات خیلی ساده ست</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">بلاگ «خیلی ساده‌ست»
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+    <!-- ============================ Agency List Start ================================== -->
+    <section class="gray">
+
+        <div class="container">
+
+            <!-- row Start -->
+            <div class="row">
+                <!-- Single blog List -->
+                <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+                    <div class="single_widgets">
+                        <!-- بخش لیست مقالات -->
+                        <!-- تعداد مقالات -->
+                        <div class="row align-items-center mb-3">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                {% comment %}<strong>142</strong> دوره آموزشی یافت شد.{% endcomment %}
+                                <strong> مقالات «خیلی ساده‌ست» </strong>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 ordering">
+
+                            </div>
+                        </div>
+                        <!-- لیست اصلی مقالات -->
+                        <div class="row">
+                            {% for article in page_obj %}
+                                <!-- Cource Grid 1 -->
+                                {% include 'components/article_card_component.html' with article=article %}
+                            {% endfor %}
+
+
+                        </div>
+                        <!-- شمارنده یا paginate مقالات -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                                <!-- Pagination -->
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                                        <ul class="pagination p-center">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                       href="?page={{ page_obj.previous_page_number }}"
+                                                       aria-label="Previous">
+                                                        <span class="ti-arrow-right"></span>
+                                                        <span class="sr-only">قبل</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% for page in paginator.page_range %}
+                                                {% if page == page_obj.number %}
+                                                    <li class="page-item active"><a class="page-link"
+                                                                                    href="?page={{ page }}">{{ page }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link"
+                                                                             href="?page={{ page }}">{{ page }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                                       aria-label="Next">
+                                                        <span class="ti-arrow-left"></span>
+                                                        <span class="sr-only">بعدی</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single blog Grid -->
+                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+
+                    <!-- Searchbard -->
+                    <div class="single_widgets widget_search">
+                        <h4 class="title">جستجو</h4>
+                        <form action="#" class="sidebar-search-form">
+                            <input type="search" name="search" placeholder="عنوان وبلاگ...">
+                            <button type="submit"><i class="ti-search"></i></button>
+                        </form>
+                    </div>
+                    <!-- Register -->
+                    {% include 'includes/register_component.html' with request=request %}
+
+                    <!-- Categories -->
+                    {% render_partial 'articles_categories_partial' %}
+
+                    <!-- Recent Posts -->
+                    {% render_partial 'recent_articles_partial' %}
+
+
+                    <!-- Tags  -->
+                    {% render_partial 'articles_all_tags_partial' %}
+
+                </div>
+
+            </div>
+            <!-- /row -->
+
+        </div>
+
+    </section>
+    <!-- ============================ Agency List End ================================== -->
+
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{
+  "django": {
+    "pythonVersion": "3.10"
+  },
+  "disks": [
+    {
+      "name": "database",
+      "mountTo": "database"
+    },
+    {
+      "name": "static",
+      "mountTo": "statics"
+    },
+    {
+      "name": "static",
+      "mountTo": "static_root"
+    },
+    {
+      "name": "media",
+      "mountTo": "media_root"
+    },
+    {
+      "name": "media",
+      "mountTo": "medias"
+    },
+    {
+      "name": "uploads",
+      "mountTo": "uploads"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{% load smooth_timedelta %}
+{% load jalali_tags %}
+<div class="edu_wraper border">
+    <h4 class="edu_title">ویژگی های دوره</h4>
+    <ul class="edu_list right">
+        <li><i class="ti-files"></i>تعداد درس ها:<strong> {{ audio_count }} </strong></li>
+        <li><i class="ti-time"></i>مدت دوره:<strong>{{ object.audios_duration|smooth_timedelta  }}</strong></li>
+        <li><i class="ti-tag"></i>سطح دوره:<strong>{{ object.get_level }}</strong></li>
+        <li><i class="ti-flag-alt"></i>قالب دوره:<strong>پادکست</strong></li>
+        <li><i class="ti-shine"></i>تمرین:<strong>
+            {% if object.has_practice %}دارد
+            {% else %}ندارد
+            {% endif %}
+        </strong></li>
+        <li><i class="ti-shine"></i>نوع دوره:<strong>اشتراکی</strong></li>
+        <li><i class="ti-shine"></i>مناسب:<strong>{{ object.age_category }}</strong></li>
+        <li><i class="ti-time"></i>آخرین به روزرسانی:
+            <strong>
+                <span class=" ml-2" dir="ltr">
+                    {{ object.last_update|to_jalali:'%d %B %Y' }}
+                </span>
+            </strong></li>
+        {% if has_perm %}
+            <li>
+
+                <div class="foot_lecture text-center">
+                    <span class="sg_rate foot_lecture"> اشتراک شما فعال است </span>
+                </div>
+            </li>
+        {% else %}
+            <li>
+                <div class="foot_lecture text-center">
+                    <span class="sg_rate"> برای دسترسی کامل به فایل های این دوره، باید اشتراک تهیه کنید. </span>
+                </div>
+            </li>
+        {% endif %}
+    </ul>
+    {% if not has_perm %}
+        <div class="packages_bottombody">
+            <a href="{% url 'plans_list' %}" class="btn btn-theme btn-rounded"> تهیه اشتراک </a>
+        </div>
+    {% endif %}
+
+</div>

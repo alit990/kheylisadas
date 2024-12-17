@@ -1,0 +1,442 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load poll_extras %}
+{% load static %}
+{% block title %} اطلاعات {{ week.name }} بارداری {% endblock %}
+{% block content %}
+    <br><br><br><br>
+    <!-- ============================ Page title Start================================== -->
+    <div class="ed_detail_head">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-5">
+                    <div>
+                        <div class="img-responsive">
+                            {% thumbnail week.image "640" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ week.alt_image }}">
+                            {% endthumbnail %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-7">
+                    <div class="ed_detail_wrap">
+                        <div class="ed_header_caption">
+                            <h2 class="ed_title">{{ week.name }}</h2>
+                            <ul>
+                                <li><i class="ti-eye"></i> {{ week.weekvisit_set.count|add:week.fake_visit_count }}
+                                    بازدید
+                                </li>
+                                <li><i class="ti-control-forward"></i>{{ week.audio_count }} دوره</li>
+                            </ul>
+                        </div>
+
+                        {% if week.description|wordcount  > 150 %}
+                            <p id="description_p">{{ week.description|truncatewords:150 }}
+                                <a onclick="showMoreDescription('{{ week.description }}')" class="link btn"> [
+                                    بیشتر ]</a>
+                            </p>
+                        {% else %}
+                            <p> {{ week.description }} </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ page title End ================================== -->
+
+    <!-- ============================ Course Detail ================================== -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <!-- Overview -->
+                    <!-- audios and podcasts  -->
+                    <div class="edu_wraper border">
+                        <h4 class="edu_title">سرفصل درس‌ها</h4>
+                        <div id="accordionExample" class="accordion shadow circullum">
+                            {% for section in data.sections %}
+
+                                <div class="card">
+                                    <div id="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
+                                         class="card-header bg-white shadow-sm border-0">
+                                        <h6 class="mb-0 accordion_title"><a href="#" data-toggle="collapse"
+                                                                            data-target="#{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                                                            class="d-block position-relative text-dark collapsible-link py-2 collapsed"
+                                                                            onclick="createAudioBySection({{ section.id }})">
+                                            دوره {{ section.name }}</a></h6>
+                                    </div>
+                                    <div id="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                         aria-labelledby="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
+                                         data-parent="#accordionExample"
+                                         class="collapse" style="">
+                                        <div class="card-body pl-3 pr-3">
+                                            <p>{{ section.description }}</p>
+                                            <hr>
+                                            <ul>
+                                                {% for audio in section.audios %}
+                                                    {% if audio.is_lock == "False" %}
+                                                        <li>
+                                                            <div>
+                                                                <div class="row mt-3">
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_number">
+                                                                                <strong>{{ forloop.counter }}</strong>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_title"><i
+                                                                                    class=" ml-2"></i>{{ audio.name }}
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="player{{ audio.id }} free"
+                                                                         dir="ltr"></div>
+                                                                </div>
+                                                                <div class="vote-area">
+                                                                    <div id="audioVoteArea{{ audio.id }}"
+                                                                         class="row mt-3 align-to-left ">
+                                                                        {% include 'vote/includes/audio_vote_partial.html' with audio=audio like_count=audio.like_count dislike_count=audio.dislike_count user_vote=audio.user_vote added_playlist=audio.added_playlist page='WEEK' %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                                {% if audio.chapters|length != 0 %}
+                                                                    <div class="border border-light-gray">
+                                                                        <p class=" font-bold">
+                                                                            <span class="fa fa-pen"></span>
+                                                                            آنچه در این پادکست مورد بررسی
+                                                                            قرار میگیرد.</p>
+                                                                        <ul>
+                                                                            {% for chapter in audio.chapters %}
+                                                                                <li>
+                                                                                    <i class="ti-music"></i>
+                                                                                    <a onclick="myUpdateChapter({{ audio.id }}, {{ forloop.counter }})"
+                                                                                       class="btn link"> {{ chapter.name }}</a>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </li>
+                                                    {% else %}
+                                                        {% if has_perm %}
+                                                            <li>
+                                                                <div class="row mt-3">
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_number">
+                                                                                <strong>{{ forloop.counter }}</strong>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_title"><i
+                                                                                    class="fa fa-lock-open ml-2"></i>{{ audio.name }}
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div>
+                                                                    <div>
+                                                                        <div class="player{{ audio.id }} locked"
+                                                                             dir="ltr"></div>
+                                                                    </div>
+                                                                    <div class="vote-area">
+                                                                        <div id="audioVoteArea{{ audio.id }}"
+                                                                             class="row mt-3 align-to-left ">
+                                                                            {% include 'vote/includes/audio_vote_partial.html' with audio=audio like_count=audio.like_count dislike_count=audio.dislike_count user_vote=audio.user_vote added_playlist=audio.added_playlist page='WEEK' %}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                    {% if audio.chapters|length != 0 %}
+                                                                        <div class="border border-light-gray">
+                                                                            <p class=" font-bold">
+                                                                                <span class="fa fa-pen"></span>
+                                                                                آنچه در این پادکست مورد بررسی
+                                                                                قرار میگیرد.</p>
+                                                                            <ul>
+                                                                                {% for chapter in audio.chapters %}
+                                                                                    <li>
+                                                                                        <i class="ti-music"></i>
+                                                                                        <a onclick="myUpdateChapter({{ audio.id }}, {{ forloop.counter }})"
+                                                                                           class="btn link"> {{ chapter.name }}</a>
+                                                                                    </li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </li>
+                                                        {% else %}
+                                                            <li>
+                                                                <div class="row mt-3">
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_number">
+                                                                                <strong>{{ forloop.counter }}</strong>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div class="audio_title"><i
+                                                                                    class="fa fa-lock ml-2"></i>{{ audio.name }}
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                                {% if audio.chapters|length != 0 %}
+                                                                    <div class="border border-light-gray">
+                                                                        <p class=" font-bold">
+                                                                            <span class="fa fa-pen"></span>
+                                                                            آنچه در این پادکست مورد بررسی
+                                                                            قرار میگیرد.</p>
+                                                                        <ul>
+                                                                            {% for chapter in audio.chapters %}
+                                                                                <li>
+                                                                                    <i class="ti-music"> {{ chapter.name }} </i>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                {% endif %}
+                                                                <div>
+                                                                    <div class="border border-light-gray2 text-center">
+                                                                        <p>
+                                                                            برای دسترسی به محتوای کامل این درس باید
+                                                                            اشتراک «خیلی ساده‌ست» را خریداری کنید.
+                                                                            <br>
+                                                                        </p>
+                                                                        <a href="{% url 'plans_list' %}"
+                                                                           class="btn btn-light btn-buy"> خرید
+                                                                            دوره </a>
+                                                                    </div>
+                                                                </div>
+
+                                                            </li>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <hr>
+                                                {% endfor %}
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <!-- Vote Like Dislike -->
+                    <div class="edu_wraper single_widgets" id="weekVoteArea">
+                        {% include 'vote/includes/week_vote_partial.html' with week_likes_count=week_likes_count week_dislikes_count=week_dislikes_count week_ip_vote=week_ip_vote week=week %}
+                    </div>
+                    <!-- instructor -->
+                    {% comment %}<div class="single_instructor border">
+
+                    </div>{% endcomment %}
+
+                    <!-- Comments -->
+                    <div class="edu_wraper single_widgets">
+
+                        <div>
+                            <div class="list-single-main-item fl-wrap" id="comments_area">
+                                {% include 'includes/comments_partial.html' with comments=comments comments_count=comments_count %}
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="comment-box submit-form">
+                                <br><br>
+                                <h2 class="reply-title">ثبت دیدگاه</h2>
+                                <div class="comment-form" id="comment_form">
+                                    <form action="#">
+                                        <div class="row">
+                                            {% if request.user.is_authenticated %}
+                                                <div id="submitCommentArea" class="col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <h5> ما را از نظر ارزشمند خود آگاه کنید </h5>
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="parent_id" value="">
+                                                            <textarea id="commentText" name="comment"
+                                                                      class="form-control"
+                                                                      cols="30" rows="6"
+                                                                      placeholder="نظر خود را بنویسید..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <button onclick="sendArticleComment({{ week.id }})"
+                                                                class="btn btn-theme btn-rounded"> ارسال نظر
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12">
+                                                    برای درج نظر می بایست
+                                                    <a href="{% url 'login_page' %}?next={{ request.path|urlencode }}">لاگین</a>
+                                                    کنید
+                                                </div>
+
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-4">
+
+                    <!-- features -->
+                    {% include 'includes/features.html' with object=week audio_count=audio_count has_perm=has_perm duration=duration %}
+
+                    <!-- Register -->
+                    {% include 'includes/register_component.html' with request=request %}
+
+                    <!-- tags -->
+                    {% include 'includes/week_tags_component.html' with tags=tags %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Course Detail ================================== -->
+
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}
+{% block footer_ref_top %}
+    <script>
+
+        class KPlayer {
+            constructor(audio_id, player) {
+                this.audio_id = audio_id;
+                this.player = player;
+            }
+        }
+
+        Player.use(Chapter);
+        let data_js = {{data_js|safe}};
+        let kplayers = [];
+        $.each(data_js.sections, function (section_index, section) {
+            $.each(section.audios, function (audion_index, audio) {
+                kplayers.push(new KPlayer(audio.id, null));
+            })
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getCSRFToken() {
+            return getCookie('csrftoken');
+        }
+
+        function getAudioUrl(csrfToken, audio_id, audio_type) {
+            const url = `{% url 'get_audio_url' %}`;
+            return $.ajax({
+                url: url,
+                method: "POST",
+                data: {
+                    csrfToken: csrfToken, // for nothing. bedoone iin ham kar mikard
+                    audio_id: audio_id,
+                    audio_type: audio_type
+                    },
+                headers: {'X-CSRFToken': csrfToken},
+                xhrFields: {withCredentials: true}
+            });
+        }
+
+
+        function createAudioBySection(section_id) {
+            const csrfToken = getCSRFToken();
+            $.each(data_js.sections, function (section_index, section) {
+                if (section.id === section_id) {
+                    $.each(section.audios, function (audio_index, audio) {
+                        var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio.id);
+                        if (kplayer.player === null) {
+                            if (audio.is_lock === "False") {
+                                getAudioUrl(csrfToken, audio.id, "WEEK").then(audioResponse => {
+                                    if (audioResponse.url) {
+                                        player_chapters = [];
+                                        $.each(audio.chapters, function (chapter_index, chapter) {
+                                            player_chapters.push({
+                                                'id': chapter.id,
+                                                'startTime': chapter.start_time,
+                                                'endTime': chapter.end_time,
+                                                'title': chapter.title,
+                                            });
+                                        });
+                                        kplayer.player = new Player({
+                                            container: document.querySelector('.player' + audio.id),
+                                            audio: {
+                                                title: audio.name,
+                                                artist: audio.artist,
+                                                chapters: player_chapters,
+                                                src: audioResponse.url,
+                                            },
+                                            themeColor: audio.theme_color,
+                                            theme: 'dark',
+                                            fixed: {type: 'static',},
+                                        });
+                                    } else {
+                                        console.error("Error: ", audioResponse.error);
+                                    }
+                                });
+                            } else {
+                                console.log("audio is LOCKED!");
+                            }
+                        }
+                        console.log("++++ kplayers " + kplayers);
+                    });
+                }
+            });
+        }
+
+
+        function myUpdateChapter(audio_id, chapter_index) {
+            console.log(audio_id, chapter_index - 1);
+            console.log(kplayers);
+            var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio_id);
+            console.log(kplayer);
+            kplayer.player.updateChapter(chapter_index - 1);
+            {#eval('var current_player = player' + audio_id + ';');#}
+            {#current_player = updateChapter(chapter_index);#}
+        }
+    </script>
+
+{% endblock %}
+
+{% block footer_ref %}
+    <script src="{% static 'assets/js/ks-week-comment.js' %}"></script>
+    <script src="{% static 'assets/js/ks-votes.js' %}"></script>
+{% endblock %}

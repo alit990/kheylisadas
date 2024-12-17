@@ -1,0 +1,28 @@
+{% load thumbnail %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+<div class="single_widgets widget_thumb_post">
+    <h4 class="title"> مقالات اخیر </h4>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <a href="{{ article.get_absolute_url }}">
+                    <span class="left">
+                        {% thumbnail article.image "128" quality=90 as im %}
+                            <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ article.alt_image }}">
+
+                        {% endthumbnail %}
+                    </span>
+                </a>
+                <span class="right">
+                    <a class="feed-title"
+                       href="{{ article.get_absolute_url }}"> {{ article.name }} </a>
+                    <span class="post-date"><i
+                            class="ti-calendar"></i>{{ article.create_date|show_jalali_date }}</span>
+                </span>
+            </li>
+        {% endfor %}
+
+
+    </ul>
+</div>
