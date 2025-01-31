@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 from ks_account.models import User
 from ks_audio.models import AudioCourse, AudioCourseChapter
 from ks_course.models import Course, SectionCourse, CourseComment, CourseVisit, TransactionCourse, GiftCourse
-from ks_site.models import Avatar
+from ks_site.models import Avatar, SiteSetting
 from ks_subscription.forms import GiftCodeForm
 from ks_subscription.models import Payment
 from ks_vote.models import CourseVote, AudioCourseVote
@@ -52,6 +52,9 @@ class CoursesListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CoursesListView, self).get_context_data(*args, **kwargs)
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        if site_setting.courses_is_disabled:
+            raise Http404("Courses is disabled")
         return context
 
     def get_queryset(self):
@@ -72,6 +75,9 @@ class CourseDetailView(DetailView):
     def get_context_data(self, **kwargs):
         has_perm = False
         context = super(CourseDetailView, self).get_context_data()
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        if site_setting.courses_is_disabled:
+            raise Http404("Courses is disabled")
         course: Course = kwargs.get('object')
         avatar = Avatar.objects.filter(is_main=True).first()
         context['avatar'] = avatar
@@ -81,7 +87,7 @@ class CourseDetailView(DetailView):
         context['comments'] = CourseComment.objects.filter(course_id=course.id, parent=None).order_by(
             '-create_date').prefetch_related('coursecomment_set')
         context['comments_count'] = CourseComment.objects.filter(course_id=course.id).count()
-        context['tags'] = course.tags.all()
+        context['tags'] = course.tags.filter(is_active=True)
         user_ip = get_client_ip(self.request)
         user_id = None
         if self.request.user.is_authenticated:

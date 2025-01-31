@@ -2,15 +2,14 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
 from PIL import Image
+from django_ckeditor_5.fields import CKEditor5Field
 
 from ks_account.models import User
 from ks_audio.models import AudioArticle
 from ks_course.models import Course
 from ks_site.models import AgeCategory
-from ks_tag.models import TagArticle
+from ks_tag.models import Tag
 from utility.choices import KSChoices
 from utility.utils import upload_articles_category_image_path, upload_articles_image_path
 
@@ -82,16 +81,15 @@ class Article(models.Model):
     is_delete = models.BooleanField(default=False)
     image = models.ImageField(upload_to=upload_articles_image_path, null=True, blank=True)
     description = models.TextField(null=True)
-    description_rich = RichTextUploadingField(null=True, blank=True)
+    description_rich = CKEditor5Field('Description', config_name='default', null=True, blank=True)
     alt_image = models.TextField(null=True, blank=True, max_length=100)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
-    tags = models.ManyToManyField(TagArticle, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
     audios = models.ManyToManyField(AudioArticle, blank=True)
     age_category = models.ForeignKey(AgeCategory, on_delete=models.CASCADE, null=True, blank=True)
-    level = models.IntegerField(choices=KSChoices.CHOICES_LEVEL, null=False, blank=False)
     fake_visit_count = models.IntegerField(default=5)
     fake_like_count = models.IntegerField(default=5)
     fake_dislike_count = models.IntegerField(default=5)

@@ -15,7 +15,7 @@ from guardian.shortcuts import get_objects_for_user
 from ks_account.models import User
 from ks_audio.models import AudioChapter, AudioWeekChapter, Audio, AudioWeek
 from ks_category.models import CCDetail, Section
-from ks_site.models import Avatar
+from ks_site.models import Avatar, ContactUs
 from ks_subscription.models import Transaction, Payment
 from ks_user_panel.forms import EditProfileModelForm, ChangePasswordForm
 from ks_vote.models import AudioPlaylist, AudioWeekPlaylist, AudioVote, AudioWeekVote
@@ -77,6 +77,21 @@ class PaymentsPage(TemplateView):
         payments = Payment.objects.filter(user_id=current_user.id)
         context['avatar'] = avatar
         context['payments'] = payments
+        context['current_user'] = user
+
+        return context
+@method_decorator(login_required, name='dispatch')
+class ContactsPage(TemplateView):
+    template_name = 'user_panel_contacts.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ContactsPage, self).get_context_data()
+        user = self.request.user
+        current_user: User = User.objects.filter(id=user.id).first()
+        avatar = Avatar.objects.filter(is_main=True).first()
+        contacts = ContactUs.objects.filter(user_id=current_user.id)
+        context['avatar'] = avatar
+        context['contacts'] = contacts
         context['current_user'] = user
 
         return context

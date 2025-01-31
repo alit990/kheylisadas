@@ -28,12 +28,13 @@
     </section>
     <!-- ============================ Page Title End ================================== -->
 
+
     <!-- ============================ Pricing Start ================================== -->
     <section class="pt-0">
 
         <div class="container">
-            <p>{{ site_setting.plan_description_rich|safe }}</p>
-            <hr>
+            {% comment %}<p>{{ site_setting.plan_description_rich|safe }}</p>
+            <hr>{% endcomment %}
             <div class="row">
 
                 {% for plan in object_list %}
@@ -42,27 +43,27 @@
                         <div class="packages_wrapping {% if plan.is_recommended %} recommended {% endif %}">
 
                             <div class="packages_headers">
-                                <i class="lni-diamond"></i>
+                                <i class="lni-star"></i>
                                 <h4 class="packages_pr_title">{{ plan.name }}</h4>
-                                <span class="packages_price-subtitle">{{ plan.short_description }}</span>
+                                {% comment %}<span class="packages_price-subtitle">{{ plan.short_description }}</span>{% endcomment %}
                             </div>
                             <div class="packages_price">
                                 <h4 class="pr-value">{{ plan.price_1000 }}</h4>
                             </div>
                             <div class="packages_middlebody">
                                 <p>{{ plan.description_rich|safe }}</p>
-                                {% if plan.courses.all %}
+                                {% comment %}{% if plan.courses.all %}
                                     <h5> + هدیه ویژه دسترسی کامل به </h5>
                                     {% else %}
                                     <h5>---</h5>
-                                {% endif %}
+                                {% endif %}{% endcomment %}
                                 {% comment %}<ul>
 										<li>درج 7 رشته تدریس</li>
 										<li>ارتباط مستقیم با واتساپ استاد</li>
 										<li>الویت نمایش و بازدید بالا</li>
 									</ul>{% endcomment %}
                             </div>
-                            <div class="packages_middlebody">
+                            {% comment %}<div class="packages_middlebody">
                                 <ul class="plan_items_ul">
                                     {% for course in plan.courses.all %}
                                         <li class="fa fa-minus">
@@ -73,7 +74,7 @@
                                         <br>
                                     {% endfor %}
                                 </ul>
-                            </div>
+                            </div>{% endcomment %}
                             <div class="packages_bottombody">
                                 <a href="{{ plan.get_absolute_url }}" class="btn-pricing">انتخاب</a>
                             </div>
@@ -87,7 +88,14 @@
             </div>
 
         </div>
+        <div class="container">
+            <div class="row">
+                <div class="edu_wraper border">
+                    <p>{{ site_setting.plan_description_rich|safe }}</p>
 
+                </div>
+            </div>
+        </div>
     </section>
     <!-- ============================ Pricing End ================================== -->
 

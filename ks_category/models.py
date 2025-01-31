@@ -1,3 +1,6 @@
+import random
+from datetime import timedelta
+
 from django.db import models
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -6,10 +9,11 @@ from django.utils.text import slugify
 
 import ks_audio
 from ks_account.models import User
+from ks_audio.models import Audio, AudioWeek
 from ks_site.models import AgeCategory
-from ks_tag.models import TagCCDetail, TagWeek
+from ks_tag.models import Tag
 from utility.choices import KSChoices
-from utility.utils import upload_category_image_path, upload_week_image_path
+from utility.utils import upload_category_image_path, upload_week_image_path, get_random_number
 
 
 # Create your models here.
@@ -43,11 +47,10 @@ class CCDetailManager(models.Manager):
 class Chapter(models.Model):
     title = models.CharField(max_length=150)
     name = models.CharField(max_length=150)
-    icon = models.CharField(default='A', max_length=10)
     # thumb = models.ImageField(upload_to=upload_category_image_path, null=True, blank=True)
     image = models.ImageField(upload_to=upload_category_image_path, null=True, blank=True)
     alt_image = models.TextField(null=True, blank=True, max_length=100)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
     description = models.TextField(null=True, blank=True)
@@ -63,7 +66,7 @@ class Chapter(models.Model):
 
     @property
     def get_audio_url(self, category_id):
-        ccdetail : CCDetail = CCDetail.objects.filter(category_id=category_id, chapter_id=self.id).first()
+        ccdetail: CCDetail = CCDetail.objects.filter(category_id=category_id, chapter_id=self.id).first()
         return ccdetail.audio_url
 
     def __str__(self):
@@ -78,13 +81,14 @@ class Category(models.Model):
     alt_thumb_image = models.TextField(null=True, blank=True, max_length=100)
     image = models.ImageField(upload_to=upload_category_image_path, null=True, blank=True)
     alt_image = models.TextField(null=True, blank=True, max_length=100)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
     description = models.TextField(null=True, blank=True)
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
     chapters = models.ManyToManyField(Chapter, blank=True)
+    is_disabled = models.BooleanField(default=True)
 
     def get_absolute_url(self):
         return reverse('category-detail', args=[self.id, self.slug])
@@ -104,36 +108,30 @@ class Category(models.Model):
         return count
 
 
-
 class CCDetail(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     title = models.CharField(max_length=150, null=True, blank=True)
     name = models.CharField(max_length=150, null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
-    icon = models.CharField(default='A', max_length=10)
     # thumb = models.ImageField(upload_to=upload_category_image_path, null=True, blank=True)
     image = models.ImageField(upload_to=upload_category_image_path, null=True, blank=True)
     alt_image = models.TextField(null=True, blank=True, max_length=100)
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
-    description = models.TextField(null=True)
-    tags = models.ManyToManyField(TagCCDetail, blank=True)
+    description = models.TextField(null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     age_category = models.ForeignKey(AgeCategory, on_delete=models.CASCADE, null=True, blank=True)
-    level = models.IntegerField(choices=KSChoices.CHOICES_LEVEL, null=False, blank=False)
     has_practice = models.BooleanField(default=False)
-    audio_url = models.URLField(max_length=200, null=True)
+    audio_url = models.URLField(max_length=200, null=True, blank=True)
     last_update = models.DateTimeField(default=timezone.now, editable=True)
-    fake_visit_count = models.IntegerField(default=5)
-    fake_like_count = models.IntegerField(default=5)
-    fake_dislike_count = models.IntegerField(default=5)
+    fake_visit_count = models.IntegerField(default=get_random_number(10, 30))
+    fake_like_count = models.IntegerField(default=get_random_number(8, 23))
+    fake_dislike_count = models.IntegerField(default=get_random_number(1, 7))
 
     objects = CCDetailManager()
-
-    def get_level(self):
-        return KSChoices.CHOICES_LEVEL[self.level - 1][1]
 
     def save(self, *args, **kwargs):
         self.title = f"{self.category.title}: {self.chapter.title}"
@@ -162,7 +160,7 @@ class CCDetail(models.Model):
 class Section(models.Model):
     title = models.CharField(max_length=150)
     name = models.CharField(max_length=150)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     description = models.TextField(null=True, blank=True)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
@@ -179,7 +177,8 @@ class Section(models.Model):
     def section_audio_duration(self):
         duration = timezone.timedelta(0)
         for audio in ks_audio.models.Audio.objects.filter(section_id=self.id, is_active=True):
-            duration += audio.duration
+            audio_duration = audio.duration if audio.duration is not None else timedelta(0)
+            duration += audio_duration
         return duration
 
 
@@ -189,7 +188,6 @@ class Week(models.Model):
     is_active = models.BooleanField(default=False)
     is_delete = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=timezone.now, editable=False)
-    icon = models.CharField(default='A', max_length=10)
     thumb = models.ImageField(upload_to=upload_week_image_path, null=True, blank=True)
     alt_thumb_image = models.TextField(null=True, blank=True, max_length=100)
     image = models.ImageField(upload_to=upload_week_image_path, null=True, blank=True)
@@ -197,9 +195,8 @@ class Week(models.Model):
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
     description = models.TextField(null=True)
-    tags = models.ManyToManyField(TagWeek, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     age_category = models.ForeignKey(AgeCategory, on_delete=models.CASCADE, null=True, blank=True)
-    level = models.IntegerField(choices=KSChoices.CHOICES_LEVEL, null=False, blank=False)
     has_practice = models.BooleanField(default=False)
     last_update = models.DateTimeField(default=timezone.now, editable=True)
     fake_visit_count = models.IntegerField(default=5)
@@ -207,11 +204,7 @@ class Week(models.Model):
     fake_dislike_count = models.IntegerField(default=5)
     audio_url = models.URLField(max_length=200, null=True)
 
-
     objects = CCDetailManager()
-
-    def get_level(self):
-        return KSChoices.CHOICES_LEVEL[self.level - 1][1]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -238,6 +231,30 @@ class Week(models.Model):
 class CCDetailComment(models.Model):
     ccdetail = models.ForeignKey(CCDetail, on_delete=models.CASCADE)
     parent = models.ForeignKey('CCDetailComment', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
+    is_allowed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class AudioComment(models.Model):
+    audio = models.ForeignKey('ks_audio.Audio', on_delete=models.CASCADE)
+    parent = models.ForeignKey('AudioComment', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
+    is_allowed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class AudioWeekComment(models.Model):
+    audioweek = models.ForeignKey('ks_audio.AudioWeek', on_delete=models.CASCADE)
+    parent = models.ForeignKey('AudioWeekComment', null=True, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     create_date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
@@ -281,7 +298,6 @@ class SectionWeek(models.Model):
         for audio in ks_audio.models.AudioWeek.objects.filter(section_week_id=self.id, is_active=True):
             duration += audio.duration
         return duration
-
 
 
 class CCDetailVisit(models.Model):

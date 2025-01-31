@@ -9,11 +9,14 @@
         <li class="{% if request.resolver_match.url_name == 'change_password_page' %}active{% endif %}">
             <a href="{% url 'change_password_page' %}"><i class="ti-lock"></i>تغییر کلمه عبور</a></li>
 
-        <li class="{% if request.resolver_match.url_name == 'user_panel_playlist_page' %}active{% endif %}">
-            <a href="{% url 'user_panel_playlist_page' %}"><i class="ti-music"></i>لیست پخش ما</a></li>
+{#        <li class="{% if request.resolver_match.url_name == 'user_panel_playlist_page' %}active{% endif %}">#}
+{#            <a href="{% url 'user_panel_playlist_page' %}"><i class="ti-music"></i>لیست پخش ما</a></li>#}
 
         <li class="{% if request.resolver_match.url_name == 'user_payments' %}active{% endif %}">
             <a href="{% url 'user_payments' %}"><i class="ti-music"></i>لیست پرداخت ها</a></li>
+
+        <li class="{% if request.resolver_match.url_name == 'user_contacts' %}active{% endif %}">
+            <a href="{% url 'user_contacts' %}"><i class="ti-music"></i>لیست پیام های شما</a></li>
 
         <li><a href="{% url 'logout_page' %}"><i class="ti-power-off"></i>خروج</a></li>
 {#        <li><a href="#"><i class="ti-heart"></i>اطلاعات حساب</a></li>#}

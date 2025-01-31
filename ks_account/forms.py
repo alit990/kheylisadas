@@ -1,35 +1,31 @@
 from captcha.fields import CaptchaField
 from django import forms
 from django.core import validators
+from django.core.validators import RegexValidator
 
+from ks_account.models import User
+
+
+from django import forms
+from django.core.validators import RegexValidator
 
 class LoginForm(forms.Form):
-    # captcha = ReCaptchaField(
-    #     label='امنیت',
-    #     widget=ReCaptchaV2Checkbox(api_params={
-    #         'hl': 'fa'
-    #     }),
-    # error_messages='احراز هویت تایید نشد'
-    # )
     captcha_field = CaptchaField(
-        label='حاصل عبارت رو به رو را وارد کنید',
-
+        label='عبارت رو به رو را وارد کنید',
     )
     username = forms.CharField(
         label='نام کاربری',
-        # label='username',
         widget=forms.TextInput(
             attrs={'class': "form-control text-center",
                    'id': "username"}
         ),
         validators=[
+            RegexValidator(regex='^[a-zA-Z0-9]*$', message='لطفاً تنها از حروف لاتین و اعداد استفاده کنید و فاصله وارد نکنید.'),
             validators.MaxLengthValidator(20),
-            # validators.EmailValidator,
         ]
     )
     password = forms.CharField(
         label='کلمه عبور',
-        # label='password',
         widget=forms.PasswordInput(
             attrs={'class': "form-control text-center",
                    'id': "password"}
@@ -41,36 +37,36 @@ class LoginForm(forms.Form):
     remember_me = forms.BooleanField(
         label='مرا به خاطر بسپار',
         required=False,
-        # disabled=True,
+        initial=True,  # فعال کردن پیش‌فرض
         widget=forms.widgets.CheckboxInput(attrs={'class': 'checkbox-inline'}),
         help_text=" با فعال کردن این گزینه، شما با بستن مرورگر از سایت خارج نمی شوید.",
-        # error_messages={'required': 'Please check the box'}
     )
-
-
 
 
 class MobileInputForm(forms.Form):
     mobile_number = forms.CharField(max_length=15,
                                     label=' شماره تلفن همراه',
                                     widget=forms.TextInput(
-                                       attrs={'class': "form-control text-center",
-                                              'id': "mobile"}),
+                                        attrs={'class': "form-control text-center",
+                                               'id': "mobile"}),
                                     validators=[
-                                       validators.MaxLengthValidator(15),
-                                   ])
+                                        RegexValidator(regex='^0\d{10}$', message='شماره همراه معتبر نیست.'),
+                                        validators.MaxLengthValidator(15),
+                                    ])
 
 
 class ActivationForm(forms.Form):
-    activation_code = forms.CharField(max_length=4,
-                                      label=' کد فعالسازی',
-                                      widget=forms.TextInput(
-                                          attrs={'class': "form-control text-center",
-                                                 'id': "activation_code"}),
-                                      validators=[
-                                          validators.MaxLengthValidator(6),
-                                      ]
-                                      )
+    activation_code = forms.CharField(
+        max_length=4,
+        label=' کد فعالسازی',
+        widget=forms.TextInput(
+            attrs={'class': "form-control text-center", 'id': "activation_code"}
+        ),
+        validators=[
+            RegexValidator(regex='^\d{4}$', message='لطفاً تنها 4 عدد وارد کنید.'),
+            validators.MaxLengthValidator(4),
+        ]
+    )
 
 
 class UsernameForm(forms.Form):
@@ -80,6 +76,14 @@ class UsernameForm(forms.Form):
                                    attrs={'class': "form-control text-center",
                                           'id': "username"}),
                                validators=[
+                                   RegexValidator(regex='^[a-zA-Z0-9]*$',
+                                                  message='لطفاً تنها از حروف لاتین و اعداد استفاده کنید و فاصله وارد نکنید.'),
                                    validators.MinLengthValidator(5),
                                ]
                                )
+
+
+class CustomUserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'

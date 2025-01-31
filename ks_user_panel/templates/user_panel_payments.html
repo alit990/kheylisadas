@@ -90,6 +90,8 @@
                                                                     <span class="payment_method cash">{{ payment.METHOD_TYPE_CHOICES.0.1 }}</span>
                                                                 {% elif payment.method == 2 %}
                                                                     <span class="payment_method online">{{ payment.METHOD_TYPE_CHOICES.1.1 }}</span>
+                                                                {% elif payment.method == 3 %}
+                                                                    <span class="payment_method gift">{{ payment.METHOD_TYPE_CHOICES.2.1 }}</span>
                                                                 {% else %}
                                                                     <span class="payment_method unknown">نامشخص</span>
                                                                 {% endif %}

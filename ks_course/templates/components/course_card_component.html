@@ -1,20 +1,17 @@
 {% load smooth_timedelta %}
 {% load thumbnail %}
 <div class="col-lg-4 col-md-6">
-    <div class="education_block_grid style_2">
-        {#        <div class="education_block_thumb n-shadow">#}
-        {#            <a href="{{ course.get_absolute_url }}">#}
-        {#                {% thumbnail course.image "400" quality=90 as im %}#}
-        {#                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ course.alt_image }}">#}
-        {#                {% endthumbnail %}#}
-        {#            </a>#}
-        {#        </div>#}
+    <div class="education_block_grid style_2 {% if courses_is_disabled %}disabled-card{% endif %}">
         <div class="education_block_thumb n-shadow">
-            <a href="{{ course.get_absolute_url }}">
-                {% thumbnail course.image "400" quality=90 as im %}
-                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ course.alt_image }}">
-                {% endthumbnail %}
-            </a>
+            {% if not courses_is_disabled %}
+                <a href="{{ course.get_absolute_url }}">
+            {% endif %}
+            {% thumbnail course.image "400" quality=90 as im %}
+                <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ course.alt_image }}">
+            {% endthumbnail %}
+            {% if not courses_is_disabled %}
+                </a>
+            {% endif %}
             {% if request.user.is_staff %}
                 <div class="number_visits_real"><i class="fa fa-eye"></i>
                     {{ course.coursevisit_set.count }}
@@ -27,41 +24,46 @@
         </div>
 
         <div class="education_block_body">
-            <h4 class="bl-title"><a href="{{ course.get_absolute_url }}">دوره {{ course.name }}</a></h4>
+            <h4 class="bl-title">
+                {% if not courses_is_disabled %}
+                    <a href="{{ course.get_absolute_url }}">
+                {% endif %}
+                دوره {{ course.name }}
+                {% if not courses_is_disabled %}
+                    </a>
+                {% endif %}
+            </h4>
         </div>
 
         <div class="courses_info_style3">
             <ul>
-                {#                <li>#}
-                {#                    <i class="ti-eye ml-2"></i>{{ course.coursevisit_set.count|add:course.fake_visit_count }}#}
-                {#                </li>#}
                 <li class="audio_count">
-                    <div class="foot_features ">
-                        <i class="ti-headphone  "></i>
+                    <div class="foot_features">
+                        <i class="ti-headphone"></i>
                         {{ course.audio_count }}
                     </div>
                 </li>
                 <li class="duration">
-                    <div class="foot_features ">
-                        <i class="ti-timer  "></i>
-
+                    <div class="foot_features">
+                        <i class="ti-timer"></i>
                         {{ course.audios_duration|smooth_timedelta }}
                     </div>
-                    {#                    <i class="ti-time ml-2 duration"></i>{{ course.audios_duration|smooth_timedelta  }}#}
                 </li>
             </ul>
         </div>
+        {% if not courses_is_disabled %}
+            <div class="price_block_footer">
+                <div class="foot_price_off">
+                    <span class="sg_rate theme-cl price_off"><del><strong>{{ course.fake_price_1000 }}</strong> هزار تومان</del></span>
+                </div>
+                <div class="foot_lecture">
 
-        <div class="price_block_footer">
-            <div class=" foot_price_off">
-                <span class="sg_rate theme-cl price_off"> <del> <strong>{{ course.fake_price_1000 }}</strong> هزار تومان </del>  </span>
-            </div>
-            <div class="foot_lecture">
-                <a href="{{ course.get_absolute_url }}">
-                    <span class="sg_rate foot_price">  <strong>{{ course.price_1000 }}</strong> هزار تومان </span>
-                </a>
-            </div>
+                    <a href="{{ course.get_absolute_url }}">
+                        <span class="sg_rate foot_price"><strong>{{ course.price_1000 }}</strong> هزار تومان</span>
+                    </a>
 
-        </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>

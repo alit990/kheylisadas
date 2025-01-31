@@ -1,4 +1,5 @@
 {% extends 'shared/_MainLayout.html' %}
+{% load poll_extras %}
 {% load thumbnail %}
 {% load static %}
 {% block title %} {{ category.name }} {% endblock %}
@@ -12,9 +13,16 @@
                 <div class="col-lg-6 col-md-6">
 
                     <div class="img-responsive">
-                        {% thumbnail category.image "960" quality=90 as im %}
-                            <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ category.alt_image }}">
-                        {% endthumbnail %}
+
+                        {% if category.image %}
+                            {% thumbnail category.image "640" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid corner-radius"
+                                     alt="{{ category.alt_image }}">
+                            {% endthumbnail %}
+                        {% else %}
+                            <img src="{% static 'assets/img/audio-no-image.jpg' %}" class="img-fluid corner-radius"
+                                 alt="{{ category.alt_image }}">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -27,9 +35,9 @@
                                         <audio id="playerChapterWeek"
                                                onplay="onplay_audio('Week')"
                                                onpause="onpause_play('Week')"
-                                               src="{{  WEEK_AUDIO_URL }}"></audio>
+                                               src="{{ WEEK_AUDIO_URL }}"></audio>
                                         <i class="ti-headphone"></i>
-                                         هفته به هفته
+                                        هفته به هفته
                                         <a class="btn align-to-left demo-audio"
                                            id="aChapterWeek"
                                            onclick="play_onclick('Week')">
@@ -37,29 +45,30 @@
                                             معرفی
                                         </a>
 
-                                           {% comment %}<i id="timeChapterWeek" class="align-to-left">00:24</i>{% endcomment %}
+                                        {% comment %}<i id="timeChapterWeek" class="align-to-left">00:24</i>{% endcomment %}
                                     </li>
 
                                 </a>
                                 <br>
                             {% endif %}
                             {% for chapter in data.chapters %}
-{#                                todo: href url is not standard#}
-                                <a href="/{{ category.id }}/{{ chapter.id }}/{{ chapter.slug }}">
-                                    <li class="tag-{{ forloop.counter }}">
-                                        <audio id="playerChapter{{ chapter.id }}"
+                                {% comment %}<a href="/{{ category.id }}/{{ chapter.id }}/{{ chapter.slug }}">{% endcomment %}
+                                <a href="{% url 'category-chapter-detail' category.id chapter.id chapter.slug %}">
+                                    <li class="tag-{{ forloop.counter|add:"-1"|mod:5|add:"1" }}">
+                                        {% comment %}<audio id="playerChapter{{ chapter.id }}"
                                                onplay="onplay_audio({{ chapter.id }})"
                                                onpause="onpause_play({{ chapter.id }})"
-                                               src="{{ chapter.audio_url }}"></audio>
+                                               src="{{ chapter.audio_url }}"></audio>{% endcomment %}
                                         <i class="ti-headphone"></i>
-                                        {{ chapter.name }}
+                                        {{ chapter.name }} / <small>{{ chapter.title }}</small>
+                                        <small class="align-to-left">({{ chapter.audio_count }} پادکست)</small>
 
-                                        <a class="btn align-to-left demo-audio"
+                                        {% comment %}<a class="btn align-to-left demo-audio"
                                            id="aChapterWeek"
                                            onclick="play_onclick({{ chapter.id }})">
                                             <i class="fa fa-play" id="iChapter{{ chapter.id }}"></i>
                                             معرفی
-                                        </a>
+                                        </a>{% endcomment %}
                                         {% comment %}<i id="timeChapter{{ chapter.id }}" class="align-to-left">00:24</i>{% endcomment %}
                                     </li>
                                 </a>

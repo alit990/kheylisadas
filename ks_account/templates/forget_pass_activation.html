@@ -1,0 +1,87 @@
+{% extends 'shared/_MainAccountLayout.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block account_title %} بازیابی نام کاربری و رمز {% endblock %}
+{% block form %}
+
+    <div class="text-center">
+        <a href="{% url 'home_page' %}" class="margin-bottom-custom">
+            {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
+                <img src="{{ im.url }}" class="img-fluid"
+                     alt="{{ setting.title_ks }}">
+            {% endthumbnail %}
+        </a>
+        <h5 id="title_register" class="logs_title margin-top-custom">
+            کد
+            <span class="theme-cl"> ارسال شده </span>
+            را وارد کنید
+        </h5>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
+            <a href="/"> خانه </a>
+        </div>
+    {% else %}
+        <form id="activation_code_form" method="post" action="{% url 'forget_pass_activation_view' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {#            <button type="submit" class="btn btn-theme btn-rounded"> بررسی کد</button>#}
+            <div class="text-center pt-1 mb-5 pb-1">
+                <button id="submit_button" class=" btn-primary btn-block   mb-3 btn  btn-rounded" type="submit">
+                    بررسی کد
+                </button>
+            </div>
+        </form>
+        <p id="timer"></p>
+        <a id="retry_button" class="btn-primary btn-block mb-3 btn btn-rounded" href="{% url 'forget_pass_view' %}"
+           style="display: none;">
+            تلاش مجدد
+        </a>
+    {% endif %}
+
+{% endblock %}
+{% block account_text %} <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}
+
+{% block script_block %}
+<script>
+    $(document).ready(function() {
+        var form = $("#activation_code_form");
+        var submitButton = $("#submit_button");
+        var retryButton = $("#retry_button");
+
+        form.on('submit', function(event) {
+            if (form[0].checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                submitButton.hide();
+                retryButton.show();
+            }
+            form.addClass('was-validated');
+        });
+
+        var mobileViewUrl = "{% url 'forget_pass_view' %}";
+        var timerElement = $("#timer");
+
+        var startTimeStr = "{{ start_time }}";  // get the start time from the template
+        var startTime = new Date(startTimeStr);
+        var now = new Date();
+        var timePassed = Math.floor((now - startTime) / 1000); // calculate the time passed in seconds
+        var timeLeft = 180 - timePassed; // calculate the time left
+
+        var timerId = setInterval(function() {
+            timeLeft--; // زمان باقی‌مانده را کاهش می‌دهیم
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+
+            timerElement.text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+
+            if (timeLeft <= 0) {
+                clearInterval(timerId); // اگر زمان به پایان رسید، تایمر را متوقف می‌کنیم
+                form.prop('disabled', true); // و فرم را غیرفعال می‌کنیم
+                window.location.href = mobileViewUrl; // کاربر را به صفحه ورود شماره تلفن هدایت می‌کنیم
+            }
+        }, 1000);
+    });
+</script>
+
+{% endblock %}

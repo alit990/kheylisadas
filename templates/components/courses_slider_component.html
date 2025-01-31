@@ -16,7 +16,7 @@
                 <div class="four_slide-dots articles arrow_middle" dir="rtl">
                     {% for course in courses %}
                         <!-- Single Slide -->
-                        {% include 'components/course_card_component.html' with course=course %}
+                        {% include 'components/course_card_component.html' with course=course courses_is_disabled=courses_is_disabled %}
                     {% endfor %}
 
 

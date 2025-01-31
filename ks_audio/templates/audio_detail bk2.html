@@ -1,0 +1,614 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load poll_extras %}
+{% load static %}
+
+{% block title %} {{ audio.name }} {% endblock %}
+{% block content %}
+
+    <!-- ============================ Page title Start================================== -->
+    <div class="ed_detail_head py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-5">
+                    <div>
+                        <div class="img-responsive">
+                            {% if audio.image %}
+                                {% thumbnail audio.image "640" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius"
+                                         alt="{{ audio.alt_image }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}"
+                                     class="img-fluid corner-radius"
+                                     alt="{{ audio.alt_image }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-7">
+                    <div class="ed_detail_wrap">
+                        <div class="ed_header_caption">
+                            <h2 class="ed_title">{{ audio.name }}</h2>
+                            <ul>
+                                {% comment %}<li>
+                                    <i class="ti-eye"></i> {{ audio.audiovisit_set.count|add:audio.fake_visit_count }}
+                                    بازدید
+                                </li>{% endcomment %}
+                                <li><i class="ti-timer"></i> مدت زمان پادکست: {{ audio.duration }} </li>
+                            </ul>
+                        </div>
+                        <div class="ed_header_short">
+                            <h6 class="rounded-box">خلاصه ای از مطالب این درس:</h6>
+                            {% if audio.summary|wordcount  > 300 %}
+                                <p id="description_p">{{ audio.summary|truncatewords:300 }}
+                                    <a onclick="showMoreDescription('{{ audio.summary|safe }}')" class="link btn"> [
+                                        بیشتر ]</a>
+                                </p>
+                            {% else %}
+                                <p> {{ audio.summary|safe }} </p>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ page title End ================================== -->
+
+    <!-- ============================ audio Detail ================================== -->
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8 col-md-8">
+                    {% comment %}<small class=" rounded-box-center">لطفاً با دقت به این درس گوش کنید.</small>{% endcomment %}
+                    {% comment %}{% if audio.description %}
+                        <div class="edu_wraper border">
+                            <h4 class="edu_title">توضیحات:</h4>
+                            <p> {{ audio.description|safe }} </p>
+                        </div>
+                    {% endif %}{% endcomment %}
+                    <!-- فایل صوتی -->
+                    {% if has_perm %}
+                        {% if has_audio %}
+                            {% include 'includes/audio_block_include.html' with chapter_set=chapter_set has_perm=has_perm audio=audio page_type='CCDETAIL' added_playlist=added_playlist %}
+                        {% else %}
+                            <div class="edu_wraper border">
+                                <h5 class="edu_title text-info"> این درس، به زودی در دسترس شما خواهد بود. </h5>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if audio.demo_url %}
+                            <div class="edu_wraper border">
+                                {% if chapter_set|length != 0 %}
+                                    <ul>
+                                        <li>
+                                            <div class="audio_title"><i
+                                                    class="fa fa-lock ml-2"></i>{{ audio.name }}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="border border-light-gray audio-chapters-container">
+                                                <h6>
+                                                    آنچه در این پادکست مورد بررسی
+                                                    قرار می‌گیرد.</h6>
+                                                <ul>
+                                                    {% for chapter in chapter_set %}
+                                                        <li>
+                                                            <i class="ti-music">  </i>
+                                                            <p class="chapter-item-p">  {{ forloop.counter }}. {{ chapter.name }}</p>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                                <h6 class="edu_title text-info"> فایل کوتاه معرفی این پادکست را از اینجا گوش کنید.</h6>
+                                <audio controls class="full-width-audio">
+                                    <source src="{{ audio.demo_url }}" type="audio/mpeg">
+                                    مرورگر شما از تگ <code>audio</code> پشتیبانی نمی‌کند. لطفاً مرورگر خود را
+                                    به‌روزرسانی
+                                    کنید.
+                                </audio>
+                                <p class="text-danger"> دسترسی کامل به محتوای این درس، با
+                                    <a href="{% url 'plans_list' %}"
+                                       class="btn btn-light btn-buy">
+                                        تهیه اشتراک
+                                    </a>
+                                    امکان پذیر است.</p>
+                            </div>
+                        {% else %}
+                            <div class="edu_wraper border">
+                                <h5 class="edu_title text-info"> این درس، به زودی در دسترس شما خواهد بود. </h5>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    <!-- فایل pdf دانلودی -->
+                    {% if has_file %}
+                        {% include 'includes/file_attachment_block_include.html' with audio=audio file=file %}
+                    {% endif %}
+                    <!-- فایل ویدیو -->
+                    {% if has_video %}
+                        {% include 'includes/video_card_block_include.html' with audio=audio video=video %}
+                    {% endif %}
+                    {% include 'vote/includes/cc_audio_vote_partial.html' with audio_likes_count=audio_likes_count audio_dislikes_count=audio_dislikes_count user_vote=audio_user_vote audio=audio %}
+
+                    {% comment %}{% if audio.references %}
+                        <!-- آکاردون منابع -->
+                        {% include 'includes/audio_references_block_include.html' with audio=audio %}
+                    {% endif %}{% endcomment %}
+                    <div class="edu_wraper border">
+                        <p>{{ site_setting.page_message }}</p>
+
+                    </div>
+                    <div class="edu_wraper border">
+                        {#                        <h4 class="edu_title"> منابع علمی این درس:</h4>#}
+                        <!-- Accardion references -->
+                        {% if audio.references %}
+                            <div id="accordionExample" class="accordion shadow circullum">
+                                <div class="card">
+                                    <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                                        <h6 class="mb-0 accordion_title">
+                                            <a href="#" data-toggle="collapse" data-target="#collapseOne"
+                                               aria-expanded="false" aria-controls="collapseOne"
+                                               class="d-block position-relative text-dark collapsible-link py-2 collapsed">
+                                                <!-- عنوان آکاردئون -->
+                                                منابع و مقالات
+                                            </a>
+                                        </h6>
+                                    </div>
+                                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample"
+                                         class="collapse" style="">
+                                        <div class="card-body pl-3 pr-3">
+                                            <!-- محتوای آکاردئون -->
+                                            <p> {{ audio.references|safe }} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div id="accordionExample" class="accordion shadow circullum">
+                            <div class="card">
+                                <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                                    <h6 class="mb-0 accordion_title">
+                                        <a href="#" data-toggle="collapse" data-target="#collapseTwo"
+                                           aria-expanded="false" aria-controls="collapseTwo"
+                                           class="d-block position-relative text-dark collapsible-link py-2 collapsed">
+                                            <!-- عنوان آکاردئون -->
+                                            نظرات کاربران
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample"
+                                     class="collapse" style="">
+                                    <div class="card-body pl-3 pr-3">
+                                        <!-- محتوای آکاردئون -->
+                                        <div class="article_detail_wrapss single_article_wrap format-standard">
+
+                                            <div>
+                                                <div class="list-single-main-item fl-wrap" id="comments_area">
+                                                    {% include 'includes/comments_partial.html' with comments=comments comments_count=comments_count %}
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="comment-box submit-form">
+                                                    <br><br>
+                                                    <h2 class="reply-title">ثبت دیدگاه</h2>
+                                                    <div class="comment-form" id="comment_form">
+                                                        <form action="#">
+                                                            <div class="row">
+                                                                {% if request.user.is_authenticated %}
+                                                                    <div id="submitCommentArea"
+                                                                         class="col-lg-12 col-md-12 col-sm-12">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                            <h5> ما را از نظر ارزشمند خود آگاه
+                                                                                کنید </h5>
+                                                                            <div class="form-group">
+                                                                                <input type="hidden" id="parent_id"
+                                                                                       value="">
+                                                                                <label for="commentText">نظر</label><textarea
+                                                                                    id="commentText" name="comment"
+                                                                                    class="form-control"
+                                                                                    cols="30" rows="6"
+                                                                                    placeholder="نظر خود را بنویسید..."></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                            <button onclick="sendAudioComment({{ audio.id }})"
+                                                                                    class="btn btn-theme btn-rounded">
+                                                                                ارسال نظر
+                                                                            </button>
+
+                                                                        </div>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12">
+                                                                        برای درج نظر می بایست
+                                                                        <a href="{% url 'login_page' %}?next={{ request.path|urlencode }}">لاگین</a>
+                                                                        کنید
+                                                                    </div>
+
+                                                                {% endif %}
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Comment2 -->
+
+                </div>
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-4">
+
+                    <!-- Register -->
+                    {% include 'includes/register_component.html' with request=request %}
+
+
+                    {% include 'includes/same_audios_component.html' with same_section_audios=same_section_audios %}
+                    <div class="single_widgets edu_wraper border">
+                        <h4 class="title"> سر فصل های {{ category.name }} </h4>
+                        <ul class="lists lists-2">
+                            {% for chapter in data.chapters %}
+                                <li>
+                                    <a href="{% url 'category-chapter-detail' category.id chapter.id chapter.slug %}">
+                                        <i ></i>
+                                        {{ chapter.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% include 'includes/tags_component.html' with tags=tags %}
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Course Detail ================================== -->
+
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+
+    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-forward-rewind/1.1.0/videojs-forward-rewind.css"
+          rel="stylesheet"/>
+    <style>
+        .video-container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .vjs-control-bar {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .vjs-control-button {
+            font-size: 1.2em;
+            color: white;
+        }
+    </style>
+{% endblock %}
+{% block footer_ref_top %}
+    {% if has_perm %}
+        <!-- کد مربوط به دسترسی داشتن کاربر -->
+        <script>
+            var hasPerm = true;
+        </script>
+    {% else %}
+        <!-- کد مربوط به دسترسی نداشتن کاربر -->
+        <script>
+            var hasPerm = false;
+        </script>
+    {% endif %}
+
+
+    {% if has_video %}
+        {% if has_perm %}
+            {#    for video#}
+            <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/videojs-http-streaming@2.10.0/dist/videojs-http-streaming.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-forward-rewind/1.1.0/videojs-forward-rewind.min.js"></script>
+
+            <script>
+                $(document).ready(function () {
+                    var player = videojs('hls-video');
+
+                    function createButton(iconClass, onClick) {
+                        var Button = videojs.getComponent('Button');
+                        var button = new Button(player, {text: ''});
+                        button.addClass('vjs-control');
+                        button.addClass('vjs-button');
+                        button.addClass('vjs-control-button');
+                        button.controlText('');
+                        var icon = document.createElement('i');
+                        icon.className = iconClass;
+                        button.el().appendChild(icon);
+                        button.on('click', onClick);
+                        return button;
+                    }
+
+                    var forwardButton = createButton('fas fa-forward', function () {
+                        player.currentTime(player.currentTime() + 5);
+                    });
+                    var rewindButton = createButton('fas fa-backward', function () {
+                        player.currentTime(player.currentTime() - 5);
+                    });
+                    var speed15Button = createButton('fas fa-forward', function () {
+                        player.playbackRate(1.5);
+                    });
+                    var speed10Button = createButton('fas fa-backward', function () {
+                        player.playbackRate(1.0);
+                    });
+                    player.getChild('controlBar').addChild(forwardButton, {}, 4);
+                    player.getChild('controlBar').addChild(rewindButton, {}, 3);
+                    player.getChild('controlBar').addChild(speed15Button, {}, 5);
+                    player.getChild('controlBar').addChild(speed10Button, {}, 6);
+                });
+            </script>
+
+        {% endif %}
+    {% endif %}
+
+    {#    for file download#}
+    <script>
+        $(document).ready(function () {
+            $('#download-link').on('click', function (event) {
+                event.preventDefault();
+                const url = $(this).attr('href');
+                const link = $('<a></a>').attr('href', url).attr('download', '');
+                $('body').append(link);
+                link[0].click();
+                link.remove();
+            });
+        });
+    </script>
+
+    <script>
+
+
+
+
+        class KPlayer {
+            constructor(audio_id, player) {
+                this.audio_id = audio_id;
+                this.player = player;
+            }
+        }
+
+        Player.use(Chapter);
+        const audio = JSON.parse('{{ audio_json|escapejs }}');
+        const chapter_set = JSON.parse('{{ chapters_json|escapejs }}');
+        var coverImageUrl = "{% static 'assets/img/audio-icon.png' %}";
+        const cover_image_url = "{{ audio.image.url }}";
+        const chapterIndexParam = {{ chapter_index|default:0 }} - 1; // تنظیم چپتر از 1 شروع شود و به صفر تغییر یابد
+        const chapterIndex = (chapterIndexParam >= 0 && chapterIndexParam < chapter_set.length) ? chapterIndexParam : -1;
+        const chapterName = chapterIndex >= 0 ? chapter_set[chapterIndex].name : '';
+
+
+        let kplayers = [];
+
+        kplayers.push(new KPlayer(audio.id, null));
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getCSRFToken() {
+            return getCookie('csrftoken');
+        }
+
+        function getAudioUrl(csrfToken, audio_id, audio_type) {
+            const url = `{% url 'get_audio_url' %}`;
+            return $.ajax({
+                url: url,
+                method: "POST",
+                data: {
+                    csrfToken: csrfToken, // for nothing. bedoone iin ham kar mikard
+                    audio_id: audio_id,
+                    audio_type: audio_type,
+                    has_perm: hasPerm,
+                },
+                headers: {'X-CSRFToken': csrfToken},
+                xhrFields: {withCredentials: true}
+            });
+        }
+        function savePlayerState() {
+            if (globalPlayer) {
+                sessionStorage.setItem('playerState', JSON.stringify({
+                    audioId: globalPlayer.audio.id, // از globalPlayer.audio.id استفاده کنید
+                    currentTime: globalPlayer.currentTime,
+                    isPlaying: !globalPlayer.paused,
+                }));
+            } else {
+                sessionStorage.removeItem('playerState');
+            }
+        }
+
+        function restorePlayerState() {
+            const savedState = sessionStorage.getItem('playerState');
+            if (savedState) {
+                try {
+                    return JSON.parse(savedState);
+                } catch (error) {
+                    console.error("Error parsing player state:", error);
+                    sessionStorage.removeItem('playerState');
+                }
+            }
+            return null;
+        }
+
+        function createAudio() {
+            const csrfToken = getCSRFToken();
+            var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio.id);
+            if (kplayer.player === null) {
+                {% comment %}if (audio.is_lock === "False") {{% endcomment %}
+                if (hasPerm) {
+                    getAudioUrl(csrfToken, audio.id, "CCDETAIL").then(audioResponse => {
+                        if (audioResponse.url) {
+                            let player_chapters = [];
+                            console.log(chapter_set);
+                            for (let i = 0; i < chapter_set.length; i++) {
+                                let chapter = chapter_set[i];
+                                let chapter_num = i + 1;
+                                let chapter_name = chapter_num + ". " + chapter.name;
+                                let start_time_seconds = convertToSeconds(chapter.start_time);
+                                let end_time_seconds = (i < chapter_set.length - 1) ? convertToSeconds(chapter_set[i + 1].start_time) : convertToSeconds("پایان فایل صوتی");
+                                player_chapters.push({
+                                    'id': chapter.id,
+                                    'startTime': start_time_seconds,
+                                    'endTime': end_time_seconds,
+                                    'title': chapter_name,
+                                });
+                            }
+                            const savedState = restorePlayerState();
+
+                            if (globalPlayer) {
+                                if (globalPlayer.audio.id !== audio.id) {
+                                    globalPlayer.destroy();
+                                    globalPlayer = null;
+                                }
+                            }
+                            if (!globalPlayer) {
+
+                                globalPlayer = new Player({
+                                    container: document.querySelector('.player' + audio.id),
+                                    audio: {
+                                        id: audio.id,
+                                        title: audio.name,
+                                        artist: '« خیلی ساده‌ست »',
+                                        cover: coverImageUrl || "{% static 'assets/img/audio-icon.png' %}",
+                                        chapters: player_chapters,
+                                        src: audioResponse.url,
+                                    },
+                                    themeColor: "#FFFFFFFF",
+                                    theme: 'dark',
+                                    fixed: { type: 'static', },
+                                });
+                                currentAudioId = audio.id;
+
+                                globalPlayer.on('chapterchange', function() {
+                                    const currentChapter = globalPlayer.currentChapter;
+                                    if (currentChapter) {
+                                        updateChapterIcons(currentChapter.index);
+                                    }
+                                });
+                                globalPlayer.on('pause', function() {
+                                    savePlayerState(); // ذخیره وضعیت هنگام مکث
+                                    pauseAnimation();
+                                });
+                                globalPlayer.on('play', function() {
+                                    savePlayerState(); // ذخیره وضعیت هنگام پخش
+                                    playAnimation();
+                                });
+                                const playButton = document.querySelector('.play-button' + audio.id);
+                                if (playButton) {
+                                    playButton.addEventListener('click', () => {
+                                        globalPlayer.play().catch(error => {
+                                            console.error("Play error:", error);
+                                        });
+                                    });
+                                } else {
+                                    console.error("Play button not found!");
+                                }
+                                if (chapterIndex !== null && chapterIndex >= 0) {
+                                    Swal.fire({
+                                        text: `مطلبی که به دنبالش هستید در قسمت ${chapterIndex + 1} با موضوع "${chapterName}" قرار دارد. مایلید فایل را از کدام قسمت گوش کنید؟`,
+                                        icon: 'info',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'پخش از قسمت ' + (chapterIndex + 1),
+                                        cancelButtonText: 'پخش از ابتدا'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            myUpdateChapter(audio.id, chapterIndex);
+                                            const playButton = document.querySelector('.play-button' + audio.id);
+                                            if(playButton){
+                                                playButton.click();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            // بازیابی وضعیت پخش *بعد از* ایجاد player
+                            if (savedState && savedState.audioId === audio.id) {
+                                globalPlayer.currentTime = savedState.currentTime;
+                                if (savedState.isPlaying) {
+                                    globalPlayer.play();
+                                }
+                            }
+                        } else {
+                            console.error("Error: ", audioResponse.error);
+                        }
+                    });
+                } else {
+                    console.log("audio is LOCKED!");
+                }
+            }
+            console.log("++++ kplayers " + kplayers);
+        }
+
+        function myUpdateChapter(audio_id, chapter_index) {
+            if (globalPlayer && currentAudioId === audio_id) {
+                globalPlayer.updateChapter(chapter_index);
+                updateChapterIcons(chapter_index);
+            }
+        }
+
+        function updateChapterIcons(currentIndex) {
+            $('.equalizer').hide();
+            $('.ti-music').show();
+            const currentIcon = $(`#chapter-icon-${currentIndex}`);
+            const currentEqualizer = $(`#equalizer-${currentIndex}`);
+            if (currentIcon.length && currentEqualizer.length) {
+                currentIcon.hide(); currentEqualizer.show();
+            }
+        }
+
+        function convertToSeconds(time) {
+            const [minutes, seconds] = time.split(':').map(Number);
+            return minutes * 60 + seconds;
+        }
+        function pauseAnimation() {
+            $('.equalizer').css('animation-play-state', 'paused');
+        }
+        function playAnimation() {
+            $('.equalizer').css('animation-play-state', 'running');
+        }
+        window.addEventListener('beforeunload', savePlayerState); // ذخیره قبل از ترک صفحه
+
+        // فراخوانی تابع برای ایجاد پلیر
+        createAudio();
+
+    </script>
+
+{% endblock %}
+{% block footer_ref %}
+    <script src="{% static 'assets/js/ks-audio-comment.js' %}"></script>
+    <script src="{% static 'assets/js/ks-votes.js' %}"></script>
+{% endblock %}

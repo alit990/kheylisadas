@@ -3,9 +3,6 @@ from django.db import models
 from django.utils import timezone
 
 from kheylisadas import settings
-from utility.utils import upload_user_avatar_path
-
-
 
 
 class User(AbstractUser):

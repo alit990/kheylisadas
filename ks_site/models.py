@@ -1,8 +1,9 @@
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils import timezone
+from django_ckeditor_5.fields import CKEditor5Field
 
 from ks_account.models import User
+from utility.faraz_sms import send_contact_response_sms
 from utility.utils import upload_site_files_path, upload_avatar_image_path
 
 
@@ -17,14 +18,18 @@ class SiteSetting(models.Model):
     eitaa = models.CharField(max_length=200, null=True, blank=True)
     instagram = models.CharField(max_length=200, null=True, blank=True)
     copy_right = models.TextField()
-    about_us_text = models.TextField()
-    about_us_rich = RichTextUploadingField(null=True, blank=True)
-    plan_description_rich = RichTextUploadingField(null=True, blank=True)
+    page_message = models.TextField(default="", null=False, blank=False)
+    about_us_rich = CKEditor5Field('about_us', config_name='default', null=True, blank=True)
+    plan_description_rich = CKEditor5Field('plan_description', config_name='default', null=True, blank=True)
     site_logo1 = models.ImageField(upload_to=upload_site_files_path, null=False, blank=False)
     site_logo2 = models.ImageField(upload_to=upload_site_files_path, null=False, blank=False)
     site_logo3 = models.ImageField(upload_to=upload_site_files_path, null=False, blank=False)
     site_logo_footer = models.ImageField(upload_to=upload_site_files_path, null=True, blank=True)
     is_main_setting = models.BooleanField()
+    courses_is_disabled = models.BooleanField(default=True)
+    articles_is_disabled = models.BooleanField(default=True)
+    weeks_is_disabled = models.BooleanField(default=True)
+    maintenance_mode = models.BooleanField(default=False)  # فیلد برای حالت به‌روزرسانی
 
     def __str__(self):
         return self.title
@@ -64,9 +69,9 @@ class Avatar(models.Model):
 
 
 class ContactUs(models.Model):
+    id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=800)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=300)
     message = models.TextField(max_length=5000)
     create_date = models.DateTimeField(default=timezone.now)
     response = models.TextField(null=True, blank=True)
@@ -74,6 +79,16 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return f"{self.title} / {self.user}"
+
+    def save(self, *args, **kwargs):
+        old_instance = ContactUs.objects.filter(pk=self.pk).first()
+        super(ContactUs, self).save(*args, **kwargs)
+        if self.is_read_by_admin and self.response and (
+                not old_instance or not old_instance.is_read_by_admin or not old_instance.response):
+            try:
+                send_contact_response_sms(self.user.mobile, self.id)
+            except Exception as e:
+                print("An error occurred while sending response SMS:", e)
 
 
 class FrequentQuestionCategory(models.Model):

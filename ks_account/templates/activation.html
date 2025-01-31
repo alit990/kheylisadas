@@ -11,10 +11,11 @@
                      alt="{{ setting.title_ks }}">
             {% endthumbnail %}
         </a>
-        <h4 id="title_register" class="logs_title margin-top-custom">کد
+        <h5 id="title_register" class="logs_title margin-top-custom">
+            کد
             <span class="theme-cl"> فعالسازی </span>
-
-        </h4>
+            را وارد کنید
+        </h5>
     </div>
     {% if request.user.is_authenticated %}
         <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
@@ -43,49 +44,43 @@
 
 {% block script_block %}
     <script>
-        var form = document.getElementById("activation_code_form");
-        var submitButton = document.getElementById("submit_button");
-        var retryButton = document.getElementById("retry_button");
+        $(document).ready(function () {
+            var form = $("#activation_code_form");
+            var submitButton = $("#submit_button");
+            var retryButton = $("#retry_button");
+            var mobileViewUrl = "{% url 'mobile_register_view' %}";
+            var timerElement = $("#timer");
 
-        form.addEventListener('submit', function (event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-                submitButton.style.display = "none";
-                retryButton.style.display = "block";
-            }
-            form.classList.add('was-validated');
+            var startTimeStr = "{{ start_time }}";
+            var startTime = new Date(startTimeStr);
+            var now = new Date();
+            var timePassed = Math.floor((now - startTime) / 1000);
+            var timeLeft = 180 - timePassed;
+
+            form.on('submit', function (event) {
+                if (form[0].checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    submitButton.hide();
+                    retryButton.show();
+                }
+                form.addClass('was-validated');
+            });
+
+            var timerId = setInterval(function () {
+                timeLeft--;
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+
+                timerElement.text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    form.prop('disabled', true);
+                    window.location.href = mobileViewUrl;
+                }
+            }, 1000);
         });
-
-
-        var mobileViewUrl = "{% url 'mobile_register_view' %}";
-        // فرض می‌کنیم که id فرم شما "myForm" است و id تایمر شما "timer" است
-        var form = document.getElementById("activation_code_form");
-        var timerElement = document.getElementById("timer");
-
-        var startTimeStr = "{{ start_time }}";  // get the start time from the template
-        var startTime = new Date(startTimeStr);
-        var now = new Date();
-        var timePassed = Math.floor((now - startTime) / 1000); // calculate the time passed in seconds
-        var timeLeft = 180 - timePassed; // calculate the time left
-
-
-        // تابع setInterval را فراخوانی می‌کنیم و به آن می‌گوییم که هر 1000 میلی‌ثانیه (یعنی 1 ثانیه) تابع داخلی را اجرا کند
-        var timerId = setInterval(function () {
-            timeLeft--; // زمان باقی‌مانده را کاهش می‌دهیم
-            var minutes = Math.floor(timeLeft / 60);
-            var seconds = timeLeft % 60;
-
-            timerElement.innerText = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-
-
-            if (timeLeft <= 0) {
-                clearInterval(timerId); // اگر زمان به پایان رسید، تایمر را متوقف می‌کنیم
-                form.disabled = true; // و فرم را غیرفعال می‌کنیم
-                {#window.location.href = "/phone_view/"; // کاربر را به صفحه ورود شماره تلفن هدایت می‌کنیم#}
-                window.location.href = mobileViewUrl;// کاربر را به صفحه ورود شماره تلفن هدایت می‌کنیم
-            }
-        }, 1000);
 
     </script>
 {% endblock %}

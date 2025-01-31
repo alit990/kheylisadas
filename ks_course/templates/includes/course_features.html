@@ -10,7 +10,6 @@
                 {% comment %}{{ course.audios_duration|time:"H:i" }}{% endcomment %}
                 {{ course.audios_duration|smooth_timedelta  }}
             </strong></li>
-        <li><i class="ti-tag"></i>سطح دوره:<strong>{{ course.get_level }}</strong></li>
         <li><i class="ti-flag-alt"></i>قالب دوره:<strong>پادکست</strong></li>
         <li><i class="ti-shine"></i>تمرین:<strong>
             {% if course.has_practice %}دارد

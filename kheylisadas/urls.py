@@ -3,9 +3,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 from kheylisadas import settings
-from .views import home_page, header, footer, index_page, success_page, failure_page
+from .views import home_page, header, footer, index_page, success_page, failure_page, maintenance_view
 
 urlpatterns = [
+    path('maintenance/', maintenance_view, name='maintenance'),
     path('index', index_page, name="home_page"),
     # path('index', index_page, name="home_page"),
     path('', home_page, name="home_page"),
@@ -23,11 +24,13 @@ urlpatterns = [
     path('header', header, name="header"),
     path('footer', footer, name="footer"),
     path('ks-admin-panel/', admin.site.urls),
+    path('ks-account/', include(('ks_account.urls', 'ks_account'), namespace='ks_account')), # اضافه کردن namespace
     # path('admin/', admin.site.urls),
     path('core/', include('core.urls')),  # for webpack
     path('captcha/', include('captcha.urls')),  # capthca urls
-    path('ckeditor/', include('ckeditor_uploader.urls')),  # ckeditor uploader urls
-
+    # path('ckeditor/', include('ckeditor_uploader.urls')),  # ckeditor uploader urls
+    path('ckeditor/', include('django_ckeditor_5.urls')),
+    path('select2/', include('django_select2.urls')),
 ]
 if settings.DEBUG:
     # add root static files

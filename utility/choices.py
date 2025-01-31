@@ -11,13 +11,7 @@ class KSChoices:
         (LOCKED_RELY_TO_QUESTION, 'LOCKED_RELY_TO_QUESTION'),
     )
 
-    PRIMARY = 1
-    ADVANCED = 2
 
-    CHOICES_LEVEL = (
-        (PRIMARY, 'مقدماتی'),
-        (ADVANCED, 'پیشرفته'),
-    )
 
 
 class PaymentStatus:

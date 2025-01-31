@@ -9,14 +9,24 @@
     <meta name="author" content="مرجع صوتی تربیت فرزند «خیلی ساده‌ست»"/>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="shortcut icon" type="image/png" href="{% static 'assets/img/favicon.png' %}" >
-    <title> {% block title%}{% endblock %} </title>
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
+    <title> {% block title %}{% endblock %} </title>
+    {#<iframe src="{% static 'assets/html/shared_script.html' %}" style="display:none;"></iframe>#}
+    <script src="{% static 'bundle.js' %}"></script>
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
+
+    {#    <script src="{% static 'assets/js/pagePlayer.js' %}" ></script>#}
+
     {% block header_ref_top %}{% endblock %}
     {% include 'shared/_HeaderReferences.html' %}
     {% block header_ref %}{% endblock %}
 </head>
 
 <body class="red-skin rtl">
+
+
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
@@ -30,7 +40,7 @@
 <!-- ============================================================== -->
 <div id="main-wrapper">
     {% render_partial 'header' %}
-{#    {% include 'shared/Header.html' with site_setting=site_setting %}#}
+    {#    {% include 'shared/Header.html' with site_setting=site_setting %}#}
 
     <!-- ============================================================== -->
     <!-- Top header  -->
@@ -52,10 +62,16 @@
 <!-- ============================================================== -->
 <!-- End Wrapper -->
 <!-- ============================================================== -->
+<div id="player-container">
+    <div id="player-floating" class="player" dir="ltr">
+    </div>
+</div>
 
 {% block footer_ref_top %}{% endblock %}
 {% include 'shared/_FooteRefernces.html' %}
+<script src="{% static 'assets/js/player-manager.js' %}"></script>
 {% block footer_ref %}{% endblock %}
+{#<script src="{% static 'assets/js/shikwasa_player.js' %}"></script>#}
 
 </body>
 

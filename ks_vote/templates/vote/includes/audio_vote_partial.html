@@ -42,7 +42,7 @@
             class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
 
 {% else %}
-    <a onclick="voteAudio({{ audio.id }}, 1)"
+    {% comment %}<a onclick="voteAudio({{ audio.id }}, 1)"
        class="_cr_detail_arrow btn btn-over-light {% if user_vote == 1 %} btn-gray-vote {% endif %}"
             {% if user_vote == 1 %}
        style="pointer-events: none" {% endif %}><i
@@ -51,7 +51,7 @@
        class="_cr_detail_arrow btn btn-over-light {% if user_vote == 0 %} btn-gray-vote {% endif %}"
             {% if user_vote == 0 %}
        style="pointer-events: none" {% endif %}><i
-            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>
+            class="fa fa-thumbs-down"> {{ dislike_count|add:audio.fake_dislike_count }} </i></a>{% endcomment %}
 
     {% if request.user.is_authenticated %}
         <div id="addToPlaylist{{ audio.id }}">

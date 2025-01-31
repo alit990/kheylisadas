@@ -32,6 +32,7 @@
         <option value="$MODULE_DIR$/ks_subscription/templates" />
         <option value="$MODULE_DIR$/ks_vote/templates" />
         <option value="$MODULE_DIR$/ks_site/templates" />
+        <option value="$MODULE_DIR$/ks_audio/templates" />
       </list>
     </option>
   </component>

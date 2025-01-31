@@ -11,12 +11,30 @@
 <script src="{% static 'assets/js/counterup.min.js' %}"></script>
 <script src="{% static 'assets/js/custom.js' %}"></script>
 <script src="{% static 'assets/js/ks-reload-user-status.js' %}"></script>
+{#<img src="{{ audio.image.url }}" alt="{{ audio.alt_image }}" class="img-fluid corner-radius full-width" onerror="this.onerror=null; this.src='{% static 'path/to/default-image.jpg' %}'">#}
+
+
+
+
+{% comment %}
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = '{% static "assets/img/audio-no-image.jpg" %}';
+            };
+        });
+    });
+</script>{% endcomment %}
+
+{% comment %}<script>
         $(document).ready(function () {
             notif('تاریخ رونمایی رسمی «خیلی ساده‌ست»: 15 فروردین 1403');
         });
 
-    </script>
+    </script>{% endcomment %}
 <!-- ============================================================== -->
 <!-- This page plugins -->
 <!-- ============================================================== -->

@@ -1,16 +1,15 @@
 import json
-import time
 
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from datetime import datetime, timedelta
 
 from ks_account.models import User
-from ks_audio.models import Audio, AudioChapter, AudioWeek, AudioWeekChapter
+from ks_audio.models import Audio, AudioChapter, AudioWeek, AudioWeekChapter, AudioVisit
 from ks_category.models import Category, CCDetail, Section, CCDetailComment, Week, WeekComment, SectionWeek, WeekVisit, \
     CCDetailVisit, Chapter
 from ks_site.models import Avatar
@@ -22,10 +21,15 @@ from utility.context_chapter_preparation import MyChapter, MyChapterData
 from utility.http_service import get_client_ip
 from utility.utils import group_subscription_name, codename_audio_perm, codename_audio_week_perm
 
+from django.views.generic.detail import DetailView
+
+
 
 # محل نمایش chapter های مختلف یک category
 def category_detail(request, id=None, slug=None):
-    category = Category.objects.filter(id=id, is_active=True).first()
+    category = Category.objects.filter(id=id, is_active=True, is_disabled=False).first()
+    if category.is_disabled:
+        raise Http404("Category is disabled")
     chapters = category.chapters.all()
 
     my_chapters = []
@@ -33,7 +37,7 @@ def category_detail(request, id=None, slug=None):
     for ccdetail in ccdetails:
         chapter: Chapter = ccdetail.chapter
         my_chapter = MyChapter(id=chapter.id, title=chapter.title, name=chapter.name, slug=chapter.slug,
-                               audio_url=ccdetail.audio_url)
+                               audio_url=ccdetail.audio_url, audio_count=ccdetail.audio_count)
         my_chapters.append(my_chapter)
     my_chapter_data = MyChapterData('chapter_data')
     my_chapter_data.add_chapter("chapters", my_chapters)
@@ -58,6 +62,9 @@ def category_detail(request, id=None, slug=None):
 
 def category_chapter_detail(request, category_id=None, chapter_id=None, chapter_slug=None):
     has_perm = False
+    category = get_object_or_404(Category, id=category_id)
+    if category.is_disabled:
+        raise Http404("Category is disabled")
     # todo: MultipleObjectsReturned if be eshtebah 2 bar data sabt shode bashad
     ccdetail = CCDetail.objects.get_details_by_category_chapter(category_id=category_id,
                                                                 chapter_id=chapter_id)  # using 404
@@ -67,7 +74,7 @@ def category_chapter_detail(request, category_id=None, chapter_id=None, chapter_
                                               is_allowed=True).order_by('-create_date').prefetch_related(
         'ccdetailcomment_set')
     comments_count = CCDetailComment.objects.filter(ccdetail_id=ccdetail.id, is_allowed=True).count()
-    tags = ccdetail.tags.all()
+    tags = ccdetail.tags.filter(is_active=True)
     user_ip = get_client_ip(request)
     user_id = None
     if request.user.is_authenticated:
@@ -75,7 +82,7 @@ def category_chapter_detail(request, category_id=None, chapter_id=None, chapter_
         current_user: User = User.objects.filter(id=user_id, is_active=True).first()
         # permission group for subscription
         has_perm = current_user.groups.filter(name=group_subscription_name()).exists()
-        print("has perm?", has_perm)
+        # print("has perm?", has_perm)
         if Transaction.objects.filter(user_id=current_user.id, is_paid=True, is_expired=False).exists() and has_perm:
             transaction: Transaction = Transaction.objects.filter(
                 user_id=current_user.id, is_paid=True, is_expired=False).first()
@@ -150,10 +157,10 @@ def category_chapter_detail(request, category_id=None, chapter_id=None, chapter_
         s.add_audio("audios", au)
         sec.append(s)
     d.add_section("sections", sec)
-    data_js = str(d).replace("\'", "\"")
-    data = json.loads(data_js)
-    context['data'] = data
-    context['data_js'] = data_js
+    # data_js = str(d).replace("\'", "\"")
+    # data = json.loads(data_js)
+    # context['data'] = data
+    # context['data_js'] = data_js
     context['has_perm'] = has_perm
     # question_form = QuestionForm()
     # context['question_form'] = question_form
@@ -229,7 +236,7 @@ class WeekDetailView(DetailView):
                                               is_allowed=True).order_by('-create_date').prefetch_related(
             'weekcomment_set')
         comments_count = WeekComment.objects.filter(week_id=week.id, is_allowed=True).count()
-        tags = week.tags.all()
+        tags = week.tags.filter(is_active=True)
         user_ip = get_client_ip(self.request)
         user_id = None
         if self.request.user.is_authenticated:

@@ -2,6 +2,11 @@
   "django": {
     "pythonVersion": "3.10"
   },
+  "app": "kheylisadas",
+  "port": 80,
+  "build": {
+    "location": "iran"
+  },
   "disks": [
     {
       "name": "database",
@@ -27,5 +32,6 @@
       "name": "uploads",
       "mountTo": "uploads"
     }
-  ]
+  ],
+  "deployHook": "python manage.py migrate"
 }

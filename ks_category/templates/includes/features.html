@@ -3,16 +3,16 @@
 <div class="edu_wraper border">
     <h4 class="edu_title">ویژگی های دوره</h4>
     <ul class="edu_list right">
-        <li><i class="ti-files"></i>تعداد درس ها:<strong> {{ audio_count }} </strong></li>
-        <li><i class="ti-time"></i>مدت دوره:<strong>{{ object.audios_duration|smooth_timedelta  }}</strong></li>
-        <li><i class="ti-tag"></i>سطح دوره:<strong>{{ object.get_level }}</strong></li>
-        <li><i class="ti-flag-alt"></i>قالب دوره:<strong>پادکست</strong></li>
-        <li><i class="ti-shine"></i>تمرین:<strong>
+        <li><i class="ti-headphone"></i>تعداد درس ها:<strong> {{ audio_count }} </strong></li>
+        <li><i class="ti-time"></i>مدت درس ها:<strong>{{ object.audios_duration|smooth_timedelta  }}</strong></li>
+{#        <li><i class="ti-tag"></i>سطح دوره:<strong>{{ object.get_level }}</strong></li>#}
+        <li><i class="ti-flag-alt"></i>قالب درس:<strong>پادکست، ویدیو، pdf</strong></li>
+        {% comment %}<li><i class="ti-shine"></i>تمرین:<strong>
             {% if object.has_practice %}دارد
             {% else %}ندارد
-            {% endif %}
+            {% endif %}{% endcomment %}
         </strong></li>
-        <li><i class="ti-shine"></i>نوع دوره:<strong>اشتراکی</strong></li>
+        <li><i class="ti-shine"></i>روش دسترسی به درس ها:<strong>تهیه اشتراک</strong></li>
         <li><i class="ti-shine"></i>مناسب:<strong>{{ object.age_category }}</strong></li>
         <li><i class="ti-time"></i>آخرین به روزرسانی:
             <strong>

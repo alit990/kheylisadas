@@ -4,7 +4,8 @@ from .views import category_chapter_detail, category_detail, add_category_chapte
 
 urlpatterns = [
     path('<int:id>/<slug:slug>', category_detail, name='category-detail'),
-    path('<int:category_id>/<int:chapter_id>/<slug:chapter_slug>', category_chapter_detail, name='category-chapter-detail'),
+    # path('<int:category_id>/<int:chapter_id>/<slug:chapter_slug>', category_chapter_detail, name='category-chapter-detail'),
+    path('<int:category_id>/<int:chapter_id>/<slug:chapter_slug>/', category_chapter_detail, name='category-chapter-detail'),
 
     path('add-category-chapter-comment', add_category_chapter_comment, name='add_category_chapter_comment'),
 

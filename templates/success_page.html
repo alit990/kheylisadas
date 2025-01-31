@@ -1,6 +1,8 @@
 {% extends 'shared/_MainLayout.html' %}
+{% load poll_extras %}
 {% load static %}
 {% load sorl_thumbnail %}
+
 {% block title %} عملیات موفق {% endblock %}
 
 {% block content %}
@@ -12,10 +14,10 @@
                 <div class="col-lg-12 col-md-12">
 
                     <div class="breadcrumbs-wrap">
-                        <h1 class="breadcrumb-title"> عملیات با موفقیت انجام شد! </h1>
+                        <h1 class="breadcrumb-title"> عملیات موفق! </h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">بازگشت به خانه</a></li>
                             </ol>
                         </nav>
                     </div>
@@ -31,23 +33,98 @@
     <div class="row m-0 align-content-center ">
         <div class="col-lg-12 col-md-12">
             <div class="edu_wraper border align-content-center text-center">
-                <h4 class="edu_title">توضیحات</h4>
-                <h>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div {% if message.tags %}
-                                class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %}>
-                                <span>{{ message }}</span>
-                                {% comment %}{% if message == 'contact' %}
-                            <h2> <span> خیلی عجیب بود چرا رشته ها با هم برابر نیستن !! </span> </h2>
-                        {% endif %}{% endcomment %}
 
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </h>
+                {#for test#}
+                {% comment %}{% if messages %}
+                    {% for message in messages %}
+                        <div {% if message.tags %}
+                            class="alert alert-success alert-dismissible fade show text-success" {% endif %}>
+
+                            <!-- نمایش خود پیام -->
+                            <p><strong>پیام:</strong> {{ message }}</p>
+
+                            <!-- نمایش تگ‌ها -->
+                            <p><strong>تگ‌ها:</strong> {{ message.tags }}</p>
+
+                            {% if 'from_registration' in message.tags %}
+                                {% with data=message.tags|stringformat:"s"|split_custom:" " %}
+                                    <!-- حذف استفاده از last_item -->
+                                    {% for part in data %}
+                                        {% if "username=" in part %}
+                                            {% with parts=part|split_custom:"|||" %}
+                                                <p><strong>بخش‌ها:</strong> {{ parts }}</p>
+
+                                                {% for item in parts %}
+                                                    {% with kv=item|key_value_custom %}
+                                                        <p><strong>کلید و مقدار:</strong> {{ kv }}</p>
+
+                                                        {% if kv|length == 2 %}
+                                                            {% if kv.0 == 'username' %}
+                                                                <p><strong>نام کاربری:</strong> <span
+                                                                        class="text-info">{{ kv.1 }}</span></p>
+                                                            {% elif kv.0 == 'mobile' %}
+                                                                <p><strong>شماره موبایل:</strong> <span
+                                                                        class="text-info">{{ kv.1 }}</span></p>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}{% endcomment %}
+
+
+                {% if messages %}
+                    <h6 class="edu_title">توضیحات</h6>
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show text-success">
+                            {% if 'from_registration' in message.tags %}
+                                <!-- نمایش پیام موفقیت -->
+                                <p> ثبت نام با موفقیت انجام شد.</p>
+
+                                {% with data=message.tags|stringformat:"s"|split_custom:" " %}
+                                    {% for part in data %}
+                                        {% if "username=" in part %}
+                                            {% with parts=part|split_custom:"|||" %}
+                                                {% for item in parts %}
+                                                    {% with kv=item|key_value_custom %}
+                                                        {% if kv|length == 2 %}
+                                                            {% if kv.0 == 'username' %}
+                                                                <p><strong>نام کاربری:</strong> <span
+                                                                        class="text-info">{{ kv.1 }}</span></p>
+                                                            {% elif kv.0 == 'mobile' %}
+                                                                <p><strong>کلمه عبور:</strong> <span
+                                                                        class="text-info">{{ kv.1 }}</span></p>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                                <div class="mt-3">
+                                    <h5>اکنون می‌توانید اشتراک «خیلی ساده‌ست» را تهیه کنید.</h5>
+                                    <a href="{% url 'plans_list' %}" class="btn btn-theme btn-rounded">تهیه اشتراک</a>
+                                </div>
+                            {% else %}
+                                <!-- نمایش پیام ساده -->
+                                <span>{{ message }}</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+
+                <hr>
                 <div class="text-center">
-                    <a href="{% url 'home_page' %}" class="btn btn-modern">صفحه اول سایت<span><i class="ti-arrow-left"></i></span></a>
+                    <a href="{% url 'home_page' %}" > صفحه اول سایت </a>
                 </div>
             </div>
         </div>

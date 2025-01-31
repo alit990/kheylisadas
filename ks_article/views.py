@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from ks_account.models import User
 from ks_article.models import Article, ArticleCategory, ArticleComment, ArticleVisit
 from ks_audio.models import AudioArticleChapter
-from ks_site.models import Avatar
-from ks_tag.models import TagArticle
+from ks_site.models import Avatar, SiteSetting
+from ks_tag.models import Tag
 from ks_vote.models import ArticleVote, AudioArticleVote
 from utility.context_audio_no_section_preparation import D, Au, Ch
 from utility.http_service import get_client_ip
@@ -28,6 +28,13 @@ class ArticlesListByCategory(ListView):
     template_name = 'articles_list.html'
     paginate_by = 2
 
+    def get_context_data(self, **kwargs):
+        context = super(ArticlesListByCategory, self).get_context_data()
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        if site_setting.courses_is_disabled:
+            raise Http404("Articles is disabled")
+        return context
+
     def get_queryset(self):
         print(self.kwargs)
         category_slug = self.kwargs['category_slug']
@@ -41,10 +48,21 @@ class ArticlesListByTag(ListView):
     template_name = 'articles_list.html'
     paginate_by = 2
 
+    def get_context_data(self, **kwargs):
+        context = super(ArticlesListByTag, self).get_context_data()
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        if site_setting.courses_is_disabled:
+            raise Http404("Articles is disabled")
+        return context
+
     def get_queryset(self):
         tag_slug = self.kwargs['slug']
-        tag_article: TagArticle = TagArticle.objects.filter(slug__iexact=tag_slug).first()
-        articles = tag_article.article_set.all()
+        tag = Tag.objects.filter(slug__iexact=tag_slug).first()
+        if tag:
+            articles = tag.article_set.all()
+        else:
+            articles = Article.objects.none()
+
         # todo: slug farsi tolid nemikone va agar dar url farsi bashe error marbut be codec mide
         if articles is None:
             raise Http404('صفحه ی مورد نظر یافت نشد')
@@ -61,6 +79,9 @@ class ArticleDetailView(DetailView):
         return query
 
     def get_context_data(self, **kwargs):
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        if site_setting.courses_is_disabled:
+            raise Http404("Articles is disabled")
         context = super(ArticleDetailView, self).get_context_data()
         article: Article = kwargs.get('object')
         avatar = Avatar.objects.filter(is_main=True).first()
@@ -181,7 +202,8 @@ def add_article_comment(request: HttpRequest):
 
 
 def articles_all_tags_partial(request):
-    tags = TagArticle.objects.filter(is_active=True).all()
+    # tags = Tag.objects.filter(is_active=True).all()
+    tags = Tag.objects.filter(article__isnull=False, is_active=True).distinct()
     context = {
         'tags': tags
     }

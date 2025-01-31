@@ -1,0 +1,59 @@
+{% load poll_extras %}
+{% load static %}
+{% load smooth_timedelta %}
+{% load thumbnail %}
+<div class="col-md-6">
+    <div class="education_block_grid style_2">
+        <div class="education_block_thumb n-shadow">
+            <a href="{% url 'audio_detail' audio.id %}">
+                {% if audio.image %}
+                    {% thumbnail audio.image "400" quality=90 as im %}
+                        <img src="{{ im.url }}" class="img-fluid corner-radius full-width" alt="{{ audio.alt_image }}">
+                    {% endthumbnail %}
+                {% else %}
+                    <img src="{% static 'assets/img/audio-no-image.jpg' %}" class="img-fluid corner-radius full-width"
+                         alt="Default Image">
+                {% endif %}
+            </a>
+
+            {% if request.user.is_staff %}
+                <div class="number_visits_real"><i class="fa fa-eye"></i>
+                    {{ audio.audiovisit_set.count }}
+                </div>
+            {% endif %}
+
+            <div class="number_visits"><i class="fa fa-eye"></i>
+                {{ audio.audiovisit_set.count|add:audio.fake_visit_count }}
+            </div>
+        </div>
+
+        <div class="education_block_body">
+            <h4 class="bl-title single-line-truncate">
+                <a href="{% url 'audio_detail' audio.id %}"> {{ audio.name|truncate_to_one_line:50 }}</a>
+            </h4>
+        </div>
+
+        <div class="courses_info_style3">
+
+            <a href="{% url 'audio_detail' audio.id %}" class="full-width-link">
+                <div class="foot_features foot_audio_duration">
+
+                    {% if audio.duration and audio.duration != "0:00:0" %}
+{#                        <i class="ti-time  "></i>#}
+                        مدت زمان پادکست
+                        {{ audio.duration }}
+                    {% else %}
+                        فایل صوتی به زودی
+                    {% endif %}
+                </div>
+            </a>
+
+
+        </div>
+
+        {% comment %}<div class="audio_description_footer">
+            <p>{{ audio.summary|truncatewords:60|safe }}</p>
+
+        </div>{% endcomment %}
+    </div>
+</div>

@@ -3,9 +3,9 @@ from django.views import View
 from django.views.generic import CreateView, ListView, DetailView, TemplateView
 from django.contrib import messages
 from ks_account.models import User
-from ks_site.forms import ContactUsModelForm, ContactUsForm
+from ks_site.forms import ContactUsForm
 from ks_site.models import ContactUs, FrequentQuestion, SiteSetting
-from utility.faraz_sms import standard_number
+from utility.faraz_sms import standard_number, send_contact_us_sms
 from django.shortcuts import render, redirect
 
 
@@ -47,18 +47,19 @@ class ContactUsView(View):
         print("post register view")
         contact_us_form = ContactUsForm(request.POST)
         print(contact_us_form.is_valid())
-        # print(contact_us_form)
+        # todo: emkan moshahede payam karbar va pasokh admin
         if contact_us_form.is_valid():
             mobile = contact_us_form.cleaned_data.get('mobile')
             title = contact_us_form.cleaned_data.get('title')
             message = contact_us_form.cleaned_data.get('message')
             user: User = User.objects.filter(mobile__contains=standard_number(mobile)).first()
-            if True:
-                contact_us = ContactUs(title=title, user_id=user.id, message=message)
-                contact_us.save()
-            else:
-                # register_form.add_error('mobile', '')
-                pass
+            contact_us = ContactUs(title=title, user_id=user.id, message=message)
+            contact_us.save()
+            try:
+                send_contact_us_sms(mobile, contact_us.id)
+            except Exception as e:
+                print("An error occurred while sending SMS:", e)
+
             messages.success(request, ' پیام شما با موفقیت ارسال شد. ')
             return redirect('success_page')
         context = {
@@ -77,5 +78,7 @@ class FrequentQuestionList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(FrequentQuestionList, self).get_context_data(**kwargs)
+        site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
+        context['site_setting'] = site_setting
         context['question_count'] = FrequentQuestion.objects.filter(is_delete=False, is_active=True).count()
         return context

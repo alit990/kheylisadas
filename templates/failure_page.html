@@ -12,7 +12,7 @@
                 <div class="col-lg-12 col-md-12">
 
                     <div class="breadcrumbs-wrap">
-                        <h1 class="breadcrumb-title"> عملیات با خطا مواجه شد! </h1>
+                        <h1 class="breadcrumb-title"> خطا در انجام عملیات! </h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
@@ -32,18 +32,26 @@
         <div class="col-lg-12 col-md-12">
             <div class="edu_wraper border align-content-center text-center">
                 <h4 class="edu_title">توضیحات</h4>
-                <h>
+                <p>
                     {% if messages %}
                         {% for message in messages %}
-                            <div {% if message.tags %}
-                                class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show" {% endif %}>
-                                <span>{{ message }}</span>
-                            </div>
+                            {% if 'pending_payment' in message.tags %}
+                                <p class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show">
+                                    {{ message }}</p>
+                                <p class="text-info"> لطفا برای لغو عملیات جاری و تلاش مجدد روی دکمه زیر بزنید. </p>
+                                <a href="{% url 'cancel_pending_payments' %}" class="btn btn-danger">
+                                    تلاش مجدد
+                                </a>
+                            {% else %}
+                                <p class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show" >{{ message }}</p>
+                            {% endif %}
+
                         {% endfor %}
                     {% endif %}
-                </h>
+                </p>
                 <div class="text-center">
-                    <a href="{% url 'home_page' %}" class="btn btn-modern">صفحه اول سایت<span><i class="ti-arrow-left"></i></span></a>
+                    <a href="{% url 'home_page' %}" class="btn btn-modern">صفحه اول سایت<span><i
+                            class="ti-arrow-left"></i></span></a>
                 </div>
             </div>
         </div>

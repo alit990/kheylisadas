@@ -138,3 +138,16 @@ def codename_audio_perm():
 
 def codename_audio_week_perm():
     return 'can_view_monetary_audio_week'
+
+
+import random
+
+def get_random_number(min_value, max_value):
+    """
+    تولید یک عدد تصادفی بین min_value و max_value.
+
+    :param min_value: کمترین مقدار ممکن
+    :param max_value: بیشترین مقدار ممکن
+    :return: عدد تصادفی بین min_value و max_value
+    """
+    return random.randint(min_value, max_value)

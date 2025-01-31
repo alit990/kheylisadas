@@ -1,0 +1,108 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load jalali_tags %}
+{% load render_partial %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+
+{% load static %}
+{% block content %}
+    <br><br><br>
+    <section class="gray pt-5">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="dashboard-navbar">
+                        <div class="d-user-avater">
+
+                            {% if current_user.is_superuser %}
+                                {% thumbnail avatar.avatar_admin "x120" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+
+                                {% endthumbnail %}
+                            {% elif current_user.is_staff %}
+                                {% thumbnail avatar.avatar_staff "x120" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+
+                                {% endthumbnail %}
+                            {% else %}
+                                {% thumbnail avatar.avatar "x120" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid avater" alt="{{ current_user.username }}">
+                                {% endthumbnail %}
+                            {% endif %}
+
+                            <h4>{{ current_user.username }}</h4>
+                            {% if current_user.get_full_name %}
+                                <span>{{ current_user.get_full_name }}</span>
+                            {% endif %}
+                        </div>
+                        {% render_partial 'ks_user_panel.views.user_panel_menu_parial' %}
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12">
+
+                    <!-- Row برد کرامپ-->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 pb-4">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">داشبورد</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- /Row -->
+
+                    <!-- پرداخت ها -->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="dashboard_container">
+                                <div class="dashboard_container_header">
+                                    <div class="dashboard_fl_1">
+                                        <h4>لیست پیام های شما</h4>
+                                    </div>
+                                </div>
+                                <div class="dashboard_container_body">
+                                    {% if contacts %}
+                                        {% for contact in contacts %}
+                                            <div class="edu_wraper border">
+                                                <h6>{{ contact.title }} - <small>کد رهگیری: {{ contact.id }}</small> </h6>
+                                                <small>{{ contact.create_date|show_jalali_date }}
+                                                    {{ contact.create_date | time }}</small>
+                                                <p><strong>سوال:</strong> {{ contact.message }}</p>
+                                                <br>
+                                                {% if contact.is_read_by_admin %}
+                                                    {% if contact.response %}
+                                                        <p class="text-info"><strong>پاسخ
+                                                            ادمین:</strong> {{ contact.response }}</p>
+                                                    {% else %}
+                                                        <p class="text-warning">هنوز پاسخی ثبت نشده است</p>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <p class="text-danger">هنوز پیام شما تایید نشده است</p>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <div class="edu_wraper border">
+                                            <p class="text-info">هنوز پیامی برای ما ارسال نکرده اید.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /پایان پرداخت ها -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

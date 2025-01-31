@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     'guardian',
     'captcha',
     # docs on https://django-ckeditor.readthedocs.io/en/latest/
-    'ckeditor',  # CKEditor config
-    'ckeditor_uploader',  # CKEditor media uploader
+    # 'ckeditor',  # CKEditor config
+    # 'ckeditor_uploader',  # CKEditor media uploader
+    # CKEditor 5 config
+    'django_ckeditor_5',
+    'django_select2',
 
     # internal apps
     'ks_account',
@@ -77,6 +80,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #  for maintence mode
+    'ks_site.maintenance_middleware.MaintenanceMiddleware',
+
     # for hls m3u8 files
     # 'corsheaders.middleware.CorsMiddleware',
     # 'django.middleware.common.CommonMiddleware',
@@ -166,18 +172,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    # {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    # {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    # {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
@@ -246,122 +244,71 @@ AUTHENTICATION_BACKENDS = (
 CAPTCHA_IMAGE_SIZE = (150, 50)
 CAPTCHA_FONT_SIZE = 37
 CAPTCHA_FOREGROUND_COLOR = '#112599'
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
-CAPTCHA_MATH_CHALLENGE_OPERATOR = '+'
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'  # تغییر به چالش عددی تصادفی
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+# CAPTCHA_MATH_CHALLENGE_OPERATOR = '+'
 CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_TIMEOUT = 5  # تنظیم زمان انقضا برای کپچا به دقیقه
+
 
 # -------------- ckeditor Config ----------------
 CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
-# CKEDITOR_STORAGE_BACKEND = 'django.core.files.storage.FileSystemStorage'
-# CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
-# CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
-# CKEDITOR_BASEPATH = "/statics/ckeditor/ckeditor/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
-CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
-CKEDITOR_SETTINGS = {
-    'font_names': 'IRANSans'
-}
-
-
-CKEDITOR_CONFIGS = {
+CKEDITOR_5_CONFIGS = {
     'default': {
-        'skin': 'moono',
-        # 'skin': 'office2013',
-        'toolbar_Basic': [
-            ['Source', '-', 'Bold', 'Italic']
-        ],
-        'toolbar_YourCustomToolbarConfig': [
-            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
-            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
-            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
-            {'name': 'forms',
-             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
-                       'HiddenField']},
-            '/',
-            {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
-            {'name': 'paragraph',
-             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
-                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
-                       'Language']},
-            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
-            {'name': 'insert',
-             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
-            '/',
-            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
-            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
-            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
-            {'name': 'about', 'items': ['About']},
-            '/',  # put this to force next toolbar on new line
-            {'name': 'yourcustomtools', 'items': [
-                # put the name of your editor.ui.addButton here
-                'Preview',
-                'Maximize',
-
-            ]},
-        ],
-        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
-        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
-        # 'height': 291,
-        # 'width': '100%',
-        # 'filebrowserWindowHeight': 725,
-        # 'filebrowserWindowWidth': 940,
-        # 'toolbarCanCollapse': True,
-        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
-        'tabSpaces': 4,
-        'extraPlugins': ','.join([
-            'uploadimage', # the upload image feature
-            # your extra plugins here
-            'div',
-            'autolink',
-            'autoembed',
-            'embedsemantic',
-            'autogrow',
-            # 'devtools',
-            'widget',
-            'lineutils',
-            'clipboard',
-            'dialog',
-            'dialogui',
-            'elementspath'
-        ]),
+        'language': 'fa',  # زبان فارسی
+        'toolbar': {
+            'items': [
+                'heading', '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
+                'fontColor', 'fontBackgroundColor', '|',
+                'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+                'alignment',  # افزودن گزینه‌های تراز متن
+                'imageUpload', 'insertTable', 'mediaEmbed', '|',
+                'undo', 'redo', 'sourceEditing'
+            ]
+        },
+        'alignment': {
+            'options': ['left', 'center', 'right', 'justify']
+        },
+        'direction': 'rtl',  # راست به چپ
+        'image': {
+            'toolbar': [
+                'imageTextAlternative', 'imageStyle:full', 'imageStyle:side'
+            ]
+        },
+        'table': {
+            'contentToolbar': [
+                'tableColumn', 'tableRow', 'mergeTableCells'
+            ]
+        },
+        'fontSize': {
+            'options': [9, 11, 13, 14, 15, 17, 19, 21]
+        },
+        'fontFamily': {
+            'options': [
+                'default',
+                'IRANSans',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ],
+            'supportAllValues': True
+        },
+        'licenseKey': '',  # اگر لایسنس CKEditor 5 دارید، می‌توانید اینجا اضافه کنید.
     }
 }
-# CKEDITOR_CONFIGS = {
-#     'default':
-#         {
-#             'toolbar': {
-#                                 'items': [
-#                                     'heading',
-#                                     '|',
-#                                     'bold',
-#                                     'italic',
-#                                     'link',
-#                                     '|',
-#                                     'fontSize',
-#                                     'fontColor',
-#                                     '|',
-#                                     'imageUpload',
-#                                     'blockQuote',
-#                                     'insertTable',
-#                                     'undo',
-#                                     'redo',
-#                                     'codeBlock'
-#                                 ]
-#                             },
-#                             'language': 'fa',
-#                             'table': {
-#                                 'contentToolbar': [
-#                                     'tableColumn',
-#                                     'tableRow',
-#                                     'mergeTableCells'
-#                                 ]
-#                             },
-#                             'licenseKey': '',
-#                             'simpleUpload': {
-#                                 # The URL that the images are uploaded to.
-#                                 'uploadUrl': '/Uploader/UploadImage'
-#                             }
-#         },
-# }
+
+# ckeditor4 mansokh bood va bayad be 5 miraftam. chon migration haye ghabli khata dashtan, 4 ro negah dashtam ama
+# dige bela estefade ast
+
+
+# تنظیمات پرداخت
+# مقدار MERCHANT
+MERCHANT = '646f0c9b-d41f-464d-a7d4-7e83ccd6e719'
+SANDBOX = False  # برای تست، مقدار را True قرار دهید. در محیط تولید، مقدار را False قرار دهید.

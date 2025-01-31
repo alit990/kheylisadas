@@ -1,5 +1,5 @@
 class MyChapter:
-    def __init__(self, id=None, title=None, name=None, slug=None, audio_url=None):
+    def __init__(self, id=None, title=None, name=None, slug=None, audio_url=None, audio_count=None):
         self.d = {}
         if id is not None:
             self.d["id"] = id
@@ -9,8 +9,10 @@ class MyChapter:
             self.d["name"] = name
         if slug is not None:
             self.d["slug"] = slug
+        if audio_count is not None:
+            self.d["audio_count"] = audio_count
         if audio_url is not None:
-            self.d["audio_url"] = audio_url
+            self.d["audio_url"] = ""  # audio_url
 
     def __repr__(self):
         return str(self.d)

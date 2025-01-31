@@ -1,0 +1,13 @@
+<div class="single_widgets edu_wraper border">
+    <h4 class="title"> درس های دیگر این بخش </h4>
+    <ul class="lists lists-3">
+        {% for audio in same_section_audios %}
+            <li>
+                <a href="{% url 'audio_detail' audio.id %}">
+                    <i ></i>
+                    {{ audio.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

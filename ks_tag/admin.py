@@ -1,37 +1,13 @@
 from django.contrib import admin
 
-from ks_tag.models import TagCourse, TagArticle, TagCCDetail, TagWeek
+from ks_tag.models import Tag
 
 
-class TagCourseAdmin(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_active']
 
     class Meta:
-        model = TagCourse
+        model = Tag
 
 
-class TagArticleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_active']
-
-    class Meta:
-        model = TagArticle
-
-
-class TagCCDetailAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_active']
-
-    class Meta:
-        model = TagCCDetail
-
-
-class TagWeekAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_active']
-
-    class Meta:
-        model = TagWeek
-
-
-admin.site.register(TagCourse, TagCourseAdmin)
-admin.site.register(TagArticle, TagArticleAdmin)
-admin.site.register(TagCCDetail, TagCCDetailAdmin)
-admin.site.register(TagWeek, TagWeekAdmin)
+admin.site.register(Tag, TagAdmin)

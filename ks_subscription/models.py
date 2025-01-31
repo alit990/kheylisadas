@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
+from django_ckeditor_5.fields import CKEditor5Field
 
 from ks_account.models import User
 from utility.choices import PaymentStatus
@@ -27,7 +27,7 @@ class Plan(models.Model):
     is_recommended = models.BooleanField(default=False)
     short_description = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    description_rich = RichTextUploadingField(null=True, blank=True)
+    description_rich = CKEditor5Field('Description', config_name='default', null=True, blank=True)
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
     icon = models.CharField(default='A', max_length=10)
@@ -90,6 +90,7 @@ class Payment(models.Model):
         (ZARINPAL, 'آنلاین',),
         (GIFT, 'هدیه',),
     )
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     method = models.IntegerField(choices=METHOD_TYPE_CHOICES, null=True, blank=True,
                                  default=ZARINPAL)  # naghdi ya online (choice field)
@@ -115,11 +116,19 @@ class Transaction(models.Model):
     BEFORE_PAYMENT = 1
     ERROR_BEFORE_PAYMENT = 2
     SUCCESS_PAYMENT = 3
+
     STATUS_CHOICES = (
         (BEFORE_PAYMENT, 'قبل از پرداخت',),
         (ERROR_BEFORE_PAYMENT, 'خطا - قبل از پرداخت',),
         (SUCCESS_PAYMENT, 'پرداخت موفق',),
     )
+
+    # ایجاد دیکشنری برای نگهداری مقادیر
+    STATUS_CODES = {
+        "BEFORE_PAYMENT": BEFORE_PAYMENT,
+        "ERROR_BEFORE_PAYMENT": ERROR_BEFORE_PAYMENT,
+        "SUCCESS_PAYMENT": SUCCESS_PAYMENT,
+    }
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت در حال به‌روزرسانی است</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Vazir', sans-serif;  /* استفاده از فونت موجود در قالب */
+            background-color: #ffffff;  /* رنگ پس‌زمینه سفید */
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .gif {
+            width: 50%;  /* نصف صفحه در دستگاه‌های بزرگ */
+            max-width: 100%;  /* کل عرض صفحه در دستگاه‌های کوچک */
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 1.2em;
+            color: #333;
+        }
+        @media (max-width: 600px) {
+            .gif {
+                width: 100%;  /* کل عرض صفحه در دستگاه‌های کوچک */
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'assets/img/logo-1.png' %}" alt="لوگو سایت" class="logo">
+    <img src="{% static 'assets/img/maintence.gif' %}" alt="در حال به‌روزرسانی" class="gif">
+    <div class="message">
+        <p>سایت در حال به‌روزرسانی است</p>
+        <p>لطفا تا اطلاع ثانوی منتظر بمانید</p>
+    </div>
+</body>
+</html>

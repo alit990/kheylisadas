@@ -1,0 +1,192 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2023-08-21T06:45:01.312",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "1",
+    "object_repr": "forbidden words",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2023-08-21T06:46:31.931",
+    "user": 1,
+    "content_type": 15,
+    "object_id": "2",
+    "object_repr": "sex education",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2023-08-21T06:48:27.880",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "to masalan pesari",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2023-08-21T06:49:05.291",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "2",
+    "object_repr": "to masalan dokhtari",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2023-08-21T06:50:28.578",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "3",
+    "object_repr": "laj bazi",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2023-08-21T06:50:56.610",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "4",
+    "object_repr": "mavane yadgiri",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2023-08-21T13:54:57.638",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "1",
+    "object_repr": "ali",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2023-08-21T13:55:25.025",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "alis",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2023-08-21T13:55:54.569",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "3",
+    "object_repr": "ali",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2023-08-22T02:27:31.857",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "4",
+    "object_repr": "gholi",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2023-08-22T06:34:14.398",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "12",
+    "object_repr": "ali",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is allowed\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2023-08-22T07:28:06.480",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "1",
+    "object_repr": "sex education",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2023-08-22T07:28:48.224",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "2",
+    "object_repr": "forbidden words",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2023-08-22T07:29:31.549",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "3",
+    "object_repr": "marahel roshd",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2023-08-23T06:01:01.033",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "4",
+    "object_repr": 

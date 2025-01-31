@@ -1,0 +1,184 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load poll_extras %}
+{% load static %}
+
+{% block title %} {{ ccdetail.name }} {% endblock %}
+{% block content %}
+
+    <!-- ============================ Page title Start================================== -->
+    <div class="ed_detail_head py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-5">
+                    <div>
+                        <div class="img-responsive">
+                            {% thumbnail ccdetail.image "640" quality=90 as im %}
+                                <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ ccdetail.alt_image }}">
+                            {% endthumbnail %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-7">
+                    <div class="ed_detail_wrap">
+                        <div class="ed_header_caption">
+                            <h2 class="ed_title">{{ ccdetail.name }}</h2>
+                            <ul>
+                                <li>
+                                    <i class="ti-eye"></i> {{ ccdetail.ccdetailvisit_set.count|add:ccdetail.fake_visit_count }}
+                                    بازدید
+                                </li>
+                                <li><i class="ti-music"></i> {{ ccdetail.audio_count }} درس</li>
+                            </ul>
+                        </div>
+                        <div class="ed_header_short">
+                            {% if ccdetail.description|wordcount  > 150 %}
+                                <p id="description_p">{{ ccdetail.description|truncatewords:150 }}
+                                    <a onclick="showMoreDescription('{{ ccdetail.description }}')" class="link btn"> [
+                                        بیشتر ]</a>
+                                </p>
+                            {% else %}
+                                <p> {{ ccdetail.description }} </p>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ page title End ================================== -->
+
+    <!-- ============================ ccdetail Detail ================================== -->
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8 col-md-8">
+
+                    <!-- آکاردون ها -->
+                    <div class="edu_wraper border">
+                        <h4 class="edu_title">سرفصل درس‌ها</h4>
+                        <div id="accordionExample" class="accordion shadow circullum">
+                            {% for section in sections %}
+                                <div class="card">
+                                    <div id="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
+                                         class="card-header bg-white shadow-sm border-0">
+                                        <h6 class="mb-0 accordion_title"><a href="#" data-toggle="collapse"
+                                                                            data-target="#{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                                                            class="d-block position-relative text-dark collapsible-link py-2 collapsed"
+                                                                            onclick="createAudioBySection({{ section.id }})">
+                                            {{ section.name }}</a></h6>
+                                    </div>
+                                    <div id="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
+                                         aria-labelledby="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
+                                         data-parent="#accordionExample"
+                                         class="collapse" style="">
+                                        <div class="card-body pl-3 pr-3">
+                                            <p>{{ section.description|safe }}</p>
+                                            <div class="row">
+                                                {% for audio in section.audio_set.all %}
+                                                    <!-- Cource Grid 1 -->
+                                                    {% include 'components/audio_card_component.html' with audio=audio %}
+
+                                                {% endfor %}
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <!-- Vote Like Dislike -->
+                    <div class="single_widgets widget_search edu_wraper border" id="ccdetailVoteArea">
+                        {% include 'vote/includes/ccdetail_vote_partial.html' with ccdetail_likes_count=ccdetail_likes_count ccdetail_dislikes_count=ccdetail_dislikes_count ccdetail_ip_vote=ccdetail_ip_vote ccdetail=ccdetail %}
+                    </div>
+
+
+                    <!-- Blog Comment2 -->
+                    <div class="article_detail_wrapss single_article_wrap format-standard">
+
+                        <div>
+                            <div class="list-single-main-item fl-wrap" id="comments_area">
+                                {% include 'includes/comments_partial.html' with comments=comments comments_count=comments_count %}
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="comment-box submit-form">
+                                <br><br>
+                                <h2 class="reply-title">ثبت دیدگاه</h2>
+                                <div class="comment-form" id="comment_form">
+                                    <form action="#">
+                                        <div class="row">
+                                            {% if request.user.is_authenticated %}
+                                                <div id="submitCommentArea" class="col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <h5> ما را از نظر ارزشمند خود آگاه کنید </h5>
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="parent_id" value="">
+                                                            <label for="commentText">نظر</label><textarea
+                                                                id="commentText" name="comment"
+                                                                class="form-control"
+                                                                cols="30" rows="6"
+                                                                placeholder="نظر خود را بنویسید..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <button onclick="sendArticleComment({{ ccdetail.id }})"
+                                                                class="btn btn-theme btn-rounded"> ارسال نظر
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12">
+                                                    برای درج نظر می بایست
+                                                    <a href="{% url 'login_page' %}?next={{ request.path|urlencode }}">لاگین</a>
+                                                    کنید
+                                                </div>
+
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-4">
+                    <!-- ویژگی ها -->
+                    {% include 'includes/features.html' with object=ccdetail audio_count=audio_count has_perm=has_perm duration=duration %}
+
+                    <!-- Register -->
+                    {% include 'includes/register_component.html' with request=request %}
+
+                    {% include 'includes/ccdetail_tags_component.html' with tags=tags %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Course Detail ================================== -->
+
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}
+{% block footer_ref_top %}
+
+{% endblock %}
+{% block footer_ref %}
+    <script src="{% static 'assets/js/ks-ccdetail-comment.js' %}"></script>
+    <script src="{% static 'assets/js/ks-votes.js' %}"></script>
+{% endblock %}

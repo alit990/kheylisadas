@@ -69,8 +69,8 @@
 	Preloader
 ------------------------------------*/
 .preloader {
-    background-color: #ffffff;
-    background-image: url("../img/loader.svg");
+    background-color: rgb(255, 255, 255);
+    background-image: url("../img/load.svg");
     background-position: center center;
     background-repeat: no-repeat;
     height: 100%;
@@ -760,8 +760,13 @@ ul:last-child {
 }
 
 .theme-ov[data-overlay]:before {
-    background: linear-gradient(109.7deg, rgba(229, 0, 57, 1) 1.8%, rgba(162, 91, 182, 1) 90.2%);
+    /*background: linear-gradient(109.7deg, rgba(252, 63, 129, 0.77) 1.8%, rgba(82, 185, 154, 0.09) 90.2%);*/
+    background: linear-gradient(109.7deg, rgba(252, 63, 129, 0.77) 1.8%, rgba(37, 44, 65, 0.67) 90.2%);
 }
+
+/*.theme-ov[data-overlay]:before {*/
+/*    background: linear-gradient(109.7deg, rgba(229, 0, 57, 1) 1.8%, rgba(162, 91, 182, 1) 90.2%);*/
+/*}*/
 
 [data-overlay] *:not(.container):not(.bg-img-holder) {
     z-index: 2;
@@ -3433,7 +3438,8 @@ nav a:hover {
     right: -400px;
     position: fixed;
     background-color: #1c2138;
-    z-index: 20000;
+    /*z-index: 20000;*/
+    z-index: 1002; /* کاهش z-index */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     transition-duration: .8s;
@@ -3590,7 +3596,8 @@ nav a:hover {
     margin-top: 0;
     position: absolute;
     text-align: center;
-    z-index: 20000
+    z-index: 1002; /* کاهش z-index */
+    /*z-index: 20000*/
 }
 
 .submenu-indicator-chevron {
@@ -3629,7 +3636,8 @@ nav a:hover {
     right: 0;
     position: fixed;
     display: none;
-    z-index: 19999
+    z-index: 1001; /* کاهش z-index */
+    /*z-index: 19999*/
 }
 
 .no-scroll {
@@ -3986,7 +3994,7 @@ nav a {
 
 .header {
     background: #fff;
-    z-index: 4;
+    z-index: 1500;
 }
 
 .header-top {
@@ -5081,6 +5089,26 @@ li.login-attri .account-drop a {
     text-align: center;
 }
 
+.audio_description_footer {
+    padding: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+    border-top: 1px solid #f0f1f5;
+    overflow: hidden;
+    text-align: center;
+
+    /* ویژگی‌های مربوط به محدودیت تعداد خطوط */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    /*max-height: calc(1.2em * 3); !* ارتفاع حداکثر برای 3 خط *!*/
+    overflow: hidden;
+    text-overflow: ellipsis; /* اضافه کردن سه نقطه برای نمایش ادامه متن */
+}
+
+
 .education_block_author {
     flex: 1;
 }
@@ -5259,6 +5287,10 @@ ul.courses_facts_list li:after {
 
 }
 
+.foot_audio_duration {
+    text-align: center;
+}
+
 .courses_info_style3 ul li .audio_count {
     flex: 0 0 25%;
     width: 100%;
@@ -5324,14 +5356,31 @@ ul.courses_facts_list li:after {
 
 }
 
+/*.foot_features {*/
+/*    background: rgba(176, 176, 176, 0.13);*/
+/*    color: #6c6c6c;*/
+/*    padding: 6px 15px;*/
+/*    font-size: 12px;*/
+/*    border-radius: 50px;*/
+
+/*}*/
 .foot_features {
-    background: rgba(176, 176, 176, 0.13);
-    color: #6c6c6c;
+    background: #da0b4e; /* پس‌زمینه صورتی */
+    color: white; /* رنگ متن سفید */
     padding: 6px 15px;
     font-size: 12px;
     border-radius: 50px;
-
 }
+
+.foot_features a {
+    color: white; /* رنگ لینک‌ها سفید */
+    text-decoration: none; /* حذف خط زیر لینک‌ها */
+}
+
+.foot_features a:hover {
+    color: white; /* رنگ متن لینک‌ها سفید هنگام هاور شدن */
+}
+
 
 .duration .foot_features {
     margin-right: 5px;
@@ -6542,6 +6591,10 @@ ul.list_ed_detail2 {
     display: block;
 }
 
+ul.list_ed_detail2 a {
+    text-decoration: none;
+}
+
 ul.list_ed_detail2 li {
     width: 100%;
     /*width: calc(100% - 50px);*/
@@ -6747,7 +6800,7 @@ ul.list_ed_detail2 li.tag-5 strong, ul.list_ed_detail2 li.tag-5 i {
 }
 
 .reviews-reaction a.comment-like.active {
-    color: #272a36;
+    color: #ff3a82;
 }
 
 .reviews-reaction a.comment-dislike.active {
@@ -7609,7 +7662,8 @@ a.btn-br-more {
     height: 100vh;
     width: 0;
     position: fixed;
-    z-index: 1000;
+    z-index: 999; /* کاهش z-index */
+    /*z-index: 1000;*/
     top: 0;
     right: 0;
     background-color: #fff;
@@ -9617,6 +9671,23 @@ ul.cart_list li strong {
     color: #ffffff;
     background: #da0b4e;
 }
+.btn.checkout_pay_btn {
+    height: 54px;
+    width: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all ease 0.4s;
+    background: #1eb453;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn.checkout_pay_btn:hover, .btn.checkout_pay_btn:focus {
+    color: #ffffff;
+    background: #ff3a82;
+}
 
 .light_form .form-control, .light_form span.select2-selection.select2-selection--single {
     background: #f4f5f7;
@@ -11489,6 +11560,10 @@ a._cr_detail_arrow {
         font-size: 18px;
     }
 
+    h2.ed_title_2 {
+        font-size: 20px;
+    }
+
     ul.edu_list.third li {
         flex: 0 0 100%;
     }
@@ -12098,3 +12173,123 @@ a {
     text-decoration: none;
     /*color: #2e344a; !* For Example *!*/
 }
+
+/*  disable cards */
+.disabled-card {
+    pointer-events: none; /* غیرفعال کردن کلیک‌پذیری */
+    opacity: 0.6; /* شفافیت کارت */
+    position: relative;
+}
+
+.disabled-card::after {
+    content: "به زودی";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.5); /* پس‌زمینه نیمه شفاف */
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 10;
+}
+
+.disabled-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(148, 147, 147, 0.34); /* لایه خاکستری */
+}
+
+/* disabled category */
+.disabled-category {
+    pointer-events: none; /* غیرفعال کردن کلیک‌پذیری */
+    opacity: 0.6; /* شفافیت کارت */
+    position: relative;
+}
+
+.disabled-category::after {
+    content: "به زودی";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.5); /* پس‌زمینه نیمه شفاف */
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 10;
+}
+
+.disabled-category::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(148, 147, 147, 0.34); /* لایه خاکستری */
+}
+
+.disabled-link {
+    color: rgba(160, 160, 160, 0.3); /* تغییر رنگ به خاکستری */
+    pointer-events: none; /* غیرفعال کردن کلیک‌پذیری */
+    text-decoration: none; /* حذف زیرخط */
+}
+
+.text-lite {
+    color: rgba(255, 255, 255, 0.36); /* تغییر رنگ به خاکستری */
+    pointer-events: none; /* غیرفعال کردن کلیک‌پذیری */
+    text-decoration: none; /* حذف زیرخط */
+}
+
+/*  for cover ccdetail  */
+
+.image-cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.header {
+    position: relative;
+}
+@media (min-width: 993px) {
+    #imageCover { /* یا هر سلکتور دیگر برای عکس */
+        height: 400px; /* یا هر ارتفاع مناسب دیگر */
+        /* بقیه استایل‌های عکس را اینجا ننویسید */
+    }
+}
+
+/*fa3d7f*/
+/*  for change accardions  */
+
+/*.accordion .collapsible-link::before,*/
+/*.accordion .collapsible-link::after {*/
+/*    content: '';*/
+/*    width: 2px;*/
+/*    height: 14px;*/
+/*    background: #fa3d7f; !* تغییر رنگ به صورتی *!*/
+/*    position: absolute;*/
+/*    top: calc(50% - 7px);*/
+/*    left: calc(1rem + 6px);*/
+/*    display: block;*/
+/*    transition: transform 0.3s ease; !* استفاده از transform برای اطمینان از چرخش صحیح *!*/
+/*}*/
+/*.accordion .collapsible-link::before {*/
+/*    transform: rotate(90deg); !* خط عمودی برای تشکیل + *!*/
+/*}*/
+/*.accordion .collapsible-link.collapsed::before,*/
+/*.accordion .collapsible-link.collapsed::after {*/
+/*    transform: rotate(0deg); !* چرخش خطوط به حالت افقی *!*/
+/*}*/

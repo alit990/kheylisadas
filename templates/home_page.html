@@ -19,12 +19,12 @@
 
     <!-- ========================== Featured Category Section =============================== -->
     {% include 'components/category_list_component.html' with category=category %}
-    <hr class="shine">
     <!-- ============================ بخش کراسول یااسلیک اسلایدر دوره ها ================================== -->
-    {% include 'components/courses_slider_component.html' with courses=courses %}
+{#    <hr class="shine">#}
+    {#    {% include 'components/courses_slider_component.html' with courses=courses courses_is_disabled=site_setting.courses_is_disabled %}#}
 
     <!-- ===== DIVIDER ========== -->
-    <hr>
+{#    <hr>#}
     {#    <hr class="accessory">#}
     {#    <hr class="bookends">#}
     {#    <hr class="bookends-dots">#}
@@ -44,13 +44,21 @@
 
 
     <!-- ============================ Articles Section Start ================================== -->
-    {% include 'components/articles_slider_component.html' with articles=articles %}
+    {% if not site_setting.articles_is_disabled %}
+        {% include 'components/articles_slider_component.html' with articles=articles %}
+    {% endif %}
     <!-- ============================ Articles Section End ================================== -->
+
+    <!-- ========================== Plans Section Start =============================== -->
+    {% if not has_perm%}
+        <hr class="shine">
+        {% include 'components/plans_component.html' with plans=plans %}
+    {% endif %}
+    <!-- ========================== Plans Section End =============================== -->
     <hr class="shine">
     <!-- ========================== References Section Start =============================== -->
     {% include 'components/references_slider_component.html' with references=references %}
     <!-- ========================== References Section End =============================== -->
-    <hr>
     <!-- ============================ Horizontal lebels Start ================================== -->
     {% comment %}{% include 'components/horizontal_stepper_labels_component.html' %}{% endcomment %}
     <!-- ============================ Horizontal labels End ================================== -->

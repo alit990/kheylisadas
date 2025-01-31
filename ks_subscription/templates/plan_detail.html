@@ -63,7 +63,7 @@
                                         دسترسی کامل خواهید داشت.
                                     </p>
                                 {% endif %}
-                                <ul class="plan_items_ul">
+                                {% comment %}<ul class="plan_items_ul">
                                     {% for course in plan.courses.all %}
                                         <li class="fa fa-check">
                                             <a href="{{ course.get_absolute_url }}" class="btn-browse-btn">
@@ -72,7 +72,7 @@
                                         </li>
                                         <br>
                                     {% endfor %}
-                                </ul>
+                                </ul>{% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -100,45 +100,45 @@
                     <div class="cart_totals checkout">
                         <h4>صورت حساب</h4>
                         <div class="cart-wrap">
-                            <ul class="cart_list">
-                                <li>قیمت اصلی<strong> <s>
-                                    {% if plan.fake_price %}
-                                        {{ plan.fake_price }} تومان
-                                    {% else %}
-                                        0 تومان
-                                    {% endif %}
-                                </s> </strong></li>
-                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>
-                                <li>تخفیف<strong>
-                                    {% if plan.off %}
-                                        {{ plan.off }} تومان
-                                    {% else %}
-                                        0 تومان
-                                    {% endif %}
-                                </strong></li>
-                            </ul>
-                            <div class="flex_cart">
-                                <div class="flex_cart_1">
-                                    جمع کل
-                                </div>
-                                <div class="flex_cart_2">
-                                    {% if code_valid %}
-                                        {{ plan.off_price }} تومان
-                                    {% else %}
-                                        {{ plan.price }} تومان
-                                    {% endif %}
-                                </div>
-                            </div>
+{#                            <ul class="cart_list">#}
+{#                                <li>قیمت اصلی<strong> <s>#}
+{#                                    {% if plan.fake_price %}#}
+{#                                        {{ plan.fake_price }} تومان#}
+{#                                    {% else %}#}
+{#                                        0 تومان#}
+{#                                    {% endif %}#}
+{#                                </s> </strong></li>#}
+{#                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>#}
+{#                                <li>تخفیف<strong>#}
+{#                                    {% if plan.off %}#}
+{#                                        {{ plan.off }} تومان#}
+{#                                    {% else %}#}
+{#                                        0 تومان#}
+{#                                    {% endif %}#}
+{#                                </strong></li>#}
+{#                            </ul>#}
+{#                            <div class="flex_cart">#}
+{#                                <div class="flex_cart_1">#}
+{#                                    جمع کل#}
+{#                                </div>#}
+{#                                <div class="flex_cart_2">#}
+{#                                    {% if code_valid %}#}
+{#                                        {{ plan.off_price }} تومان#}
+{#                                    {% else %}#}
+{#                                        {{ plan.price }} تومان#}
+{#                                    {% endif %}#}
+{#                                </div>#}
+{#                            </div>#}
 
                             {% if not has_perm %}
-                                <div class="flex_cart text-center">
+{#                                <div class="flex_cart text-center">#}
                                     {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
                                     {% csrf_token %}
                                     {{ gift_form.as_p }}
                                     <button class="btn btn-theme" type="submit">بررسی کد</button>
                                 </form>{% endcomment %}
 
-                                    <form action="{{ plan.get_absolute_url }}" method="post">
+                                    {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
                                         {% csrf_token %}
                                         {{ gift_form.code.label }}
                                         {{ gift_form.code }}
@@ -158,10 +158,10 @@
                                             بررسی کد
                                         </button>
                                     </form>
-                                    <p class="text-success">{{ code_valid }}</p>
-                                </div>
-
-                                <hr>
+                                    <p class="text-success">{{ code_valid }}</p>{% endcomment %}
+{#                                </div>#}
+{##}
+{#                                <hr>#}
                                 <div class="flex_cart">
                                     <div class="flex_cart_1">
                                         مبلغ قابل پرداخت
@@ -179,7 +179,8 @@
                                        class="btn checkout_btn btn-light">دریافت رایگان اشتراک</a>
                                 {% else %}
                                     <a href="{% url 'request_payment' plan_id=plan.id code=gift_code %}"
-                                       class="btn checkout_btn btn-light">پرداخت</a>
+                                       class="btn checkout_pay_btn">پرداخت</a>
+{#                                       class="btn checkout_btn btn-light">پرداخت</a>#}
                                 {% endif %}
 
                             {% endif %}

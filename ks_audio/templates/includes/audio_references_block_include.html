@@ -1,0 +1,46 @@
+<div class="edu_wraper border">
+    <h4 class="edu_title"> مطالب این بخش بر اساس منابع علمی زیر تهیه شده اند.</h4>
+    <div id="accordionExample" class="accordion shadow circullum">
+        <div class="card">
+            <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                <h6 class="mb-0 accordion_title">
+                    <a href="#" data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne"
+                       class="d-block position-relative text-dark collapsible-link py-2 collapsed">
+                        <!-- عنوان آکاردئون -->
+                        منابع
+                    </a>
+                </h6>
+            </div>
+            <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample"
+                 class="collapse" style="">
+                <div class="card-body pl-3 pr-3">
+                    <!-- محتوای آکاردئون -->
+                    <p> {{ audio.references|safe }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="accordionExample" class="accordion shadow circullum">
+        <div class="card">
+            <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                <h6 class="mb-0 accordion_title">
+                    <a href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="false" aria-controls="collapseTwo"
+                       class="d-block position-relative text-dark collapsible-link py-2 collapsed">
+                        <!-- عنوان آکاردئون -->
+                        منابع
+                    </a>
+                </h6>
+            </div>
+            <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample"
+                 class="collapse" style="">
+                <div class="card-body pl-3 pr-3">
+                    <!-- محتوای آکاردئون -->
+                    <p> {{ audio.references|safe }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

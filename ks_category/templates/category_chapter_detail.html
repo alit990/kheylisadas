@@ -1,4 +1,5 @@
 {% extends 'shared/_MainLayout.html' %}
+{% load smooth_timedelta %}
 {% load thumbnail %}
 {% load poll_extras %}
 {% load static %}
@@ -7,15 +8,22 @@
 {% block content %}
 
     <!-- ============================ Page title Start================================== -->
-    <div class="ed_detail_head py-5">
+    {% comment %}<div class="ed_detail_head py-5">
         <div class="container py-5">
             <div class="row align-items-center">
                 <div class="col-lg-4 col-md-5">
                     <div>
                         <div class="img-responsive">
-                            {% thumbnail ccdetail.image "640" quality=90 as im %}
-                                <img src="{{ im.url }}" class="img-fluid corner-radius" alt="{{ ccdetail.alt_image }}">
-                            {% endthumbnail %}
+                            {% if ccdetail.image %}
+                                {% thumbnail ccdetail.image "640" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius"
+                                         alt="{{ ccdetail.alt_image }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}" class="img-fluid corner-radius"
+                                     alt="{{ ccdetail.alt_image }}">
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
@@ -48,7 +56,62 @@
                 </div>
             </div>
         </div>
+    </div>{% endcomment %}
+
+    <div id="imageCover" class="image-cover ed_detail_head lg theme-ov" data-overlay="9" style="background: #f4f4f4;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-lg-7 col-md-7">
+                    <div class="ed_detail_wrap light">
+                        <ul class="cources_facts_list">
+                            <li class="facts-1 text-lite">{{ ccdetail.title }}</li>
+                            {#                            <li class="facts-5">طراحی سایت</li>#}
+                        </ul>
+                        <div class="ed_header_caption">
+                            <h3 class="ed_title2">{{ ccdetail.name }}</h3>
+                            <ul>
+                                <li><i class="ti-time"></i> مدت زمان:{{ ccdetail.audios_duration|smooth_timedelta }}
+                                </li>
+                                <li><i class="ti-headphone"></i> {{ ccdetail.audio_count }} فایل صوتی</li>
+                                <li><i class="ti-shine"></i> {{ ccdetail.age_category }} </li>
+                                {#                                <li><i class="ti-user"></i> {{ ccdetail.student_count }} هنرجو</li>#}
+                            </ul>
+                        </div>
+                        {#                        <div class="ed_header_short">#}
+                        {#                            <p>{{ ccdetail.short_description|safe }}</p>#}
+                        {#                        </div>#}
+                        {#                        <div class="ed_rate_info">#}
+                        {#                            <div class="star_info">#}
+                        {#                                <i class="fas fa-star filled"></i>#}
+                        {#                                <i class="fas fa-star filled"></i>#}
+                        {#                                <i class="fas fa-star filled"></i>#}
+                        {#                                <i class="fas fa-star filled"></i>#}
+                        {#                                <i class="fas fa-star"></i>#}
+                        {#                            </div>#}
+                        {#                            <div class="review_counter">#}
+                        {#                                <strong class="high">4</strong>  امتیاز#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    {% if ccdetail.image %}
+        {% thumbnail ccdetail.image "2400x1000" quality=100 as im %}
+            <img id="hiddenImage" src="{{ im.url }}" style="display: none;" onload="adjustCoverSize(this)">
+        {% endthumbnail %}
+    {% else %}
+        <img id="hiddenImage" src="{% static 'assets/img/audio-no-image.jpg' %}" style="display: none;"
+             onload="adjustCoverSize(this)">
+    {% endif %}
+
+
+
+
+
+
     <!-- ============================ page title End ================================== -->
 
     <!-- ============================ ccdetail Detail ================================== -->
@@ -62,264 +125,38 @@
                     <div class="edu_wraper border">
                         <h4 class="edu_title">سرفصل درس‌ها</h4>
                         <div id="accordionExample" class="accordion shadow circullum">
-                            {% for section in data.sections %}
-
+                            {% for section in sections %}
                                 <div class="card">
-                                    <div id="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
+                                    <div id="heading{{ forloop.counter }}"
                                          class="card-header bg-white shadow-sm border-0">
-                                        <h6 class="mb-0 accordion_title"><a href="#" data-toggle="collapse"
-                                                                            data-target="#{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
-                                                                            class="d-block position-relative text-dark collapsible-link py-2 collapsed"
-                                                                            onclick="createAudioBySection({{ section.id }})">
-                                            {{ section.name }}</a></h6>
+                                        <h6 class="mb-0 accordion_title">
+                                            <a href="#" data-toggle="collapse"
+                                               data-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                                               aria-controls="collapse{{ forloop.counter }}"
+                                               class="d-block position-relative text-dark collapsible-link py-2 collapsed">
+                                                {{ section.name }} <small>({{ section.section_audio_count }}
+                                                درس)</small>
+                                            </a>
+                                        </h6>
                                     </div>
-                                    <div id="{% if forloop.counter == 1 %}collapseOne{% elif forloop.counter == 2 %}collapseTwo{% elif forloop.counter == 3 %}collapseThree{% elif forloop.counter == 4 %}collapseFour{% else %}collapseFive{% endif %}"
-                                         aria-labelledby="{% if forloop.counter == 1 %}headingOne{% elif forloop.counter == 2 %}headingTwo{% elif forloop.counter == 3 %}headingThree{% elif forloop.counter == 4 %}headingFour{% else %}headingFive{% endif %}"
-                                         data-parent="#accordionExample"
+                                    <div id="collapse{{ forloop.counter }}"
+                                         aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample"
                                          class="collapse" style="">
                                         <div class="card-body pl-3 pr-3">
-                                            <p>{{ section.description }}</p>
-                                            <hr>
-                                            <ul>
-                                                {% for audio in section.audios %}
-                                                    {% if audio.is_lock == "False" %}
-                                                        <li>
-                                                            <div>
-
-                                                                <div class="row mt-3">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_number">
-                                                                                <strong>{{ forloop.counter }}</strong>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_title"><i
-                                                                                    class=" ml-2"></i>{{ audio.name }}
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div>
-                                                                    <div class="player{{ audio.id }} free"
-                                                                         dir="ltr"></div>
-                                                                </div>
-                                                                <div class="vote-area">
-                                                                    <div id="audioVoteArea{{ audio.id }}"
-                                                                         class="row mt-3 align-to-left ">
-                                                                        {% include 'vote/includes/audio_vote_partial.html' with audio=audio like_count=audio.like_count dislike_count=audio.dislike_count user_vote=audio.user_vote added_playlist=audio.added_playlist page='CCDETAIL' %}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                                {% if audio.chapters|length != 0 %}
-                                                                    <div class="border border-light-gray">
-                                                                        <p class=" font-bold">
-                                                                            <span class="fa fa-pen"></span>
-                                                                            آنچه در این پادکست مورد بررسی
-                                                                            قرار میگیرد.</p>
-                                                                        <ul>
-                                                                            {% for chapter in audio.chapters %}
-                                                                                <li>
-                                                                                    <i class="ti-music"></i>
-                                                                                    <a onclick="myUpdateChapter({{ audio.id }},{{ forloop.counter }})"
-                                                                                       class="btn "> {{ chapter.name }}</a>
-                                                                                </li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </div>
-                                                                {% endif %}
-                                                            </div>
-                                                        </li>
-                                                    {% else %}
-                                                        {% if has_perm %}
-                                                            <li>
-                                                                <div class="row mt-3">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_number">
-                                                                                <strong>{{ forloop.counter }}</strong>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_title"><i
-                                                                                    class="fa fa-lock-open ml-2"></i>{{ audio.name }}
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div>
-                                                                    <div>
-                                                                        <div class="player{{ audio.id }} locked"
-                                                                             dir="ltr"></div>
-                                                                    </div>
-                                                                    <div class="vote-area">
-                                                                        <div id="audioVoteArea{{ audio.id }}"
-                                                                             class="row mt-3 align-to-left ">
-                                                                            {% include 'vote/includes/audio_vote_partial.html' with audio=audio like_count=audio.like_count dislike_count=audio.dislike_count user_vote=audio.user_vote added_playlist=audio.added_playlist page='CCDETAIL' %}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-                                                                    {% if audio.chapters|length != 0 %}
-                                                                        <div class="border border-light-gray">
-                                                                            <p class=" font-bold">
-                                                                                <span class="fa fa-pen"></span>
-                                                                                آنچه در این پادکست مورد بررسی
-                                                                                قرار میگیرد.</p>
-                                                                            <ul>
-                                                                                {% for chapter in audio.chapters %}
-                                                                                    <li>
-                                                                                        <i class="ti-music"></i>
-                                                                                        <a onclick="myUpdateChapter({{ audio.id }}, {{ forloop.counter }})"
-                                                                                           class="btn "> {{ chapter.name }}</a>
-                                                                                    </li>
-                                                                                {% endfor %}
-                                                                            </ul>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </li>
-                                                        {% else %}
-                                                            <li>
-                                                                <div class="row mt-3">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_number">
-                                                                                <strong>{{ forloop.counter }}</strong>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div class="audio_title"><i
-                                                                                    class="fa fa-lock ml-2"></i>{{ audio.name }}
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                                {% if audio.chapters|length != 0 %}
-                                                                    <div class="border border-light-gray">
-                                                                        <p class=" font-bold">
-                                                                            <span class="fa fa-pen"></span>
-                                                                            آنچه در این پادکست مورد بررسی
-                                                                            قرار میگیرد.</p>
-                                                                        <ul>
-                                                                            {% for chapter in audio.chapters %}
-                                                                                <li>
-                                                                                    <i class="ti-music"> {{ chapter.name }} </i>
-                                                                                </li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </div>
-                                                                {% endif %}
-                                                                <div>
-
-                                                                    <div class="border border-light-gray2 text-center">
-                                                                        <p>
-                                                                            برای دسترسی به محتوای کامل این درس باید
-                                                                            اشتراک «خیلی ساده‌ست» را خریداری کنید.
-                                                                            <br>
-
-                                                                        </p>
-                                                                        <a href="{% url 'plans_list' %}"
-                                                                           class="btn btn-light btn-buy">
-                                                                            خرید اشتراک
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-
-                                                            </li>
-                                                        {% endif %}
-                                                        {% comment %}                                                         {% if audio.type == 3 %}
-                                                                                                                    <div>
-                                                                                                                        <form action="submit">
-                                                                                                                            <h>{{ question_form.choices.label }}</h>
-                                                                                                                            {% for choice in question_form.choices %}
-                                                                                                                                <div class="form-check">
-                                                                                                                                    <label class="form-check-label">
-                                                                                                                                        <input type="radio"
-                                                                                                                                               class="form-check-input checkbox-custom"
-                                                                                                                                               name="choice{{ forloop.counter }}">
-                                                                                                                                        {{ choice }}
-                                                                                                                                    </label>
-                                                                                                                                </div>
-                                                                                                                            {% endfor %}
-                                                                                                                        </form>
-                                                                                                                    </div>
-                                                                                                                {% endif %}{% endcomment %}
-                                                    {% endif %}
-                                                    <hr>
+                                            <p>{{ section.description|safe }}</p>
+                                            <div class="row">
+                                                {% for audio in section.audio_set.all|is_active_filter %}
+                                                    {% include 'components/audio_card_component.html' with audio=audio %}
                                                 {% endfor %}
-
-                                            </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
-
                         </div>
                     </div>
 
-                    <!-- Vote Like Dislike -->
-                    <div class="single_widgets widget_search edu_wraper border" id="ccdetailVoteArea">
-                        {% include 'vote/includes/ccdetail_vote_partial.html' with ccdetail_likes_count=ccdetail_likes_count ccdetail_dislikes_count=ccdetail_dislikes_count ccdetail_ip_vote=ccdetail_ip_vote ccdetail=ccdetail %}
-                    </div>
 
-
-                    <!-- Blog Comment2 -->
-                    <div class="article_detail_wrapss single_article_wrap format-standard">
-
-                        <div>
-                            <div class="list-single-main-item fl-wrap" id="comments_area">
-                                {% include 'includes/comments_partial.html' with comments=comments comments_count=comments_count %}
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="comment-box submit-form">
-                                <br><br>
-                                <h2 class="reply-title">ثبت دیدگاه</h2>
-                                <div class="comment-form" id="comment_form">
-                                    <form action="#">
-                                        <div class="row">
-                                            {% if request.user.is_authenticated %}
-                                                <div id="submitCommentArea" class="col-lg-12 col-md-12 col-sm-12">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                                        <h5> ما را از نظر ارزشمند خود آگاه کنید </h5>
-                                                        <div class="form-group">
-                                                            <input type="hidden" id="parent_id" value="">
-                                                            <label for="commentText">نظر</label><textarea
-                                                                id="commentText" name="comment"
-                                                                class="form-control"
-                                                                cols="30" rows="6"
-                                                                placeholder="نظر خود را بنویسید..."></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                                        <button onclick="sendArticleComment({{ ccdetail.id }})"
-                                                                class="btn btn-theme btn-rounded"> ارسال نظر
-                                                        </button>
-
-                                                    </div>
-                                                </div>
-                                            {% else %}
-                                                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12">
-                                                    برای درج نظر می بایست
-                                                    <a href="{% url 'login_page' %}?next={{ request.path|urlencode }}">لاگین</a>
-                                                    کنید
-                                                </div>
-
-                                            {% endif %}
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- Sidebar -->
                 <div class="col-lg-4 col-md-4">
@@ -339,240 +176,118 @@
 
 {% endblock %}
 {% block header_ref_top %}
-    <script src="{% static 'bundle.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
-    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+
 {% endblock %}
 {% block footer_ref_top %}
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        const audio_url_static = "{% static 'assets/test_media/output.m3u8' %}";
+    <script type="text/javascript">
 
-        class KPlayer {
-            constructor(audio_id, player) {
-                this.audio_id = audio_id;
-                this.player = player;
+        $(document).ready(function () {
+            var hiddenImage = document.getElementById('hiddenImage');
+
+            // تنظیم نسبت تصویر بر اساس عرض صفحه قبل از لود تصویر
+            setCoverAspectRatio();
+
+            if (hiddenImage) {
+                hiddenImage.onload = function () {
+                    adjustCoverSize(hiddenImage);
+                };
+
+                // اگر تصویر لود نشد، مجددا سعی در تنظیم نسبت تصویر
+                hiddenImage.onerror = function () {
+                    console.error("Error loading image. Using default aspect ratio.");
+                    setCoverAspectRatio(); // تلاش مجدد برای تنظیم نسبت تصویر
+                };
             }
-        }
-
-        Player.use(Chapter);
-        let data_js = {{data_js|safe}};
-        let kplayers = [];
-        $.each(data_js.sections, function (section_index, section) {
-            $.each(section.audios, function (audio_index, audio) {
-                kplayers.push(new KPlayer(audio.id, null));
-            });
         });
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
+        $(window).on('pageshow', function (event) {
+            var hiddenImage = document.getElementById('hiddenImage');
+
+            // تنظیم نسبت تصویر بر اساس عرض صفحه در pageshow
+            setCoverAspectRatio();
+
+            if (hiddenImage && hiddenImage.complete) {
+                adjustCoverSize(hiddenImage);
+            } else if (hiddenImage) {
+                hiddenImage.onload = function () {
+                    adjustCoverSize(hiddenImage);
+                };
+
+                hiddenImage.onerror = function () {
+                    console.error("Error loading image. Using default aspect ratio.");
+                    setCoverAspectRatio();
+                };
             }
-            return cookieValue;
+        });
+
+
+        function setCoverAspectRatio() {
+            var cover = document.getElementById('imageCover');
+            cover.style.height = (cover.offsetWidth * 5 / 12) + 'px';
         }
 
-        function getCSRFToken() {
-            return getCookie('csrftoken');
-        }
+        function adjustCoverSize(img) {
+            console.log("Image loaded with size: " + img.naturalWidth + "x" + img.naturalHeight);
+            var cover = document.getElementById('imageCover');
+            var ratio = img.naturalWidth / img.naturalHeight; // نسبت تصویر
 
-        function getAudioUrl(csrfToken, audio_id, audio_type) {
-            const url = `{% url 'get_audio_url' %}`;
-            return $.ajax({
-                url: url,
-                method: "POST",
-                data: {
-                    csrfToken: csrfToken, // for nothing. bedoone iin ham kar mikard
-                    audio_id: audio_id,
-                    audio_type: audio_type
-                    },
-                headers: {'X-CSRFToken': csrfToken},
-                xhrFields: {withCredentials: true}
-            });
-        }
+            if (ratio > 12 / 5) {
+                // تصویر عریض‌تر از نسبت 12:5 است، بنابراین باید عرض را برش دهیم
+                cover.style.backgroundImage = 'url(' + img.src + ')';
+                cover.style.backgroundSize = 'cover';
+                cover.style.backgroundPosition = 'center center';
+            } else {
+                // تصویر به اندازه مناسب است
+                cover.style.backgroundImage = 'url(' + img.src + ')';
+                cover.style.backgroundSize = 'cover';
+                cover.style.backgroundPosition = 'center center';
+            }
 
-        function createAudioBySection(section_id) {
-            const csrfToken = getCSRFToken();
-            $.each(data_js.sections, function (section_index, section) {
-                if (section.id === section_id) {
-                    $.each(section.audios, function (audio_index, audio) {
-                        var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio.id);
-                        if (kplayer.player === null) {
-                            if (audio.is_lock === "False") {
-                                getAudioUrl(csrfToken, audio.id, "CCDETAIL").then(audioResponse => {
-                                    if (audioResponse.url) {
-                                        player_chapters = [];
-                                        $.each(audio.chapters, function (chapter_index, chapter) {
-                                            player_chapters.push({
-                                                'id': chapter.id,
-                                                'startTime': chapter.start_time,
-                                                'endTime': chapter.end_time,
-                                                'title': chapter.title,
-                                            });
-                                        });
-                                        kplayer.player = new Player({
-                                            container: document.querySelector('.player' + audio.id),
-                                            audio: {
-                                                title: audio.name,
-                                                artist: audio.artist,
-                                                chapters: player_chapters,
-                                                src: audioResponse.url,
-                                            },
-                                            themeColor: audio.theme_color,
-                                            theme: 'dark',
-                                            fixed: {type: 'static',},
-                                        });
-                                    } else {
-                                        console.error("Error: ", audioResponse.error);
-                                    }
-                                });
-                            } else {
-                                console.log("audio is LOCKED!");
-                            }
-                        }
-                        console.log("++++ kplayers " + kplayers);
-                    });
-                }
-            });
-        }
-
-        {% comment %}function createAudioBySection(section_id) {
-            $.each(data_js.sections, function (section_index, section) {
-                if (section.id === section_id) {
-                    $.each(section.audios, function (audio_index, audio) {
-                        var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio.id);
-                        if (kplayer.player === null) {
-                            if (audio.audio_url !== "LOCKED") {
-                                player_chapters = [];
-                                $.each(audio.chapters, function (chapter_index, chapter) {
-                                    player_chapters.push({
-                                        'id': chapter.id,
-                                        'startTime': chapter.start_time,
-                                        'endTime': chapter.end_time,
-                                        'title': chapter.title,
-                                    });
-                                });
-                                kplayer.player = new Player({
-                                    container: document.querySelector('.player' + audio.id),
-                                    audio: {
-                                        title: audio.name,
-                                        artist: audio.artist,
-                                        chapters: player_chapters,
-                                        src: audio.audio_url,
-                                    },
-                                    themeColor: audio.theme_color,
-                                    theme: 'dark',
-                                    fixed: {
-                                        type: 'static',
-                                    },
-                                });
-                                }
-                            } else {
-                                console.log("audio is LOCKED!");
-                            }
-                        }
-                        console.log("++++ kplayers  " + kplayers);
-                    });
-                }
-            });
-        }{% endcomment %}
-
-        function myUpdateChapter(audio_id, chapter_index) {
-            console.log(audio_id, chapter_index - 1);
-            console.log(kplayers);
-            var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio_id);
-            console.log(kplayer);
-            kplayer.player.updateChapter(chapter_index - 1);
-            {#eval('var current_player = player' + audio_id + ';');#}
-            {#current_player = updateChapter(chapter_index);#}
+            // تنظیم ارتفاع بخش به نسبت 12:5 (اینجا هم برای اطمینان تکرار شده)
+            cover.style.height = (cover.offsetWidth * 5 / 12) + 'px';
         }
     </script>
 
 
-    {% comment %}    <script>
-
-        class KPlayer {
-            constructor(audio_id, player) {
-                this.audio_id = audio_id;
-                this.player = player;
-            }
-        }
-
-        Player.use(Chapter);
-        let data_js = {{data_js|safe}};
-        let kplayers = [];
-        $.each(data_js.sections, function (section_index, section) {
-            $.each(section.audios, function (audio_index, audio) {
-                kplayers.push(new KPlayer(audio.id, null));
-            })
+    {% comment %}<script type="text/javascript">
+        $(document).ready(function () {
+            var hiddenImage = document.getElementById('hiddenImage');
+            hiddenImage.onload = function () {
+                adjustCoverSize(hiddenImage);
+            };
         });
 
-        function createAudioBySection(section_id) {
-            $.each(data_js.sections, function (section_index, section) {
-                if (section.id === section_id) {
-                    $.each(section.audios, function (audio_index, audio) {
-                        var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio.id);
-                        if (kplayer.player === null) {
-                            if (audio.audio_url !== "LOCKED") {
-                                player_chapters = [];
-                                $.each(audio.chapters, function (chapter_index, chapter) {
-                                    player_chapters.push({
-                                        'id': chapter.id,
-                                        'startTime': chapter.start_time,
-                                        'endTime': chapter.end_time,
-                                        'title': chapter.title,
-                                    })
-                                })
+        $(window).on('pageshow', function (event) {
+            var hiddenImage = document.getElementById('hiddenImage');
+            hiddenImage.onload = function () {
+                adjustCoverSize(hiddenImage);
+            };
+        });
 
-                                kplayer.player = new Player({
-                                    container: document.querySelector('.player' + audio.id),
-                                    audio: {
-                                        title: audio.name,
-                                        artist: audio.artist,
-                                        chapters: player_chapters,
-                                        src: audio.audio_url,
-                                        {#src: audio.url,#}
-                                        cover: audio.image_url
-                                    },
-                                    themeColor: audio.theme_color,
-                                    theme: 'dark',
-                                    fixed: {
-                                        type: 'static',
 
-                                    },
-                                });
-                            } else {
-                                console.log("audio is LOCKED!");
-                            }
+        function adjustCoverSize(img) {
+            console.log("Image loaded with size: " + img.naturalWidth + "x" + img.naturalHeight);
+            var cover = document.getElementById('imageCover');
+            var ratio = img.naturalWidth / img.naturalHeight; // نسبت تصویر
 
-                        }
-                        console.log("++++ kplayers  " + kplayers);
+            if (ratio > 12 / 5) {
+                // تصویر عریض‌تر از نسبت 12:5 است، بنابراین باید عرض را برش دهیم
+                cover.style.backgroundImage = 'url(' + img.src + ')';
+                cover.style.backgroundSize = 'cover';
+                cover.style.backgroundPosition = 'center center';
+            } else {
+                // تصویر به اندازه مناسب است
+                cover.style.backgroundImage = 'url(' + img.src + ')';
+                cover.style.backgroundSize = 'cover';
+                cover.style.backgroundPosition = 'center center';
+            }
 
-                    })
-                }
-            });
+            // تنظیم ارتفاع بخش به نسبت 12:5
+            cover.style.height = (cover.offsetWidth * 5 / 12) + 'px';
         }
-
-        function myUpdateChapter(audio_id, chapter_index) {
-            console.log(audio_id, chapter_index - 1);
-            console.log(kplayers);
-            var kplayer = kplayers.find(kplayer => kplayer.audio_id === audio_id);
-            console.log(kplayer);
-            kplayer.player.updateChapter(chapter_index - 1);
-            {#eval('var current_player = player' + audio_id + ';');#}
-            {#current_player = updateChapter(chapter_index);#}
-        }
-    </script>{% endcomment %}
-
+    </script>
+{% endcomment %}
 {% endblock %}
 {% block footer_ref %}
-    <script src="{% static 'assets/js/ks-ccdetail-comment.js' %}"></script>
     <script src="{% static 'assets/js/ks-votes.js' %}"></script>
 {% endblock %}

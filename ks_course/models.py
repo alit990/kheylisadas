@@ -10,7 +10,7 @@ import ks_audio
 from ks_account.models import User
 from ks_site.models import AgeCategory
 from ks_subscription.models import Payment
-from ks_tag.models import TagCourse
+from ks_tag.models import Tag
 from utility.choices import KSChoices
 from utility.utils import upload_course_image_path, group_course_name
 
@@ -42,9 +42,8 @@ class Course(models.Model):
     create_date = models.DateTimeField(default=timezone.now, editable=False)
     slug = models.SlugField(default="", blank='True', null=True,
                             db_index=True)  # samsung galaxy s 20 => samsung-galaxy-s-20
-    tags = models.ManyToManyField(TagCourse, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     age_category = models.ForeignKey(AgeCategory, on_delete=models.CASCADE, null=True, blank=True)
-    level = models.IntegerField(choices=KSChoices.CHOICES_LEVEL, null=False, blank=False)
     has_practice = models.BooleanField(default=False)
     last_update = models.DateTimeField(default=timezone.now, editable=True)
     fake_visit_count = models.IntegerField(default=5)
@@ -58,8 +57,6 @@ class Course(models.Model):
         )
         get_latest_by = 'create_date'
 
-    def get_level(self):
-        return KSChoices.CHOICES_LEVEL[self.level - 1][1]
 
     def get_absolute_url(self):
         return reverse('course_detail', args=[self.id, self.slug])

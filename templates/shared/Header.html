@@ -13,7 +13,7 @@
                 <a class="nav-brand static-logo"
                    href="{% if request.resolver_match.url_name == 'home_page' %}#{% else %}{% url 'home_page' %}{% endif %}">
 
-                    {% thumbnail site_setting.site_logo2 "x40" quality=95 format="PNG" as im %}
+                    {% thumbnail site_setting.site_logo2 "x40" quality=100 format="PNG" as im %}
                         <img src="{{ im.url }}" class="img-fluid" alt="">
 
                     {% endthumbnail %}
@@ -36,13 +36,13 @@
                     </li>
 
 
-                    <li class="{% if request.resolver_match.url_name == 'courses_list' %}active{% endif %}">
+                    {% comment %}<li class="{% if request.resolver_match.url_name == 'courses_list' %}active{% endif %}">
                         <a class="{% if request.resolver_match.url_name == 'courses_list' %}active{% endif %}"
                            href="{% if request.resolver_match.url_name == 'courses_list' %}#{% else %}{% url 'courses_list' %}{% endif %}">دوره‌های جامع</a>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'articles_list' %}active{% endif %}">
+                    </li>{% endcomment %}
+                    {% comment %}<li class="{% if request.resolver_match.url_name == 'articles_list' %}active{% endif %}">
                         <a href="{% if request.resolver_match.url_name == 'articles_list' %}#{% else %}{% url 'articles_list' %}{% endif %}">مقاله‌ها</a>
-                    </li>
+                    </li>{% endcomment %}
                     <li class="{% if request.resolver_match.url_name == 'plans_list' %}active{% endif %}">
                         <a href="{% if request.resolver_match.url_name == 'plans_list' %}#{% else %}{% url 'plans_list' %}{% endif %}">خرید
                             اشتراک</a>
@@ -92,3 +92,19 @@
 </div>
 <!-- End Navigation -->
 <div class="clearfix"></div>
+{% if has_perm %}
+    <!-- کد مربوط به دسترسی داشتن کاربر -->
+    <script>
+        var hasPerm = true;
+    </script>
+{% else %}
+    <!-- کد مربوط به دسترسی نداشتن کاربر -->
+    <script>
+        var hasPerm = false;
+    </script>
+{% endif %}
+<script>
+    const audioGetUrl = `{% url 'get_audio_url' %}`;
+    const coverImageUrl = "{% static 'assets/img/audio-icon.png' %}";
+</script>
+

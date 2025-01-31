@@ -384,6 +384,10 @@ span.payment_method.online {
     color: #21f33d;
     background: rgba(33, 150, 243, 0.1);
 }
+span.payment_method.gift {
+    color: #7b19cb;
+    background: rgba(33, 150, 243, 0.1);
+}
 
 span.payment_method.unknown {
     color: #f32121;
@@ -673,4 +677,168 @@ div.vote-area {
 
 .color-ks5 {
     color: #da0b4e !important;
+}
+
+.color-ks6 {
+    color: #ff3a82 !important;
+}
+
+.rounded-box {
+    color: white;
+    background-color: #ff3a82;
+    border-radius: 50px; /* مقدار بزرگتر برای ایجاد گوشه‌های گردتر */
+    padding: 10px; /* فضای داخلی باکس */
+    display: inline-block; /* برای اینکه باکس به اندازه محتوای داخلی‌اش باشد */
+}
+
+.rounded-box-center {
+    color: white;
+    background-color: #ff3a82;
+    border-radius: 50px; /* این مقدار را می‌توانید بر اساس نیاز خود تغییر دهید */
+    padding: 10px; /* فضای داخلی باکس */
+    display: block; /* برای اینکه باکس به اندازه محتوای داخلی‌اش باشد */
+    text-align: center;
+    margin: 0 auto; /* برای وسط‌چین کردن باکس */
+    margin-bottom: 3px;
+    width: fit-content; /* باکس به اندازه محتوا باشد */
+}
+.full-width-audio {
+    width: 100%;
+}
+.full-width-link {
+    display: block;
+    width: 100%;
+    text-align: center; /* مرکزچینی متن داخل لینک */
+    text-decoration: none; /* حذف خط زیرین لینک */
+}
+
+.courses_info_style3 .foot_features.foot_audio_duration {
+    display: flex;
+    align-items: center; /* تنظیم عمودی مرکزچین شدن */
+    justify-content: center; /* تنظیم افقی مرکزچین شدن */
+    background-color: #ff3a82; /* اضافه کردن استایل مورد نظر */
+    border-radius: 10px; /* این مقدار را می‌توانید بر اساس نیاز خود تغییر دهید */
+    padding: 5px 10px; /* فضای داخلی باکس */
+    margin: 0 auto; /* برای وسط‌چین کردن باکس */
+    width: 100%; /* عرض کامل */
+    box-sizing: border-box; /* محاسبه پدینگ در داخل باکس */
+    transition: background-color 0.3s, color 0.3s; /* اضافه کردن انیمیشن برای تغییرات */
+}
+
+.courses_info_style3 .foot_features.foot_audio_duration i {
+    margin-right: 5px; /* ایجاد فاصله بین آیکون و متن */
+}
+
+.full-width-link:hover .foot_features.foot_audio_duration {
+    background-color: #da0b4e; /* رنگ پس‌زمینه در حالت hover */
+    color: white; /* رنگ متن در حالت hover */
+}
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 0 !important; /* تغییر padding-bottom به صفر */
+}
+.single-line-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.audio-chapters-container {
+    border: 1px solid lightgray; /* اطمینان از اینکه کلاس border موجود همچنان اعمال می‌شود */
+}
+
+.audio-chapters-container h6 {
+    padding-right: 5px; /* فاصله از سمت راست برای تراز شدن با آیتم‌های زیر */
+    margin-right: 5px; /* ایجاد فاصله اضافی از سمت راست */
+}
+.audio-chapters-container h6 small {
+    color: darkgray;
+}
+
+.audio-chapters-container ul {
+    list-style: none; /* حذف بولت‌های پیش‌فرض لیست */
+    padding: 0; /* حذف فضای پیش‌فرض */
+}
+
+.audio-chapters-container li {
+    margin-bottom: 10px; /* فاصله بین آیتم‌های لیست */
+    display: flex; /* استفاده از Flexbox برای تراز کردن آیتم‌ها */
+    align-items: center; /* تراز کردن آیتم‌ها در مرکز */
+}
+
+.audio-chapters-container i {
+    margin-right: 5px; /* کاهش فاصله بین آیکون و متن */
+}
+
+.audio-chapters-container a {
+    white-space: normal; /* اجازه به چند خطه شدن متن */
+    word-break: break-word; /* شکستن کلمات بلند به خطوط جدید */
+    display: inline-block; /* جلوگیری از بیرون زدن متن از کادر */
+    max-width: 100%; /* جلوگیری از بیرون زدن متن از کادر */
+    color: #da0b4e !important; /* رنگ اولیه لینک با استفاده از !important */
+    text-decoration: none !important; /* حذف خط زیر لینک با استفاده از !important */
+    margin-right: 2px;
+    padding-right: 2px;
+}
+
+.audio-chapters-container a:hover {
+    color: #ff3a82 !important; /* رنگ لینک در حالت هاور با استفاده از !important */
+    text-decoration: underline !important; /* خط زیر لینک در حالت هاور با استفاده از !important */
+}
+
+.audio-chapters-container a:active {
+    color: #252c41 !important; /* رنگ لینک در حالت کلیک با استفاده از !important */
+    /*text-decoration: underline !important; !* خط زیر لینک در حالت کلیک با استفاده از !important *!*/
+}
+
+
+/*vote area*/
+.reviews-reaction {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* فاصله بین تگ‌ها، می‌توانید این مقدار را تنظیم کنید */
+}
+
+.reviews-reaction h4 {
+    margin: 0; /* حذف حاشیه‌های پیش‌فرض */
+}
+
+.reviews-reaction a {
+    white-space: nowrap; /* جلوگیری از رفتن به خط دوم */
+}
+
+.chapter-item-p {
+    padding-right: 5px;
+}
+#player-container {
+    position: relative;
+}
+#player-floating {
+    position: fixed;
+    bottom: 0; /* چسبیدن به پایین صفحه */
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #ffffff;
+    transition: transform 0.3s ease-out;
+    transform: translateY(100%); /* پنهان کردن اولیه پلیر */
+}
+
+#player-floating.show {
+    transform: translateY(0); /* نمایش پلیر */
+}
+
+.close-btn {
+    position: absolute;
+    top: -35px; /* موقعیت بالاتر از پلیر */
+    right: 10px;
+    background: rgba(95, 95, 98, 0.75);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 1001; /* بالاتر از پلیر */
 }
