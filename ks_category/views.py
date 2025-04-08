@@ -8,12 +8,14 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from datetime import datetime, timedelta
 
+from guardian.shortcuts import remove_perm
+
 from ks_account.models import User
 from ks_audio.models import Audio, AudioChapter, AudioWeek, AudioWeekChapter, AudioVisit
 from ks_category.models import Category, CCDetail, Section, CCDetailComment, Week, WeekComment, SectionWeek, WeekVisit, \
     CCDetailVisit, Chapter
 from ks_site.models import Avatar
-from ks_subscription.models import Transaction
+from ks_subscription.models import Transaction, Campaign, CTransaction, Chart
 from ks_vote.forms import QuestionForm
 from ks_vote.models import WeekVote, CCDetailVote, AudioVote, AudioPlaylist, AudioWeekVote, AudioWeekPlaylist
 from utility.context_audio_with_section_preparation import D, Sec, Au, Ch
@@ -22,7 +24,6 @@ from utility.http_service import get_client_ip
 from utility.utils import group_subscription_name, codename_audio_perm, codename_audio_week_perm
 
 from django.views.generic.detail import DetailView
-
 
 
 # محل نمایش chapter های مختلف یک category
@@ -56,7 +57,32 @@ def category_detail(request, id=None, slug=None):
             context['WEEK_AUDIO_URL'] = week_audio_url
         except:
             context['WEEK_AUDIO_URL'] = ""
+    user_chart = None
+    if request.user.is_authenticated:
+        campaign = Campaign.objects.filter(is_active=True).first()
+        current_user: User = request.user
+        user_id = current_user.id
+        has_campaign = current_user.has_perm('fully_view_campaign', campaign)  # guardian library
+        # has_campaign = has_perm(self.request.user, 'fully_view_campaign', campaign)  # guardian library
 
+        if CTransaction.objects.filter(user_id=current_user.id, is_paid=True,
+                                       is_expired=False).exists() and has_campaign:
+            c_transaction = CTransaction.objects.filter(
+                user_id=current_user.id, is_paid=True, is_expired=False).first()
+            if c_transaction.is_expired_this:
+                try:
+                    remove_perm('fully_view_campaign', current_user, campaign)
+                    # سایر عملیات مربوط به انقضای اشتراک
+                except Campaign.DoesNotExist:
+                    # مدیریت خطای عدم وجود Campaign
+                    pass
+                has_campaign = False
+            else:
+                if c_transaction.category.id == category.id:
+                    user_chart = Chart.objects.filter(campaign=campaign, is_active=True,
+                                                      category_id=c_transaction.category.id).first()
+        context['user_chart'] = user_chart
+        context['has_campaign'] = has_campaign
     return render(request, 'category_detail.html', context)
 
 
@@ -165,7 +191,8 @@ def category_chapter_detail(request, category_id=None, chapter_id=None, chapter_
     # question_form = QuestionForm()
     # context['question_form'] = question_form
     context['audio_count'] = audio_count
-
+    categories = Category.objects.all()
+    context['categories'] = categories
     return render(request, 'category_chapter_detail.html', context)
 
 
@@ -360,8 +387,3 @@ def add_week_comment(request: HttpRequest):
             else:
                 return HttpResponse('too-many-comment')
     return HttpResponse('response')
-
-
-
-
-

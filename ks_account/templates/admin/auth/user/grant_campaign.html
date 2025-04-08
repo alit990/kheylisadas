@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>اعطای کمپین به کاربر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>اعطای کمپین به کاربر: {{ user.username }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="campaign">انتخاب کمپین:</label>
+    <select name="campaign" id="campaign" required>
+        <option value="">-- یک کمپین انتخاب کنید --</option>
+        {% for campaign in campaigns %}
+            <option value="{{ campaign.id }}">{{ campaign.name }} ({{ campaign.duration }} روز - {{ campaign.price }}
+                تومان)
+            </option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="category">انتخاب دسته‌بندی:</label>
+    <select name="category" id="category" required>
+        <option value="">-- یک دسته‌بندی انتخاب کنید --</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <button type="submit">اعطای اشتراک و کمپین</button>
+</form>
+<a href="{% url 'admin:index' %}">بازگشت به پنل ادمین</a>
+</body>
+</html>

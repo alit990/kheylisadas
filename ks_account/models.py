@@ -38,6 +38,17 @@ class ActivityLog(models.Model):
     SENT_ACTIVATION_SMS = 4
     SENT_RESET_PASSWORD_SMS = 5
     REGISTER_SUCCESS = 6
+    INVALID_MOBILE_NUMBER = 7
+    DUPLICATE_MOBILE_NUMBER = 8
+    SMS_DELIVERY_FAILED = 9
+    ACTIVATION_FAILED_INVALID_CODE = 10
+    ACTIVATION_FAILED_EXPIRED_CODE = 11
+    ACTIVATION_FAILED_USER_NOT_FOUND = 12
+    REGISTER_FAILED_UNKNOWN = 13
+    ACTIVATION_FAILED_UNKNOWN = 14
+    SENT_ACTIVATION_SMS_VERIFIED = 15  # مورد جدید
+    ACTIVATION_FAILED_INVALID_CODE_ENTERED = 16  # مورد جدید
+    LOGIN_FAILED_USER_NOT_FOUND = 17  # مورد جدید
 
     TYPE_CHOICES = (
         (LOGIN_SUCCESS, 'ورود موفق'),
@@ -46,8 +57,19 @@ class ActivityLog(models.Model):
         (SENT_ACTIVATION_SMS, 'ارسال پیامک فعالسازی'),
         (SENT_RESET_PASSWORD_SMS, 'ارسال پیامک بازیابی رمز عبور'),
         (REGISTER_SUCCESS, 'ثبت نام موفق'),
+        (INVALID_MOBILE_NUMBER, 'شماره موبایل نامعتبر'),
+        (DUPLICATE_MOBILE_NUMBER, 'شماره موبایل تکراری'),
+        (SMS_DELIVERY_FAILED, 'ارسال پیامک فعالسازی ناموفق'),
+        (ACTIVATION_FAILED_INVALID_CODE, 'کد فعالسازی نامعتبر'),
+        (ACTIVATION_FAILED_EXPIRED_CODE, 'کد فعالسازی منقضی شده'),
+        (ACTIVATION_FAILED_USER_NOT_FOUND, 'کاربر یافت نشد'),
+        (REGISTER_FAILED_UNKNOWN, 'خطای ثبت نام ناشناخته'),
+        (ACTIVATION_FAILED_UNKNOWN, 'خطای فعالسازی ناشناخته'),
+        (SENT_ACTIVATION_SMS_VERIFIED, 'کد فعالسازی وارد شده'),  # مورد جدید
+        (ACTIVATION_FAILED_INVALID_CODE_ENTERED, 'کد فعالسازی اشتباه وارد شده'),  # مورد جدید
+        (LOGIN_FAILED_USER_NOT_FOUND, 'ورود ناموفق. کاربر یافت نشد.'),  # مورد جدید
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # null=True و blank=True اضافه شدند
     type = models.IntegerField(choices=TYPE_CHOICES, null=False, blank=False)
     ip = models.CharField(max_length=30, null=True, blank=True)
     create_date = models.DateTimeField(default=timezone.now)

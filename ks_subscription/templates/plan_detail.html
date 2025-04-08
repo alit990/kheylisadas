@@ -100,45 +100,45 @@
                     <div class="cart_totals checkout">
                         <h4>صورت حساب</h4>
                         <div class="cart-wrap">
-{#                            <ul class="cart_list">#}
-{#                                <li>قیمت اصلی<strong> <s>#}
-{#                                    {% if plan.fake_price %}#}
-{#                                        {{ plan.fake_price }} تومان#}
-{#                                    {% else %}#}
-{#                                        0 تومان#}
-{#                                    {% endif %}#}
-{#                                </s> </strong></li>#}
-{#                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>#}
-{#                                <li>تخفیف<strong>#}
-{#                                    {% if plan.off %}#}
-{#                                        {{ plan.off }} تومان#}
-{#                                    {% else %}#}
-{#                                        0 تومان#}
-{#                                    {% endif %}#}
-{#                                </strong></li>#}
-{#                            </ul>#}
-{#                            <div class="flex_cart">#}
-{#                                <div class="flex_cart_1">#}
-{#                                    جمع کل#}
-{#                                </div>#}
-{#                                <div class="flex_cart_2">#}
-{#                                    {% if code_valid %}#}
-{#                                        {{ plan.off_price }} تومان#}
-{#                                    {% else %}#}
-{#                                        {{ plan.price }} تومان#}
-{#                                    {% endif %}#}
-{#                                </div>#}
-{#                            </div>#}
+                            {#                            <ul class="cart_list">#}
+                            {#                                <li>قیمت اصلی<strong> <s>#}
+                            {#                                    {% if plan.fake_price %}#}
+                            {#                                        {{ plan.fake_price }} تومان#}
+                            {#                                    {% else %}#}
+                            {#                                        0 تومان#}
+                            {#                                    {% endif %}#}
+                            {#                                </s> </strong></li>#}
+                            {#                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>#}
+                            {#                                <li>تخفیف<strong>#}
+                            {#                                    {% if plan.off %}#}
+                            {#                                        {{ plan.off }} تومان#}
+                            {#                                    {% else %}#}
+                            {#                                        0 تومان#}
+                            {#                                    {% endif %}#}
+                            {#                                </strong></li>#}
+                            {#                            </ul>#}
+                            {#                            <div class="flex_cart">#}
+                            {#                                <div class="flex_cart_1">#}
+                            {#                                    جمع کل#}
+                            {#                                </div>#}
+                            {#                                <div class="flex_cart_2">#}
+                            {#                                    {% if code_valid %}#}
+                            {#                                        {{ plan.off_price }} تومان#}
+                            {#                                    {% else %}#}
+                            {#                                        {{ plan.price }} تومان#}
+                            {#                                    {% endif %}#}
+                            {#                                </div>#}
+                            {#                            </div>#}
 
                             {% if not has_perm %}
-{#                                <div class="flex_cart text-center">#}
-                                    {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
+                                {#                                <div class="flex_cart text-center">#}
+                                {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
                                     {% csrf_token %}
                                     {{ gift_form.as_p }}
                                     <button class="btn btn-theme" type="submit">بررسی کد</button>
                                 </form>{% endcomment %}
 
-                                    {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
+                                {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
                                         {% csrf_token %}
                                         {{ gift_form.code.label }}
                                         {{ gift_form.code }}
@@ -159,9 +159,9 @@
                                         </button>
                                     </form>
                                     <p class="text-success">{{ code_valid }}</p>{% endcomment %}
-{#                                </div>#}
-{##}
-{#                                <hr>#}
+                                {#                                </div>#}
+                                {##}
+                                {#                                <hr>#}
                                 <div class="flex_cart">
                                     <div class="flex_cart_1">
                                         مبلغ قابل پرداخت
@@ -179,8 +179,50 @@
                                        class="btn checkout_btn btn-light">دریافت رایگان اشتراک</a>
                                 {% else %}
                                     <a href="{% url 'request_payment' plan_id=plan.id code=gift_code %}"
-                                       class="btn checkout_pay_btn">پرداخت</a>
-{#                                       class="btn checkout_btn btn-light">پرداخت</a>#}
+                                       class="btn checkout_pay_btn" id="paymentButton">
+                                        <span id="buttonText">پرداخت</span>
+                                        <svg id="loadingAnimation" class="hidden-loading" width="24" height="24"
+                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <style>.spinner_qM83 {
+                                                animation: spinner_8HQG 1.05s infinite
+                                            }
+
+                                            .spinner_oXPr {
+                                                animation-delay: .1s
+                                            }
+
+                                            .spinner_ZTLf {
+                                                animation-delay: .2s
+                                            }
+
+                                            @keyframes spinner_8HQG {
+                                                0%, 57.14% {
+                                                    animation-timing-function: cubic-bezier(0.33, .66, .66, 1);
+                                                    transform: translate(0)
+                                                }
+                                                28.57% {
+                                                    animation-timing-function: cubic-bezier(0.33, 0, .66, .33);
+                                                    transform: translateY(-6px)
+                                                }
+                                                100% {
+                                                    transform: translate(0)
+                                                }
+                                            }</style>
+                                            <circle class="spinner_qM83" cx="4" cy="12" r="3" fill="#ffffff"/>
+                                            <circle class="spinner_qM83 spinner_oXPr" cx="12" cy="12" r="3"
+                                                    fill="#ffffff"/>
+                                            <circle class="spinner_qM83 spinner_ZTLf" cx="20" cy="12" r="3"
+                                                    fill="#ffffff"/>
+                                        </svg>
+                                    </a>
+
+
+
+
+
+
+
+                                    {#                                       class="btn checkout_btn btn-light">پرداخت</a>#}
                                 {% endif %}
 
                             {% endif %}
@@ -195,4 +237,32 @@
     </section>
     <!-- ============================ Add To cart End ================================== -->
 
+{% endblock %}
+{% block footer_ref %}
+    <script>
+        $(document).ready(function () {
+            var paymentButton = $("#paymentButton");
+            var buttonText = $("#buttonText");
+            var loadingAnimation = $("#loadingAnimation");
+
+            paymentButton.on("click", function (event) {
+                if (paymentButton.prop("disabled")) {
+                    return; // جلوگیری از چندبار کلیک
+                }
+                event.preventDefault();
+                disableButton();
+                // Navigate to the payment URL
+                window.location.href = $(this).attr("href");
+            });
+
+            function disableButton() {
+                paymentButton.prop("disabled", true); // غیرفعال کردن دکمه
+                paymentButton.css("background", "#808080"); // تغییر رنگ دکمه به توسی
+                buttonText.addClass("hidden-loading"); // پنهان کردن متن دکمه
+                loadingAnimation.removeClass("hidden-loading").addClass("visible-loading"); // نمایش انیمیشن
+            }
+        });
+
+
+    </script>
 {% endblock %}

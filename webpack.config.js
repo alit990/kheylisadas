@@ -6,11 +6,27 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, 'core', 'static'),
             filename: 'bundle.js',
-            library: 'MyLibrary',
-            libraryTarget: 'var',
         },
         resolve: {
             extensions: ['.js', '.jsx'],
+            alias: {
+                '@core': path.resolve(__dirname, 'core', 'static'),
+            },
+        },
+    },
+    {
+        entry: './assets/scripts/index.js',
+        output: {
+            path: path.resolve(__dirname, 'core', 'static'),
+            filename: 'bundle_lib.js',
+            library: 'MyLibrary',
+            libraryTarget: 'umd',
+        },
+        resolve: {
+            extensions: ['.js', '.jsx'],
+            alias: {
+                '@core': path.resolve(__dirname, 'core', 'static'),
+            },
         },
     },
     {
@@ -21,10 +37,9 @@ module.exports = [
         },
         resolve: {
             extensions: ['.js', '.jsx'],
+            alias: {
+                '@core': path.resolve(__dirname, 'core', 'static'),
+            },
         },
-    }
+    },
 ];
-
-// npm run dev
-
-

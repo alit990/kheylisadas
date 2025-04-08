@@ -5,6 +5,10 @@
 <html lang="fa">
 
 <head>
+    {#    for google tags    #}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-15FGG6FFY5"></script>
+    <script src="{% static 'assets/js/gtag.js' %}"></script>
+
     <meta charset="utf-8"/>
     <meta name="author" content="مرجع صوتی تربیت فرزند «خیلی ساده‌ست»"/>
     <meta name="viewport"
@@ -13,8 +17,11 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
     <title> {% block title %}{% endblock %} </title>
     {#<iframe src="{% static 'assets/html/shared_script.html' %}" style="display:none;"></iframe>#}
-    <script src="{% static 'bundle.js' %}"></script>
+    {#    <script src="{% static 'bundle.js' %}"></script>#}
+    <script src="{% static 'bundle_lib.js' %}"></script>
+    {#    <script src="{% static 'assets/js/bundle.js' %}"></script>#}
     <script src="{% static 'bundle_sweetalert.js' %}"></script>
+    {#    <script src="{% static 'assets/js/bundle_sweetalert.js' %}"></script>#}
     <link rel="stylesheet" type="text/css" href="{% static 'assets/base.css' %}">
 
     {#    <script src="{% static 'assets/js/pagePlayer.js' %}" ></script>#}
@@ -69,8 +76,118 @@
 
 {% block footer_ref_top %}{% endblock %}
 {% include 'shared/_FooteRefernces.html' %}
-<script src="{% static 'assets/js/player-manager.js' %}"></script>
 {% block footer_ref %}{% endblock %}
+<script src="{% static 'assets/js/main.js' %}"></script>
+<script type="module" src="{% static 'assets/js/player-manager.js' %}"></script>
+{% comment %}
+بعد از رفتن به این آدرس kheylisadas.ir/service-worker ویو تعریف شده اجرا میشه و درون اون ویو
+فایل سرویس ورکر رو پیدا و باز میکنه و اونجا scope رو کل سایت قرار میده. برای فهم بهتر به urls برو و ببین
+{% endcomment %}
+
+<script>
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                const baseUrl = window.location.origin;
+
+                fetch('/manifest-version/')
+                    .then(response => response.json())
+                    .then(data => {
+                        const MANIFEST_VERSION = data.version;
+                        const cacheNames = [`my-cache-${MANIFEST_VERSION}`];
+
+                        // فیلتر کردن Service Workerها بر اساس scope
+                        const swWithScope = registrations.filter(registration => registration.scope === `${baseUrl}/`);
+
+                        if (swWithScope.length > 0) {
+                            // بررسی ورژن آخرین Service Worker ثبت شده
+                            const lastSW = swWithScope[swWithScope.length - 1];
+                            const lastSWVersion = lastSW.active && lastSW.active.scriptURL.includes(MANIFEST_VERSION) ? MANIFEST_VERSION : null;
+
+                            if (lastSWVersion === MANIFEST_VERSION) {
+                                console.log('Service Worker with current version already registered:', lastSW);
+                                if (navigator.serviceWorker.controller) {
+                                    lastSW.sync.register('sync-player-status')
+                                        .then(() => {
+                                            console.log('Sync registration successful');
+                                        })
+                                        .catch(error => {
+                                            console.error('Sync registration failed:', error);
+                                        });
+                                }
+                            } else {
+                                // حذف Service Workerهای قدیمی (همه به جز آخرین)
+                                for (let i = 0; i < swWithScope.length - 1; i++) {
+                                    swWithScope[i].unregister().then(() => {
+                                        console.log(`Service Worker with scope ${swWithScope[i].scope} unregistered.`);
+                                    });
+                                }
+
+                                // ثبت یا به‌روزرسانی Service Worker
+                                if (lastSWVersion) {
+                                    lastSW.update()
+                                        .then(registration => {
+                                            console.log('Service Worker updated:', registration);
+                                            if (navigator.serviceWorker.controller) {
+                                                registration.sync.register('sync-player-status')
+                                                    .then(() => {
+                                                        console.log('Sync registration successful');
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Sync registration failed:', error);
+                                                    });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Service Worker update failed:', error);
+                                        });
+                                } else {
+                                    //navigator.serviceWorker.register('/service-worker/', {scope: '/'})
+                                    navigator.serviceWorker.register('/service-worker/', { scope: '/', updateViaCache: 'none' })
+                                        .then(function (registration) {
+                                            console.log('Service Worker registered:', registration);
+                                            if (navigator.serviceWorker.controller) {
+                                                registration.sync.register('sync-player-status')
+                                                    .then(() => {
+                                                        console.log('Sync registration successful');
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Sync registration failed:', error);
+                                                    });
+                                            }
+                                        })
+                                        .catch(function (error) {
+                                            console.error('Service Worker registration failed:', error);
+                                        });
+                                }
+                            }
+                        } else {
+                            // ثبت Service Worker جدید (اگر هیچ Service Worker با scope مورد نظر وجود نداشته باشد)
+                            //navigator.serviceWorker.register('/service-worker/', {scope: '/'})
+                            navigator.serviceWorker.register('/service-worker/', { scope: '/', updateViaCache: 'none' })
+                                .then(function (registration) {
+                                    console.log('Service Worker registered:', registration);
+                                    if (navigator.serviceWorker.controller) {
+                                        registration.sync.register('sync-player-status')
+                                            .then(() => {
+                                                console.log('Sync registration successful');
+                                            })
+                                            .catch(error => {
+                                                console.error('Sync registration failed:', error);
+                                            });
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.error('Service Worker registration failed:', error);
+                                });
+                        }
+                    });
+            });
+        });
+    }
+</script>
+
+
 {#<script src="{% static 'assets/js/shikwasa_player.js' %}"></script>#}
 
 </body>

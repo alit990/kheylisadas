@@ -4,6 +4,10 @@
 <html lang="fa">
 
 <head>
+    {#    for google tags    #}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-15FGG6FFY5"></script>
+    <script src="{% static 'assets/js/gtag.js' %}"></script>
+
     <meta charset="utf-8"/>
     <meta name="author" content=""/>
     <meta name="viewport"
@@ -76,7 +80,29 @@
 {% endblock %}
 <script src="{% static 'assets/js/ks-redirect-user-onback-pressed.js' %}"></script>
 <script src="{% static 'assets/js/ks-account-styles.js' %}"></script>
+<script>
+    function normalizeInput(inputId) {
+        document.getElementById(inputId).addEventListener('input', function (e) {
+            let value = e.target.value;
+            const digitMap = {
+                '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
+                '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9',
+                '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+                '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+            };
+            value = value.replace(/[۰-۹٠-٩]/g, digit => digitMap[digit] || digit);
+            value = value.replace(/[^0-9]/g, '');
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            e.target.value = value;
+        });
+    }
 
+    normalizeInput('username');
+    normalizeInput('password');
+    normalizeInput('mobile');
+</script>
 
 
 </body>

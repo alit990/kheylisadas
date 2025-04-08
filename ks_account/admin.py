@@ -19,20 +19,53 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from guardian.models import UserObjectPermission
+from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
+
+from ks_subscription.models import Campaign
+
+
+class CampaignUserObjectPermissionInline(admin.TabularInline):
+    """
+    این اینلاین فقط مجوزهایی را نمایش می‌دهد که مربوط به Campaign هستند.
+    """
+    model = UserObjectPermission
+    extra = 0
+    # فیلدهای مورد نمایش؛ می‌توانید بنا به نیاز موارد بیشتری اضافه کنید
+    fields = ('permission', 'object_pk')
+    readonly_fields = ('object_pk',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # فیلتر کردن مجوزهایی که فقط برای Campaign اعطا شده‌اند
+        campaign_ct = ContentType.objects.get_for_model(Campaign)
+        return qs.filter(content_type=campaign_ct)
+
+
 class CustomUserAdmin(BaseUserAdmin):
     form = CustomUserChangeForm
 
     def reset_password_link(self, obj):
         return format_html('<a href="{}">Reset Password</a>',
                            reverse('ks_account:user_reset_password', args=[obj.id]))
+
     reset_password_link.short_description = 'ریست کردن پسورد'
 
     def activate_user_link(self, obj):
         return format_html('<a href="{}">activate user</a>',
                            reverse('ks_account:user_activate_user', args=[obj.id]))
+
     activate_user_link.short_description = 'فعال‌سازی کاربر'
 
-    list_display = ('username', 'mobile', 'reset_password_link', 'is_active', 'activate_user_link')
+    def grant_campaign_link(self, obj):
+        return format_html('<a href="{}">Grant Campaign</a>',
+                           reverse('ks_account:user_grant_campaign', args=[obj.id]))
+
+    grant_campaign_link.short_description = 'اعطای کمپین'
+
+    list_display = ('username', 'mobile', 'reset_password_link', 'is_active',
+                    'activate_user_link', 'grant_campaign_link')
 
     fieldsets = (
         (None, {'fields': ('username', 'password',)}),
@@ -43,7 +76,11 @@ class CustomUserAdmin(BaseUserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
+    inlines = [CampaignUserObjectPermissionInline]  # اضافه کردن اینلاین
+
+
 admin.site.register(User, CustomUserAdmin)
+
 
 
 # class AccountUserAdmin(admin.ModelAdmin):

@@ -1,12 +1,15 @@
-<div class="single_widgets widget_tags edu_wraper border">
+<div class="single_widgets widget_tags edu_wraper border background-green-lite">
     <div class=" reviews-reaction">
         <h4 class="title">این مطلب برای شما مفید بود؟</h4>
-        <a
-                class="btn btn-light comment-like like {% if user_vote == 1 %}active{% endif %}"
-                onclick="voteAudio({{ audio.id }} , 1)">
-            <i class="icofont-heart-alt"></i>
-            {{ audio_likes_count|add:audio.fake_like_count }}
-        </a>
+        <div id="audioVoteArea{{ audio.id }}">
+            <a
+                    class="btn btn-light comment-like like {% if user_vote == 1 %}active{% endif %}"
+                    onclick="voteAudio({{ audio.id }} , 1)">
+                <i class="icofont-heart-alt"></i>
+                {% if user_vote == 1 %} بله {% endif %}
+                {% comment %}{{ audio_likes_count|add:audio.fake_like_count }}{% endcomment %}
+            </a>
+        </div>
         {% comment %}<a
                 class="btn btn-light comment-like like {% if user_vote == 0 %}active{% endif %}"
                 onclick="voteAudio({{ audio.id }} , 0)">

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>پیامک تلاش مجدد پرداخت</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <p>کاربر: {{ user.username }}</p>
+    <p>شماره موبایل: {{ user.mobile }}</p>
+    <p>پرداخت: {{ payment }}</p>
+
+    {% if user.is_active %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">ارسال پیامک</button>
+        </form>
+    {% else %}
+        <p>کاربر هنوز فعال نشده است.</p>
+    {% endif %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>

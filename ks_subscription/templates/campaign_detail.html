@@ -1,0 +1,561 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load thumbnail %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %}
+    کمپین
+    {{ campaign.name }}
+    خیلی ساده‌ست
+{% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">کمپین خیلی ساده‌ست</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">عضویت در کمپین</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+
+    <!-- ============================ Add To cart ================================== -->
+    <section class="campaign-section pt-0">
+        <div class="container">
+            <h4 class="bl-title single-line-truncate text-center">
+                کمپین
+                {{ campaign.name }}
+            </h4>
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div class="education_block_grid style_2 campaign-card">
+                        <div class="education_block_thumb n-shadow">
+                            {% if campaign.banner_course %}
+                                {% thumbnail campaign.banner_course "400" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width"
+                                         alt="{{ campaign.description_course }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}"
+                                     class="img-fluid corner-radius full-width"
+                                     alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="education_block_body">
+                            <h4 class="bl-title ">
+                                {{ campaign.description_course }}
+                            </h4>
+                            <h4 class="bl-title ">
+                                دانلود مستقیم
+                                {{ course_name }}
+                            </h4>
+                        </div>
+                        <div class="courses_info_style3 {% if not has_campaign %} no-bullets {% endif %}">
+                            {% for item in course_audio_list %}
+                                <li>
+                                    {% if has_campaign %}
+                                        <a href="{{ item.audio_url }}"
+                                           class="full-width-link">
+                                            <div class="foot_features foot_audio_duration">
+                                                {{ item.audio_name }}
+                                            </div>
+                                        </a>
+                                    {% elif request.user.is_superuser %}
+                                        <a href="{{ item.audio_url }}"
+                                           class="full-width-link">
+                                            <div class="foot_features foot_audio_duration">
+                                                {{ item.audio_name }}
+                                            </div>
+                                        </a>
+                                    {% else %}
+                                        <a href="#"
+                                           class="full-width-link disabled">
+                                            <div>
+                                                {{ item.audio_name }}
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div class="education_block_grid style_2 campaign-card">
+                        <div class="education_block_thumb n-shadow">
+                            {% if campaign.banner_chart %}
+                                {% thumbnail campaign.banner_chart "400" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width"
+                                         alt="{{ campaign.description_chart }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}"
+                                     class="img-fluid corner-radius full-width"
+                                     alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="education_block_body">
+                            <h4 class="bl-title ">
+                                {{ campaign.description_chart }}
+                            </h4>
+                        </div>
+                        <div class="courses_info_style3 {% if has_campaign %}{% else %} no-bullets {% endif %}">
+                            {% if has_campaign %}
+                                {% if user_chart %}
+                                    <a href="{{ user_chart.url }}"
+                                       class="full-width-link">
+                                        <div class="foot_features foot_audio_duration">
+                                            {{ user_chart.name }} - ({{ user_chart.category.name }})
+                                        </div>
+                                    </a>
+                                {% elif request.user.is_superuser %}
+                                    {% for chart in charts %}
+                                        <li>
+                                            <a href="{{ chart.url }}" class="full-width-link">
+                                                <div class="foot_features foot_audio_duration">
+                                                    {{ chart.name }} - ({{ chart.category.name }})
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <p> متأسفانه چارت شما یافت نشد </p>
+                                {% endif %}
+                            {% else %}
+                                {% for chart in charts %}
+                                    <li>
+                                        <a href="#" class="full-width-link disabled">
+                                            <div>
+                                                {{ chart.name }} - ({{ chart.category.name }})
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div class="education_block_grid style_2 campaign-card">
+                        <div class="education_block_thumb n-shadow">
+                            {% if campaign.banner_3 %}
+                                {% thumbnail campaign.banner_3 "400" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width"
+                                         alt="{{ campaign.description_3 }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}"
+                                     class="img-fluid corner-radius full-width"
+                                     alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="education_block_body">
+                            <h4 class="bl-title ">
+                                {{ campaign.description_3 }}
+                            </h4>
+                        </div>
+                        <div class="courses_info_style3 {% if not has_campaign %} no-bullets {% endif %}">
+                            {% if campaign_weeks %}
+                                {% for week in campaign_weeks %}
+
+                                    <li>
+                                        {% if has_campaign %}
+                                            <a href="{% url 'campaign_question_detail' campaign_id=campaign.id campaign_week_id=week.id %}"
+                                               class="full-width-link">
+                                                <div class="foot_features foot_audio_duration">
+                                                    {{ week.name }}
+                                                </div>
+                                            </a>
+                                        {% elif request.user.is_superuser %}
+                                            <a href="{% url 'campaign_question_detail' campaign_id=campaign.id campaign_week_id=week.id %}"
+                                               class="full-width-link">
+                                                <div class="foot_features foot_audio_duration">
+                                                    {{ week.name }}
+                                                </div>
+                                            </a>
+                                        {% else %}
+                                            <a href="#"
+                                               class="full-width-link disabled">
+                                                <div>
+                                                    {{ week.name }}
+                                                </div>
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div class="education_block_grid style_2 campaign-card">
+                        <div class="education_block_thumb n-shadow">
+                            {% if campaign.banner_podcast %}
+                                {% thumbnail campaign.banner_podcast "400" quality=90 as im %}
+                                    <img src="{{ im.url }}" class="img-fluid corner-radius full-width"
+                                         alt="{{ campaign.description_podcast }}">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="{% static 'assets/img/audio-no-image.jpg' %}"
+                                     class="img-fluid corner-radius full-width"
+                                     alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="education_block_body">
+                            <h4 class="bl-title ">
+                                {{ campaign.description_podcast }}
+                            </h4>
+                        </div>
+                        <div class="courses_info_style3  no-bullets ">
+                            <li>
+                                {% if has_campaign %}
+                                    <a href="{% url 'home_page' %}"
+                                       class="full-width-link ">
+                                        <div class="foot_features foot_audio_duration">
+                                            پادکست ها
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    <a href="#" class="full-width-link disabled">
+                                        <div>
+                                            پادکست ها
+                                        </div>
+                                    </a>
+
+                                {% endif %}
+                            </li>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="pt-0">
+        {% if campaign.is_open %}
+            <div class="container">
+
+                {% if has_campaign %}
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12 cart_totals checkout  mb-4 ">
+                            <div class="text-center">
+                                <h5 class="alert alert-info col-lg-12 col-md-12 col-sm-12 ">
+                                    شما در حال حاضر عضو فعال کمپین می باشید.
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% if has_perm %}
+                        <div class="row">
+                            <div class="col-md-12 cart_totals checkout  mb-4 ">
+                                <div class="text-center">
+                                    <h5 class="alert alert-danger col-lg-12 col-md-12 col-sm-12 ">
+                                        شما در حال حاضر دارای اشتراک خیلی ساده‌ست هستید و با خرید حق عضویت کمپین،
+                                        مدت اعتبار فعلی شما باقی خواهد ماند و از بین نمی رود و
+                                        با مدت زمان اشتراک کمپین جمع خواهد شد.
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-12">
+                            <div class="cart_totals checkout light_form mb-4">
+                                <h4>اطلاعات فاکتور</h4>
+                                <div class="row">
+                                    <div class="packages_middlebody pr-3">
+
+                                        <p> شما با عضویت در این کمپین مدت
+                                            {{ campaign.duration }}
+                                            روز به موارد ویژه زیر دسترسی خواهید داشت:
+                                        </p>
+                                        <br>
+                                        <p>
+                                            <strong>
+                                                ۱) دوره‌ی خودشناسی انواع والدین ( دانلودی ) <br>
+                                                ۲) چارت مراحل رشد کودک ( pdf و دانلودی ) <br>
+                                                ۳) دوازده جلسه مشاوره ( هفته‌ای یک جلسه ) <br>
+                                                ۴) دسترسی به تمام پادکست‌های سایت ( ۱۰۰ روز )
+                                            </strong>
+                                        </p>
+
+                                        {% comment %}<ul class="plan_items_ul">
+                                    {% for course in plan.courses.all %}
+                                        <li class="fa fa-check">
+                                            <a href="{{ course.get_absolute_url }}" class="btn-browse-btn">
+                                                دوره {{ course.name }}  </a>
+
+                                        </li>
+                                        <br>
+                                    {% endfor %}
+                                </ul>{% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart_totals checkout light_form">
+                                <h>روش پرداخت</h>
+                                <h4> زرین پال </h4>
+
+                                <div class="row ">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 ">
+                                        <div class="choose_payment_mt">
+                                            <img src="{% static 'assets/img/zarin-pal.png' %}" alt=""/>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-12">
+                            <!-- Total Cart -->
+                            <div class="cart_totals checkout">
+                                <h4>صورت حساب</h4>
+                                <div class="cart-wrap">
+                                    {#                            <ul class="cart_list">#}
+                                    {#                                <li>قیمت اصلی<strong> <s>#}
+                                    {#                                    {% if plan.fake_price %}#}
+                                    {#                                        {{ plan.fake_price }} تومان#}
+                                    {#                                    {% else %}#}
+                                    {#                                        0 تومان#}
+                                    {#                                    {% endif %}#}
+                                    {#                                </s> </strong></li>#}
+                                    {#                                <li>قیمت برای شما<strong>{{ plan.price }} تومان</strong></li>#}
+                                    {#                                <li>تخفیف<strong>#}
+                                    {#                                    {% if plan.off %}#}
+                                    {#                                        {{ plan.off }} تومان#}
+                                    {#                                    {% else %}#}
+                                    {#                                        0 تومان#}
+                                    {#                                    {% endif %}#}
+                                    {#                                </strong></li>#}
+                                    {#                            </ul>#}
+                                    {#                            <div class="flex_cart">#}
+                                    {#                                <div class="flex_cart_1">#}
+                                    {#                                    جمع کل#}
+                                    {#                                </div>#}
+                                    {#                                <div class="flex_cart_2">#}
+                                    {#                                    {% if code_valid %}#}
+                                    {#                                        {{ plan.off_price }} تومان#}
+                                    {#                                    {% else %}#}
+                                    {#                                        {{ plan.price }} تومان#}
+                                    {#                                    {% endif %}#}
+                                    {#                                </div>#}
+                                    {#                            </div>#}
+
+                                    {% if not has_perm %}
+                                        {#                                <div class="flex_cart text-center">#}
+                                        {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
+                                    {% csrf_token %}
+                                    {{ gift_form.as_p }}
+                                    <button class="btn btn-theme" type="submit">بررسی کد</button>
+                                </form>{% endcomment %}
+
+                                        {% comment %}<form action="{{ plan.get_absolute_url }}" method="post">
+                                        {% csrf_token %}
+                                        {{ gift_form.code.label }}
+                                        {{ gift_form.code }}
+                                        {% if gift_form.errors %}
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    {% for field in gift_form %}
+                                                        {% for error in field.errors %}
+                                                            <li><strong>{{ field.label }}:</strong> <span
+                                                                    class="text-danger">{{ error }}</span></li>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                        <button class="btn btn-theme m-2" type="submit">
+                                            بررسی کد
+                                        </button>
+                                    </form>
+                                    <p class="text-success">{{ code_valid }}</p>{% endcomment %}
+                                        {#                                </div>#}
+                                        {##}
+                                        {#                                <hr>#}
+                                        <div>
+                                            <form id="categoryForm" method="post">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    {{ category_form.category.label_tag }}
+                                                    <div class="form-check">
+                                                        {% for radio in category_form.category %}
+                                                            <div class="form-check">
+                                                                {{ radio.tag }}
+                                                                <label class="form-check-label"
+                                                                       for="{{ radio.id_for_label }}">
+                                                                    {{ radio.choice_label }}
+                                                                </label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="flex_cart">
+                                            <div class="flex_cart_1">
+                                                مبلغ قابل پرداخت
+                                            </div>
+                                            <div class="flex_cart_2">
+                                                {% if code_valid %}
+                                                    {{ campaign.off_price }} تومان
+                                                {% else %}
+                                                    {{ campaign.price }} تومان
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        {% comment %}<a href="{% url 'request_payment' campaign_id=campaign.id %}"{% endcomment %}
+                                        <a href="#" class="btn checkout_pay_btn" id="paymentButton">
+                                            <span id="buttonText">پرداخت</span>
+                                            <svg id="loadingAnimation" class="hidden-loading" width="24" height="24"
+                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <style>
+                                                    .spinner_qM83 {
+                                                        animation: spinner_8HQG 1.05s infinite
+                                                    }
+
+                                                    .spinner_oXPr {
+                                                        animation-delay: .1s
+                                                    }
+
+                                                    .spinner_ZTLf {
+                                                        animation-delay: .2s
+                                                    }
+
+                                                    @keyframes spinner_8HQG {
+                                                        0%, 57.14% {
+                                                            animation-timing-function: cubic-bezier(0.33, .66, .66, 1);
+                                                            transform: translate(0)
+                                                        }
+                                                        28.57% {
+                                                            animation-timing-function: cubic-bezier(0.33, 0, .66, .33);
+                                                            transform: translateY(-6px)
+                                                        }
+                                                        100% {
+                                                            transform: translate(0)
+                                                        }
+                                                    }
+                                                </style>
+                                                <circle class="spinner_qM83" cx="4" cy="12" r="3" fill="#ffffff"/>
+                                                <circle class="spinner_qM83 spinner_oXPr" cx="12" cy="12" r="3"
+                                                        fill="#ffffff"/>
+                                                <circle class="spinner_qM83 spinner_ZTLf" cx="20" cy="12" r="3"
+                                                        fill="#ffffff"/>
+                                            </svg>
+                                        </a>
+                                        {#                                       class="btn checkout_btn btn-light">پرداخت</a>#}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+
+
+            </div>
+        {% else %}
+            {% if has_campaign %}
+                <div class="container">
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12 cart_totals checkout  mb-4 ">
+                            <div class="text-center">
+                                <h5 class="alert alert-info col-lg-12 col-md-12 col-sm-12 ">
+                                    شما در حال حاضر عضو فعال کمپین می باشید.
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+    <!-- ============================ Add To cart End ================================== -->
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'new_user' in message.tags %}
+                <script>
+                    Swal.fire({
+                        title: 'به خیلی ساده‌ست خوش آمدید!',
+                        html: `
+                        دوست عزیز، ثبت نام شما با موفقیت انجام شد.
+                        <br>
+                        نام کاربری: {{ request.user.username }}
+                        <br>
+                        رمز ورود: {{ request.user.username }}
+                        <br>
+                        اکنون میتوانید اشتراک تهیه کنید.
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'باشه'
+                    });
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+{% block footer_ref %}
+    <script>
+        $(document).ready(function () {
+            const paymentButton = $("#paymentButton");
+            const buttonText = $("#buttonText");
+            const loadingAnimation = $("#loadingAnimation");
+
+            paymentButton.on("click", function (event) {
+                if (paymentButton.prop("disabled")) {
+                    return; // جلوگیری از چندبار کلیک
+                }
+                event.preventDefault();
+
+                const categoryId = $("input[name='category']:checked").val(); // دریافت مقدار category انتخاب شده
+                const campaignId = "{{ campaign.id }}"; // دریافت کد کمپین از context
+
+                // ایجاد URL با پارامترهای category و campaign_id
+                const paymentUrl = `/subscription/request-campaign-payment/${campaignId}/${categoryId}/`;
+
+                // غیرفعال کردن دکمه و نمایش اسپینر
+                disableButton();
+
+                // هدایت کاربر به صفحه پرداخت
+                window.location.href = paymentUrl;
+            });
+
+            function disableButton() {
+                paymentButton.prop("disabled", true); // غیرفعال کردن دکمه
+                paymentButton.css("background", "#808080"); // تغییر رنگ دکمه به توسی
+                buttonText.addClass("hidden-loading"); // پنهان کردن متن دکمه
+                loadingAnimation.removeClass("hidden-loading").addClass("visible-loading"); // نمایش انیمیشن
+            }
+        });
+    </script>
+{% endblock %}

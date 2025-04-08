@@ -161,8 +161,10 @@
                 <!-- Sidebar -->
                 <div class="col-lg-4 col-md-4">
                     <!-- ویژگی ها -->
-                    {% include 'includes/features.html' with object=ccdetail audio_count=audio_count has_perm=has_perm duration=duration %}
+                    {% comment %}{% include 'includes/features.html' with object=ccdetail audio_count=audio_count has_perm=has_perm duration=duration %}{% endcomment %}
 
+                    <!-- categories -->
+                    {% include 'components/mini_category_list_component.html' with categories=categories %}
                     <!-- Register -->
                     {% include 'includes/register_component.html' with request=request %}
 

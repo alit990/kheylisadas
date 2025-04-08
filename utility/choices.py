@@ -18,13 +18,38 @@ class PaymentStatus:
     PENDING_NO_ERRORS = 'در حال پرداخت'
     PAID_NO_ERRORS = 'پرداخت شده'
     PAYMENT_ERROR = 'خطا در پرداخت'
+    DUPLICATE_TRANSACTION = 'تراکنش تکراری'
+    ZARINPAL_ERROR = 'خطا از زرین پال'
+    REQUEST_ERROR = 'خطا در درخواست'
+    TIMEOUT_ERROR = 'Timeout'
+    CONNECTION_ERROR = 'خطا در اتصال'
+    UNKNOWN_ERROR = 'خطای نامشخص'
+    LOCKING_ERROR = 'خطا در قفل گذاری'
+    DATABASE_ERROR = 'خطای پایگاه داده'
+    USER_CANCELLED = 'لغو توسط کاربر'
+    INVALID_AMOUNT = 'مبلغ نامعتبر'
+    ACTIVE_SUBSCRIPTION = 'اشتراک فعال'
+    PENDING_TRANSACTION = 'تراکنش در حال انجام'
+
 
     @staticmethod
-    def error(error_code):
+    def error(error_code):  # This might be redundant, consider removing
         return f"خطا - کد {error_code}"
 
     CHOICES = [
         (PENDING_NO_ERRORS, 'در حال پرداخت'),
         (PAID_NO_ERRORS, 'پرداخت شده'),
         (PAYMENT_ERROR, 'خطا در پرداخت'),
+        (DUPLICATE_TRANSACTION, 'تراکنش تکراری'),
+        (ZARINPAL_ERROR, 'خطا از زرین پال'),
+        (REQUEST_ERROR, 'خطا در درخواست'),
+        (TIMEOUT_ERROR, 'Timeout'),
+        (CONNECTION_ERROR, 'خطا در اتصال'),
+        (UNKNOWN_ERROR, 'خطای نامشخص'),
+        (LOCKING_ERROR, 'خطا در قفل گذاری'),
+        (DATABASE_ERROR, 'خطای پایگاه داده'),
+        (USER_CANCELLED, 'لغو توسط کاربر'),
+        (INVALID_AMOUNT, 'مبلغ نامعتبر'),
+        (ACTIVE_SUBSCRIPTION, 'اشتراک فعال'),
+        (PENDING_TRANSACTION, 'تراکنش در حال انجام'),
     ]

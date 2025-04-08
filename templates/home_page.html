@@ -20,11 +20,11 @@
     <!-- ========================== Featured Category Section =============================== -->
     {% include 'components/category_list_component.html' with category=category %}
     <!-- ============================ بخش کراسول یااسلیک اسلایدر دوره ها ================================== -->
-{#    <hr class="shine">#}
+    {#    <hr class="shine">#}
     {#    {% include 'components/courses_slider_component.html' with courses=courses courses_is_disabled=site_setting.courses_is_disabled %}#}
 
     <!-- ===== DIVIDER ========== -->
-{#    <hr>#}
+    {#    <hr>#}
     {#    <hr class="accessory">#}
     {#    <hr class="bookends">#}
     {#    <hr class="bookends-dots">#}
@@ -50,7 +50,7 @@
     <!-- ============================ Articles Section End ================================== -->
 
     <!-- ========================== Plans Section Start =============================== -->
-    {% if not has_perm%}
+    {% if not has_perm %}
         <hr class="shine">
         {% include 'components/plans_component.html' with plans=plans %}
     {% endif %}
@@ -66,5 +66,6 @@
 
 {% endblock %}
 {% block footer_ref %}
+
     <script src="{% static 'assets/js/ks-custom-divider.js' %}"></script>
 {% endblock %}

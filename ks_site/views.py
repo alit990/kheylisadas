@@ -47,7 +47,6 @@ class ContactUsView(View):
         print("post register view")
         contact_us_form = ContactUsForm(request.POST)
         print(contact_us_form.is_valid())
-        # todo: emkan moshahede payam karbar va pasokh admin
         if contact_us_form.is_valid():
             mobile = contact_us_form.cleaned_data.get('mobile')
             title = contact_us_form.cleaned_data.get('title')

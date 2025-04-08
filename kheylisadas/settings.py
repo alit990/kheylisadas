@@ -195,7 +195,8 @@ USE_TZ = False
 STATIC_URL = '/statics/'  # show on front side
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "assets")  # show on real project
+    os.path.join(BASE_DIR, "assets"),  # show on real project
+    os.path.join(BASE_DIR, "core/static"),  # اضافه کردن مسیر core/static
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_root")

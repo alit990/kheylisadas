@@ -3,15 +3,20 @@ from django.contrib import admin
 from django.urls import path, include
 
 from kheylisadas import settings
-from .views import home_page, header, footer, index_page, success_page, failure_page, maintenance_view
+from .views import home_page, header, footer, index_page, success_page, failure_page, maintenance_view, service_worker, \
+    manifest_version, check_login_status
 
 urlpatterns = [
     path('maintenance/', maintenance_view, name='maintenance'),
-    path('index', index_page, name="home_page"),
     # path('index', index_page, name="home_page"),
     path('', home_page, name="home_page"),
+    path('index', home_page, name="home_page"),
     path('success', success_page, name="success_page"),
     path('failure', failure_page, name="failure_page"),
+    path('service-worker/', service_worker, name='service-worker'),
+    path('manifest-version/', manifest_version, name='manifest_version'),
+    path('check-login-status/', check_login_status, name='check_login_status'),
+
     path('', include('ks_account.urls')),
     path('', include('ks_category.urls')),
     path('audio/', include('ks_audio.urls')),

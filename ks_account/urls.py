@@ -1,8 +1,8 @@
 from django.urls import path, re_path
 
-from ks_account.views import LoginView, LogoutView, MobileRegisterView, ActivationView, UsernameView, \
+from ks_account.views import LoginView, LogoutView, MobileRegisterView, ActivationView, \
     ForgetPassMobileView, \
-    ForgetPassActivationView, reset_user_password, activate_user
+    ForgetPassActivationView, reset_user_password, activate_user, grant_campaign
 
 urlpatterns = [
     # path('register-mobile', register_mobile_page, name='register_mobile_page'),  # USED register_mobile_page.html
@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('mobile_register/', MobileRegisterView.as_view(), name='mobile_register_view'),  # 1
     path('activation/', ActivationView.as_view(), name='activation_view'),  # 2
-    path('username/', UsernameView.as_view(), name='username_view'),  # 3
+    # path('username/', UsernameView.as_view(), name='username_view'),  # 3
     path('forget_pass/', ForgetPassMobileView.as_view(), name='forget_pass_view'),
     path('forget_pass_activation/', ForgetPassActivationView.as_view(), name='forget_pass_activation_view'),
 
@@ -30,4 +30,7 @@ urlpatterns = [
     path('user/<int:id>/reset_password/', reset_user_password, name='user_reset_password'),
     # اضافه کردن URL ریست پسورد]
     path('user/<int:id>/activate_user/', activate_user, name='user_activate_user'),  # اضافه کردن URL فعال‌سازی کاربر
+    # اضافه کردن مجوز دستی
+    path('user/<int:id>/grant-campaign/', grant_campaign, name='user_grant_campaign'),
+
 ]

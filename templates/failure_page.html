@@ -1,7 +1,7 @@
 {% extends 'shared/_MainLayout.html' %}
 {% load static %}
 {% load sorl_thumbnail %}
-{% block title %} عملیات موفق {% endblock %}
+{% block title %} عملیات ناموفق {% endblock %}
 
 {% block content %}
 
@@ -41,6 +41,18 @@
                                 <p class="text-info"> لطفا برای لغو عملیات جاری و تلاش مجدد روی دکمه زیر بزنید. </p>
                                 <a href="{% url 'cancel_pending_payments' %}" class="btn btn-danger">
                                     تلاش مجدد
+                                </a>
+                            {% elif 'failed_payment' in message.tags %}
+                                <p class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show">
+                                    {{ message }}</p>
+                                <a href="{% url 'cancel_pending_payments' %}" class="btn btn-danger">
+                                    تلاش مجدد
+                                </a>
+                            {% elif 'failed_payment_contact_us' in message.tags %}
+                                <p class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show">
+                                    {{ message }}</p>
+                                <a href="{% url 'contact_us' %}" class="btn btn-danger">
+                                    تماس با پشتیبانی
                                 </a>
                             {% else %}
                                 <p class="alert alert-{{ message.tags }} alert-danger alert-dismissible fade show" >{{ message }}</p>

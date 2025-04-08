@@ -759,11 +759,20 @@ ul:last-child {
     left: 0;
 }
 
+/*.theme-ov[data-overlay]:before {
+    background: linear-gradient(109.7deg, rgba(255, 255, 255, 0.2) 1.8%, rgba(37, 44, 65, 0.4) 90.2%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}*/
 .theme-ov[data-overlay]:before {
-    /*background: linear-gradient(109.7deg, rgba(252, 63, 129, 0.77) 1.8%, rgba(82, 185, 154, 0.09) 90.2%);*/
-    background: linear-gradient(109.7deg, rgba(252, 63, 129, 0.77) 1.8%, rgba(37, 44, 65, 0.67) 90.2%);
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.2) 0%, rgba(37, 44, 65, 0.4) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    /*border: 1px solid rgba(255, 255, 255, 0.1);*/
+    /*box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);*/
 }
-
 /*.theme-ov[data-overlay]:before {*/
 /*    background: linear-gradient(109.7deg, rgba(229, 0, 57, 1) 1.8%, rgba(162, 91, 182, 1) 90.2%);*/
 /*}*/
@@ -1888,15 +1897,15 @@ a.btn-trans-video i {
 .btn-primary,
 .btn-primary.disabled {
     background: #da0b4e;
-    border: 1px solid #da0b4e;
+    /*border: 1px solid #da0b4e;*/
     -webkit-transition: 0.2s ease-in;
     -o-transition: 0.2s ease-in;
     transition: 0.2s ease-in;
 }
 
 .btn-primary:hover, .btn-primary.disabled:hover {
-    background: #e05707;
-    border: 1px solid #e05707;
+    background: #ff3a82;
+    /*border: 1px solid #e05707;*/
     color: #ffffff !important;
 }
 
@@ -2223,8 +2232,8 @@ a.btn-trans-video i {
 .open > .dropdown-toggle.btn-primary:hover,
 .btn-primary.focus,
 .btn-primary:focus {
-    background-color: #345bcb;
-    border: 1px solid #345bcb;
+    background-color: #252c41;
+    /*border: 1px solid #345bcb;*/
 }
 
 .btn-success.active.focus,
@@ -6661,6 +6670,14 @@ ul.list_ed_detail2 li.tag-5 {
 ul.list_ed_detail2 li.tag-5 strong, ul.list_ed_detail2 li.tag-5 i {
     color: #2196f3;
 }
+ul.list_ed_detail2 li.tag-chart {
+    background: rgba(23, 232, 121, 0.24);
+    color: #118335;
+}
+
+ul.list_ed_detail2 li.tag-chart strong, ul.list_ed_detail2 li.tag-chart i {
+    color: #118335;
+}
 
 /*----------------- Reviews Students -------------*/
 .list-single-main-item {
@@ -9688,7 +9705,11 @@ ul.cart_list li strong {
     color: #ffffff;
     background: #ff3a82;
 }
-
+.btn.checkout_pay_btn:disabled {
+    background: #808080; /* رنگ توسی */
+    cursor: not-allowed;
+    color: #ffffff;
+}
 .light_form .form-control, .light_form span.select2-selection.select2-selection--single {
     background: #f4f5f7;
 }
@@ -12166,7 +12187,7 @@ a._cr_detail_arrow {
 }
 
 .corner-radius {
-    border-radius: 0.9rem;
+    border-radius: 0.5rem;
 }
 
 a {
@@ -12221,7 +12242,7 @@ a {
     color: #fff;
     font-size: 12px;
     background: rgba(0, 0, 0, 0.5); /* پس‌زمینه نیمه شفاف */
-    padding: 10px 20px;
+    padding: 2px 4px;
     border-radius: 5px;
     z-index: 10;
 }
@@ -12233,7 +12254,8 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(148, 147, 147, 0.34); /* لایه خاکستری */
+    border-radius: 5px;
+    background: rgba(211, 211, 211, 0.24); /* لایه خاکستری */
 }
 
 .disabled-link {
@@ -12293,3 +12315,211 @@ a {
 /*.accordion .collapsible-link.collapsed::after {*/
 /*    transform: rotate(0deg); !* چرخش خطوط به حالت افقی *!*/
 /*}*/
+.campaign-section {
+    background: linear-gradient(135deg, rgba(46, 52, 74, 0.06), rgba(46, 52, 74, 0.07)); /* گرادیان کودکانه */
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.campaign-card {
+    background: linear-gradient(135deg, #f7f3f9, #f9e2e2); /* گرادیان هماهنگ با بخش اصلی */
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    transition: border-color 0.5s ease; /* انیمیشن برای تغییر رنگ بوردر */
+}
+
+.campaign-card:hover {
+    border-color: #ff69b4; /* رنگ بوردر در حالت hover */
+}
+
+.campaign-btn {
+    background: linear-gradient(135deg, rgba(46, 52, 74, 0.06), rgba(46, 52, 74, 0.07)); /* گرادیان کودکانه */
+    border: rgba(95, 95, 98, 0.75);
+    border-radius: 0.5rem;
+    transition: background 0.3s ease; /* اضافه کردن ترانزیشن برای تغییر رنگ */
+}
+
+.campaign-btn:hover {
+    background: linear-gradient(135deg, rgba(46, 52, 74, 0.06), rgba(46, 52, 74, 0.3)); /* گرادیان کودکانه */
+}
+
+.campaign-btn:active {
+    background: #da0b4e; /* رنگ کلیک سورمه ای */
+}
+
+.no-bullets {
+    list-style: none; /* حذف نقاط کنار آیتم‌های لیست */
+    padding: 0; /* حذف فاصله‌های پیش‌فرض (اختیاری) */
+    margin: 0; /* حذف حاشیه‌های پیش‌فرض (اختیاری) */
+}
+
+
+/* استایل‌های نسخه کوچک‌شده دسته‌بندی‌ها */
+.mini-cat-item {
+    text-align: center;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+    border-radius: 0.4rem;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-cat-item:hover {
+    transform: scale(1.05);
+}
+.mini-cat-content {
+    width: 100%;
+}
+.mini-cat-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    display: block;
+}
+.mini-cat-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0.3rem 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.mini-cat-age {
+    font-size: 0.7rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.disabled-category .mini-cat-name,
+.disabled-category .mini-cat-age {
+    color: #ccc !important;
+    cursor: not-allowed;
+}
+.disabled-category {
+    background: #f4f5f7 !important;
+}
+
+/* رنگ‌ها برای هر دسته‌بندی (پس‌زمینه و متن) */
+.mini-cat-item.cat-1 {
+    background: rgba(0, 173, 182, 0.1);
+}
+.mini-cat-item.cat-1 .mini-cat-name,
+.mini-cat-item.cat-1 .mini-cat-age {
+    color: #00adb6;
+}
+.mini-cat-item.cat-2 {
+    background: rgba(247, 179, 32, 0.1);
+}
+.mini-cat-item.cat-2 .mini-cat-name,
+.mini-cat-item.cat-2 .mini-cat-age {
+    color: #f7b320;
+}
+.mini-cat-item.cat-3 {
+    background: rgba(241, 7, 80, 0.1);
+}
+.mini-cat-item.cat-3 .mini-cat-name,
+.mini-cat-item.cat-3 .mini-cat-age {
+    color: #f10750;
+}
+.mini-cat-item.cat-4 {
+    background: rgba(154, 222, 69, 0.1);
+}
+.mini-cat-item.cat-4 .mini-cat-name,
+.mini-cat-item.cat-4 .mini-cat-age {
+    color: #9ade45;
+}
+.mini-cat-item.cat-5 {
+    background: rgba(247, 179, 32, 0.1);
+}
+.mini-cat-item.cat-5 .mini-cat-name,
+.mini-cat-item.cat-5 .mini-cat-age {
+    color: #f7b320;
+}
+.mini-cat-item.cat-6 {
+    background: rgba(185, 95, 253, 0.1);
+}
+.mini-cat-item.cat-6 .mini-cat-name,
+.mini-cat-item.cat-6 .mini-cat-age {
+    color: #b95ffd;
+}
+.mini-cat-item.cat-7 {
+    background: rgba(236, 80, 152, 0.1);
+}
+.mini-cat-item.cat-7 .mini-cat-name,
+.mini-cat-item.cat-7 .mini-cat-age {
+    color: #ec5098;
+}
+.mini-cat-item.cat-8 {
+    background: rgba(37, 165, 95, 0.1);
+}
+.mini-cat-item.cat-8 .mini-cat-name,
+.mini-cat-item.cat-8 .mini-cat-age {
+    color: #25a55f;
+}
+.mini-cat-item.cat-9 {
+    background: rgba(234, 105, 13, 0.1);
+}
+.mini-cat-item.cat-9 .mini-cat-name,
+.mini-cat-item.cat-9 .mini-cat-age {
+    color: #ea690d;
+}
+.mini-cat-item.cat-10 {
+    background: rgba(13, 214, 234, 0.1);
+}
+.mini-cat-item.cat-10 .mini-cat-name,
+.mini-cat-item.cat-10 .mini-cat-age {
+    color: #0dd6ea;
+}
+
+/* استایل‌های دسکتاپ (768px به بالا) */
+@media (min-width: 768px) {
+    .mini-cat-item {
+        padding: 0.75rem;
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+        height: 110px;
+    }
+    .mini-cat-icon {
+        width: 50px;
+        height: 50px;
+    }
+    .mini-cat-name {
+        font-size: 0.65rem; /* کاهش فونت */
+    }
+    .mini-cat-age {
+        font-size: 0.5rem; /* کاهش فونت */
+    }
+}
+
+/* استایل‌های موبایل (کمتر از 576px) */
+@media (max-width: 576px) {
+    .mini-cat-item {
+        margin-bottom: 0.8rem;
+        padding: 0.4rem;
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+        height: 90px;
+    }
+    .mini-cat-icon {
+        width: 35px;
+        height: 35px;
+    }
+    .mini-cat-name {
+        font-size: 0.8rem;
+    }
+    .mini-cat-age {
+        font-size: 0.65rem;
+    }
+}
+
+.background-pink-lite {
+    background: rgba(236, 80, 152, 0.1);
+}
+.background-green-lite {
+    background: rgba(37, 165, 95, 0.05);
+}

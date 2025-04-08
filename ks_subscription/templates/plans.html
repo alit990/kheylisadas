@@ -98,6 +98,27 @@
         </div>
     </section>
     <!-- ============================ Pricing End ================================== -->
-
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'new_user' in message.tags %}
+                <script>
+                    Swal.fire({
+                        title: 'به خیلی ساده‌ست خوش آمدید!',
+                        html: `
+                        دوست عزیز، ثبت نام شما با موفقیت انجام شد.
+                        <br>
+                        نام کاربری: {{ request.user.username }}
+                        <br>
+                        رمز ورود: {{ request.user.username }}
+                        <br>
+                        اکنون میتوانید اشتراک تهیه کنید.
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'باشه'
+                    });
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
 {% endblock %}

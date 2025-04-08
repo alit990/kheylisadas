@@ -44,9 +44,23 @@
                         <a href="{% if request.resolver_match.url_name == 'articles_list' %}#{% else %}{% url 'articles_list' %}{% endif %}">مقاله‌ها</a>
                     </li>{% endcomment %}
                     <li class="{% if request.resolver_match.url_name == 'plans_list' %}active{% endif %}">
-                        <a href="{% if request.resolver_match.url_name == 'plans_list' %}#{% else %}{% url 'plans_list' %}{% endif %}">خرید
-                            اشتراک</a>
+                        {% if active_campaign.is_open or has_campaign %}
+                            <a class="btn campaign-btn"
+                               href="{% if request.resolver_match.url_name == 'campaign_detail' %}#{% else %}{% url 'campaign_detail' pk=active_campaign.id slug=active_campaign.slug %}{% endif %}">
+                                کمپین
+                                {{ active_campaign.name }}</a>
+                        {% else %}
+                            <a href="{% if request.resolver_match.url_name == 'plans_list' %}#{% else %}{% url 'plans_list' %}{% endif %}">
+                                خرید اشتراک</a>
+                        {% endif %}
+
                     </li>
+                    {% if request.user.is_staff %}
+                        <li class="{% if request.resolver_match.url_name == 'plans_list' %}active{% endif %}">
+                            <a href="{% if request.resolver_match.url_name == 'plans_list' %}#{% else %}{% url 'plans_list' %}{% endif %}">
+                                خرید اشتراک</a>
+                        </li>
+                    {% endif %}
                     <li class="{% if request.resolver_match.url_name == 'contact_us' %}active{% endif %}">
                         <a href="{% if request.resolver_match.url_name == 'contact_us' %}#{% else %}{% url 'contact_us' %}{% endif %}">تماس
                             با ما</a>

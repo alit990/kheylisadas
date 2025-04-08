@@ -4,42 +4,23 @@
 <html lang="fa">
 
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-15FGG6FFY5"></script>
+    <script src="{% static 'assets/js/gtag.js' %}"></script>
+
     <meta charset="utf-8"/>
     <meta name="author" content=""/>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-    <title>|
-        ورود به
-        {{ setting.title}}
-        |</title>
+    <title>ورود به {{ setting.title }}</title>
 
     <!-- Custom CSS -->
     <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
     <link href="{% static 'assets/css/my-custom.css' %}" rel="stylesheet">
-
-    <!-- Custom Color Option -->
     <link href="{% static 'assets/css/colors.css' %}" rel="stylesheet">
-
-    <!-- login register styles -->
     <link href="{% static 'assets/css/login_register.css' %}" rel="stylesheet">
 </head>
 
 <body class="log-bg rtl">
-
-<!-- ============================================================== -->
-<!-- Preloader - style you can find in spinners.css -->
-<!-- ============================================================== -->
-{#<div id="preloader">#}
-{#    <div class="preloader"><span></span><span></span></div>#}
-{#</div>#}
-
-
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
-
-<!-- ========================== LOGIN START ============================= -->
 <div id="main-wrapper">
     <div class="clearfix"></div>
     <section class="h-100 gradient-form" style="background-color: #eee;">
@@ -50,90 +31,115 @@
                         <div class="row g-0">
                             <div class="col-lg-6">
                                 <div class="card-body p-md-5 mx-md-4">
-
                                     <div class="text-center">
-                                        <a href="{% url 'home_page' %}" class="margin-bottom-custom" >
+                                        <a href="{% url 'home_page' %}" class="margin-bottom-custom">
                                             {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
-                                                <img src="{{ im.url }}" class="img-fluid"
-                                                     alt="{{ setting.title_ks }}">
-
+                                                <img src="{{ im.url }}" class="img-fluid" alt="{{ setting.title_ks }}">
                                             {% endthumbnail %}
                                         </a>
-
                                         <h4 id="title_register" class="logs_title margin-top-custom">
-                                            ورود به
-                                            <span class="theme-cl">  «خیلی ساده‌ست» </span>
-
+                                            ورود به <span class="theme-cl">«خیلی ساده‌ست»</span>
                                         </h4>
                                         <p id="mobileNumber">{{ mobile_number }}</p>
                                     </div>
-                                    {% if request.user.is_authenticated %}
-                                        <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
-                                            <a href="/"> خانه </a>
-                                        </div>
 
+                                    {% if request.user.is_authenticated %}
+                                        <div class="alert alert-warning">شما قبلاً وارد سایت شده‌اید.
+                                            <a href="/">خانه</a>
+                                        </div>
                                     {% else %}
                                         <form id="login_form" method="post" action="{% url 'login_page' %}">
                                             {% csrf_token %}
+                                            <input type="hidden" name="next" value="{{ next_url|default:'/' }}">
 
-                                            <input type="hidden" name="next"
-                                                   value="{{ request.GET.next }}">
                                             <div class="form-outline mb-4">
-                                                <label>{{ login_form.username.label_tag }}</label>
+                                                {{ login_form.username.label_tag }}
                                                 {{ login_form.username }}
-                                                {{ login_form.username.errors }}
+                                                {% if login_form.username.errors %}
+                                                    <div class="text-danger">
+                                                        {% for error in login_form.username.errors %}
+                                                            {{ error }}<br>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
                                             </div>
+
                                             <div class="form-outline mb-4">
-                                                <label>{{ login_form.password.label_tag }}</label>
+                                                {{ login_form.password.label_tag }}
                                                 {{ login_form.password }}
-                                                {{ login_form.password.errors }}
+                                                {% if login_form.password.errors %}
+                                                    <div class="text-danger">
+                                                        {% for error in login_form.password.errors %}
+                                                            {{ error }}<br>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
                                             </div>
+
                                             <div class="form-outline mb-4 align-content-lg-center">
-
-                                                <label>{{ login_form.captcha_field.label_tag }}</label>
-                                                {{ login_form.captcha_field }}
-                                                {{ login_form.captcha_field.errors }}
-                                                <a class='btn-light  js-captcha-refresh '> <span
-                                                        class="ti-reload"></span>
-                                                    تغییر تصویر
-                                                </a>
+                                                {{ login_form.captcha_field.label_tag }}
+                                                <div class="captcha-container d-flex align-items-center">
+                                                    {{ login_form.captcha_field }}
+                                                    <a class="btn btn-light js-captcha-refresh btn-sm ml-2">
+                                                        <span class="ti-reload"></span>
+                                                    </a>
+                                                </div>
+                                                {% if login_form.captcha_field.errors %}
+                                                    <div class="text-danger">
+                                                        {% for error in login_form.captcha_field.errors %}
+                                                            {{ error }}<br>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
                                             </div>
 
-
-                                            {#                                            <div class="form-outline mb-4">#}
-                                            {#                                                <label>{{ login_form.captcha.label_tag }}</label>#}
-                                            {#                                                {{ login_form.captcha }}#}
-                                            {#                                                {{ login_form.captcha.errors }}#}
-                                            {#                                            </div>#}
                                             <div class="form-outline mb-4">
                                                 {{ login_form.remember_me }}
-                                                <label>{{ login_form.remember_me.label_tag }}</label>
-                                                {{ login_form.remember_me.errors }}
+                                                {{ login_form.remember_me.label_tag }}
+                                                {% if login_form.remember_me.errors %}
+                                                    <div class="text-danger">
+                                                        {% for error in login_form.remember_me.errors %}
+                                                            {{ error }}<br>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
                                             </div>
 
-                                            <h id="infoAlert" class="text-warning"></h>
                                             <div class="text-center pt-1 mb-5 pb-1">
-                                                <button class=" btn-primary btn-block   mb-3 btn  btn-rounded"
-                                                        type="submit"> ورود
+                                                <button id="login_submit_button" class="btn btn-primary btn-block mb-3 btn-rounded" type="submit">
+                                                    <span id="login_buttonText">ورود</span>
+                                                    <svg id="login_loadingAnimation" class="hidden-loading" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <style>
+                                                            .spinner_qM83 { animation: spinner_8HQG 1.05s infinite }
+                                                            .spinner_oXPr { animation-delay: .1s }
+                                                            .spinner_ZTLf { animation-delay: .2s }
+                                                            @keyframes spinner_8HQG {
+                                                                0%, 57.14% { animation-timing-function: cubic-bezier(0.33, .66, .66, 1); transform: translate(0) }
+                                                                28.57% { animation-timing-function: cubic-bezier(0.33, 0, .66, .33); transform: translateY(-6px) }
+                                                                100% { transform: translate(0) }
+                                                            }
+                                                        </style>
+                                                        <circle class="spinner_qM83" cx="4" cy="12" r="3" fill="white"/>
+                                                        <circle class="spinner_qM83 spinner_oXPr" cx="12" cy="12" r="3" fill="white"/>
+                                                        <circle class="spinner_qM83 spinner_ZTLf" cx="20" cy="12" r="3" fill="white"/>
+                                                    </svg>
                                                 </button>
-
                                             </div>
+
                                             <div class="form-group text-center mb-0 mt-3">
-                                                <p> کلمه عبور خود را فراموش کرده اید؟
-                                                    <br>
-                                                    <strong>
-                                                        کلمه عبور پیش فرض در ابتدا
-                                                    شماره تلفن شما به همراه صفر ابتدایی است.
-                                                    </strong>
-                                                    <br>
-                                                    <a href="{% url 'forget_pass_view' %}" class="theme-cl link">
-                                                        فراموشی کلمه عبور </a>
+                                                <p>کلمه عبور خود را فراموش کرده‌اید؟<br>
+                                                    <strong>کلمه عبور پیش‌فرض در ابتدا شماره تلفن شما به همراه صفر ابتدایی است.</strong><br>
+                                                    <a href="{% url 'forget_pass_view' %}" class="theme-cl link">فراموشی کلمه عبور</a>
+                                                </p>
+                                            </div>
+
+                                            <div class="form-group text-center mb-0 mt-3">
+                                                <p>حساب کاربری ندارید؟<br>
+                                                    <a href="{% url 'mobile_register_view' %}" class="theme-cl link">ثبت نام</a>
                                                 </p>
                                             </div>
                                         </form>
                                     {% endif %}
-
-
                                 </div>
                             </div>
 
@@ -141,12 +147,10 @@
                                 <div class="text-center text-white px-3 py-4 p-md-5 mx-md-4">
                                     <a href="{% url 'home_page' %}" class="">
                                         {% thumbnail setting.icon_ks "x150" quality=95 format="PNG" as im %}
-                                            <img src="{{ im.url }}" class="img-fluid"
-                                                 alt="{{ setting.title_ks }}">
-
+                                            <img src="{{ im.url }}" class="img-fluid" alt="{{ setting.title_ks }}">
                                         {% endthumbnail %}
                                     </a>
-                                    <h4 class="mb-4 color-ks3"> {{ setting.title_ks }} </h4>
+                                    <h4 class="mb-4 color-ks3">{{ setting.title_ks }}</h4>
                                     <p class="small mb-0 color-ks4">{{ setting.login_text }}</p>
                                 </div>
                             </div>
@@ -156,22 +160,33 @@
             </div>
         </div>
     </section>
-
-
-    <!-- ========================== End Mobile Activation ============================= -->
-
-
 </div>
-<!-- ========================== LOGIN END ============================= -->
 
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->
 {% include 'shared/_FooteRefernces.html' %}
 <script src="{% static 'assets/js/ks-captcha.js' %}"></script>
 <script src="{% static 'assets/js/ks-redirect-user-onback-pressed.js' %}"></script>
 <script src="{% static 'assets/js/ks-account-styles.js' %}"></script>
 
+<script>
+    function normalizeInput(inputId) {
+        document.getElementById(inputId).addEventListener('input', function (e) {
+            let value = e.target.value;
+            const digitMap = {
+                '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
+                '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9',
+                '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+                '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+            };
+            value = value.replace(/[۰-۹٠-٩]/g, digit => digitMap[digit] || digit);
+            if (inputId !== 'password' && value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            e.target.value = value;
+        });
+    }
+    normalizeInput('username');
+    // normalizeInput('password'); // کامنت شده، پس محدودیتی اعمال نمی‌شه
+    normalizeInput('mobile');
+</script>
 </body>
-
 </html>

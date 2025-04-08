@@ -1,4 +1,5 @@
 // let currentAudioData;
+// let currentAudioId;
 // let kplayer;
 // document.addEventListener('DOMContentLoaded', function () {
 //     const {
@@ -23,8 +24,13 @@
 //
 //         // اضافه‌کردن رویداد کلیک برای دکمه بستن
 //         closeButton.addEventListener('click', function () {
-//             const kplayer = getPlayer();
-//             savePlayerState(); // ذخیره وضعیت پلیر
+//             let kplayer = getPlayer();
+//             const audioData = JSON.parse(localStorage.getItem(`audio_${kplayer.options.id}`));
+//             if (audioData) { // بررسی وجود audioData قبل از به‌روزرسانی
+//                 audioData.currentTime = kplayer.currentTime;
+//                 audioData.isPlaying = false;
+//                 saveAudioData(audioData); // استفاده از تابع saveAudioData
+//             }
 //             if (kplayer) {
 //                 kplayer.pause(); // متوقف کردن پلیر قبل از نابود کردن
 //                 kplayer.destroy(); // نابود کردن پلیر
@@ -73,19 +79,6 @@
 //         } else {
 //             document.body.style.paddingBottom = '0';
 //         }
-//     }
-//
-//     // اضافه‌کردن رویداد کلیک برای دکمه بستن
-//     if (closePlayerButton) {
-//         closePlayerButton.addEventListener('click', function () {
-//             const kplayer = getPlayer();
-//             //saveAudioData(); // ذخیره وضعیت پلیر todo: check and save state
-//             if (kplayer) {
-//                 kplayer.pause(); // متوقف کردن پلیر قبل از نابود کردن
-//                 kplayer.destroy(); // نابود کردن پلیر
-//             }
-//             hidePlayer();
-//         });
 //     }
 //
 //
@@ -151,8 +144,11 @@
 //         const playerContainer = isAudioPage ? document.getElementById('player-main') : document.getElementById('player-floating');
 //         if (!playerContainer) return;
 //         const lastPlayedAudioTitle = localStorage.getItem('lastPlayedAudioTitle');
+//         const decryptedSrc = decryptData(audioData.src); // رمزگشایی src
+//         const decryptedAudioData = {...audioData, src: decryptedSrc}; // ایجاد یک کپی از audioData و تغییر src به decryptedSrc
+//
 //         if (!kplayer) {
-//             kplayer = createPlayer(playerContainer, audioData);
+//             kplayer = createPlayer(playerContainer, decryptedAudioData);
 //             window.addEventListener('scroll', adjustScroll); // اضافه کردن listener اسکرول
 //             showPlayer(); // نمایش پلیر شناور
 //             setPlayer(kplayer);
@@ -164,7 +160,7 @@
 //         } else if (window.audio && kplayer.options.audio.album !== window.audio.title) {
 //
 //             kplayer.destroy();
-//             kplayer = createPlayer(playerContainer, audioData);
+//             kplayer = createPlayer(playerContainer, decryptedAudioData);
 //             window.addEventListener('scroll', adjustScroll); // اضافه کردن listener اسکرول
 //             showPlayer(); // نمایش پلیر شناور
 //             setPlayer(kplayer);
@@ -181,7 +177,7 @@
 //                 }
 //
 //                 console.log('after', kplayer);
-//                 kplayer = createPlayer(playerContainer, audioData);
+//                 kplayer = createPlayer(playerContainer, decryptedAudioData);
 //                 // kplayer = createPlayer(playerContainer, audioData);
 //                 window.addEventListener('scroll', adjustScroll); // اضافه کردن listener اسکرول
 //                 setPlayer(kplayer);
@@ -189,19 +185,19 @@
 //                 customPlayerControls(playerContainer); // فراخوانی تابع اضافه‌کردن دکمه‌های سفارشی
 //             }
 //         }
-//         // try {
-//         //     if (isAudioPage) {
-//         //         localStorage.setItem('lastPlayedAudioTitle', window.audio.title);
-//         //         localStorage.setItem('lastPlayedAudioId', window.audio.id);
-//         //     } else {
-//         //         localStorage.setItem('lastPlayedAudioTitle', audioData.title);
-//         //         localStorage.setItem('lastPlayedAudioId', audioData.id);
-//         //     }
-//         // } catch (e) {
-//         //     // console.error("Error getting Last player id from localStorage:", e);
-//         //     console.log("Error setting Last player id to localStorage:", e);
-//         //
-//         // }
+//         try {
+//             if (isAudioPage) {
+//                 localStorage.setItem('lastPlayedAudioTitle', window.audio.title);
+//                 localStorage.setItem('lastPlayedAudioId', window.audio.id);
+//             } else {
+//                 localStorage.setItem('lastPlayedAudioTitle', audioData.title);
+//                 localStorage.setItem('lastPlayedAudioId', audioData.id);
+//             }
+//         } catch (e) {
+//             // console.error("Error getting Last player id from localStorage:", e);
+//             console.log("Error setting Last player id to localStorage:", e);
+//
+//         }
 //         if (!isAudioPage) {
 //             // انتقال پلیر به body بعد از ایجاد یا به‌روزرسانی
 //             const playerFloating = document.getElementById('player-floating');
@@ -238,7 +234,7 @@
 //                     cancelButtonText: 'پخش از ابتدا'
 //                 }).then((result) => {
 //                     if (result.isConfirmed) {
-//                         myUpdateChapter(chapterIndex);
+//                         updateCurrentChapter(chapterIndex);
 //                         const playPromise = kplayer?.play();
 //                         if (playPromise && typeof playPromise.catch === 'function') {
 //                             playPromise.catch(error => console.error("Auto-play failed: ", error));
@@ -251,7 +247,10 @@
 //                     }
 //                 });
 //             } else if (parsedState) {
-//                 setPlayerCurrentTime(parsedState.currentTime, parsedState.isPlaying);
+//                 console.log('--', kplayer);
+//                 waitForPlayerInitialization().then(() => {
+//                     setPlayerCurrentTime(parsedState.currentTime, parsedState.isPlaying);
+//                 });
 //             }
 //         });
 //
@@ -268,7 +267,6 @@
 //             .done(function (audioResponse) {
 //                 if (audioResponse && audioResponse.url) {
 //                     const lastChapterIndex = window.chapter_set.length - 1; // index آخرین چپتر
-//
 //                     let player_chapters = window.chapter_set.map((chapter, i) => ({
 //                         // id: chapter.id,
 //                         id: i,
@@ -277,7 +275,8 @@
 //                         endTime: i === lastChapterIndex ? convertToSeconds(window.audio_duration) : convertToSeconds(window.chapter_set[i + 1].start_time), // تبدیل window.audio_duration به ثانیه
 //                         title: `${i + 1}. ${chapter.name}`,
 //                     }));
-//                     console.log('chapters ', player_chapters);
+//                     const encryptedSrc = encryptData(audioResponse.url); // رمزنگاری src
+//
 //                     currentAudioData = {
 //                         id: window.audio.id,
 //                         name: window.audio.name,
@@ -285,7 +284,8 @@
 //                         artist: '« خیلی ساده‌ست »',
 //                         cover: coverImageUrl,
 //                         chapters: player_chapters,
-//                         src: audioResponse.url,
+//                         src: encryptedSrc, // ذخیره src رمزگذاری شده
+//                         // src: audioResponse.url, // ذخیره src رمزگذاری شده
 //                     };
 //                     // saveAudioData(currentAudioData); // ذخیره اطلاعات فایل صوتی قبل از ایجاد پلیر
 //                     // try {
@@ -327,6 +327,7 @@
 //                             currentTime: audioData.currentTime || 0, // اگر currentTime ذخیره نشده بود، صفر در نظر می‌گیریم
 //                             isPlaying: audioData.isPlaying || false // اگر isPlaying ذخیره نشده بود، false در نظر می‌گیریم
 //                         };
+//                         console.log('-------', parsedState);
 //                         updatePlayer(audioData, parsedState, window.chapterIndexParam);
 //                     } else {
 //                         createAudio(window.chapterIndexParam, null);
@@ -334,12 +335,12 @@
 //                 }
 //             } catch (e) {
 //                 console.error("Error parsing player state from localStorage:", e);
-//                 localStorage.removeItem(playerStorageKey); // پاک کردن state خراب
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'خطا',
-//                     text: "مشکلی در بازیابی وضعیت پخش پیش آمده است."
-//                 });
+//                 // localStorage.removeItem(playerStorageKey); // پاک کردن state خراب
+//                 // Swal.fire({
+//                 //     icon: 'error',
+//                 //     title: 'خطا',
+//                 //     text: "مشکلی در بازیابی وضعیت پخش پیش آمده است."
+//                 // });
 //             }
 //         } else {
 //             removeAudioSrc();
@@ -366,8 +367,19 @@
 //         }
 //     }
 //
+//     function waitForPlayerInitialization() {
+//         return new Promise((resolve, reject) => {
+//             const checkInterval = setInterval(() => {
+//                 if (kplayer) {
+//                     clearInterval(checkInterval);
+//                     resolve();
+//                 }
+//             }, 100); // چک کردن هر 100 میلی‌ثانیه
+//         });
+//     }
+//
 //     function setPlayerCurrentTime(time, isPlaying) {
-//         if (kplayer && kplayer.currentTime !== time) { // بررسی تفاوت زمان
+//         if (kplayer) { // بررسی تفاوت زمان
 //             kplayer.seek(time);
 //             kplayer.on('seeked', function handler() {
 //                 let playPromise;
@@ -386,10 +398,37 @@
 //     }
 //
 //     function setupPageHistoryEvents() { // تغییر نام تابع برای وضوح بیشتر
-//         $(window).on('pageshow', () => {
-//             console.log('pageshow', kplayer);
-//             checkEverything();
+//         // $(window).on('pageshow', () => {
+//         //     console.log('pageshow', kplayer);
+//         //     checkEverything();
+//         // });
+//         // $(window).on('pageshow', function (event) {
+//         //     if (!isAudioPage) {
+//         //         if (event.persisted) {
+//         //             // بررسی اینکه آیا صفحه از کش مرورگر بارگذاری شده است یا خیر
+//         //             checkEverything(); // اجرای تابع بدون رفرش صفحه
+//         //         } else {
+//         //             checkEverything(); // اجرای تابع به طور عادی
+//         //         }
+//         //     }
+//         // });
+//         $(window).on('pageshow', function (event) {
+//             // بررسی و تعیین flag در localStorage
+//             const refreshFlag = localStorage.getItem('refreshFlag');
+//             if (!isAudioPage) {
+//                 if (!refreshFlag) {
+//                     localStorage.setItem('refreshFlag', 'true'); // تعیین flag
+//                     checkEverything();
+//                     window.location.reload(); // رفرش صفحه فقط در صورتی که از کش بارگذاری شده باشد
+//                     if (event.persisted) {
+//                         // بررسی اینکه آیا صفحه از کش مرورگر بارگذاری شده است یا خیر
+//                     }
+//                 } else {
+//                     localStorage.removeItem('refreshFlag'); // برداشتن flag بعد از یکبار رفرش
+//                 }
+//             }
 //         });
+//
 //
 //         $(window).on('popstate', () => {
 //             console.log('popstate', kplayer);
@@ -400,22 +439,17 @@
 //             console.log('pagehide', kplayer);
 //             console.log('pagehide data', currentAudioData);
 //             saveAudioData(currentAudioData); // ذخیره اطلاعات فایل صوتی قبل از ایجاد پلیر
-//             try {
-//                 localStorage.setItem('lastPlayedAudioTitle', window.audio.title);
-//                 localStorage.setItem('lastPlayedAudioId', window.audio.id);
-//             } catch (e) {
-//                 // console.error("Error getting Last player id from localStorage:", e);
-//                 console.log("Error setting Last player id to localStorage:", e);
-//
-//             }
 //
 //             // checkEverything();
 //
 //         });
 //     }
 //
-// // ... در انتهای کد و داخل رویداد DOMContentLoaded
-//     setupPageHistoryEvents(); // فراخوانی تابع جدید
-//     checkEverything(); // فراخوانی اولیه
+//     if (hasPerm) {
+//         // ... در انتهای کد و داخل رویداد DOMContentLoaded
+//         setupPageHistoryEvents(); // فراخوانی تابع جدید
+//         checkEverything(); // فراخوانی اولیه
+//     }
+//
 //
 // });

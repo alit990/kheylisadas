@@ -1,0 +1,54 @@
+{% extends 'shared/_MainAccountLayout.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block account_title %} {{ title }} {% endblock %}
+{% block form %}
+
+    <div class="text-center">
+        <a href="{% url 'home_page' %}" class="margin-bottom-custom">
+            {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
+                <img src="{{ im.url }}" class="img-fluid"
+                     alt="{{ setting.title_ks }}">
+            {% endthumbnail %}
+        </a>
+        <h6 id="title_register" class="logs_title margin-top-custom">
+            ابتدا ثبت نام کنید
+        </h6>
+        <br>
+        <h6 id="title_register" class="logs_title margin-top-custom">شماره
+            <span class="theme-cl"> تلفن همراه </span>
+            را وارد کنید
+        </h6>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="alert alert-warning">شما قبلا وارد سایت شده اید.
+            <a href="/"> خانه </a>
+        </div>
+    {% else %}
+        <form id="register_form" method="post" action="{% url 'mobile_register_view' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if form.non_field_errors %}
+                <p class="error-message">
+                    این شماره قبلا ثبت نام شده است. لطفا به صفحه <a href="{% url 'forget_pass_view' %}">فراموشی رمز
+                    عبور</a> مراجعه کنید.
+                </p>
+            {% endif %}
+            <div class="text-center pt-1 mb-5 pb-1">
+                <button class=" btn-primary btn-block mb-3 btn btn-rounded" type="submit">
+                    ثبت نام
+                </button>
+            </div>
+        </form>
+    {% endif %}
+    {% if form.error_code == 'duplicate_number' %}
+        <div class="alert alert-danger">
+            این شماره قبلا ثبت نام شده است. اگر نام کاربری و رمز ورود خود را نمی دانید، لطفا به صفحه
+            <a href="{% url 'forget_pass_view' %}">فراموشی رمز عبور</a>
+            مراجعه کنید.
+        </div>
+    {% endif %}
+
+
+{% endblock %}
+{% block account_text %} <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}

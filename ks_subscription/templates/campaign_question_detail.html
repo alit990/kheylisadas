@@ -1,0 +1,196 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% block title %} سوال و مشاوره {% endblock %}
+
+{% block content %}
+
+    <!-- ============================ Page Title Start================================== -->
+    <section class="page-title py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="breadcrumbs-wrap">
+                        <h1 class="breadcrumb-title">ارسال سوال و مشاوره</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home_page' %}">خانه</a></li>
+                                <li class="breadcrumb-item"><a
+                                        href="{% url 'campaign_detail' pk=campaign.id slug=campaign.slug %}">کمپین {{ campaign.name }} </a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">ارسال سوال و مشاوره</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Page Title End ================================== -->
+
+    <!-- ============================ Agency List Start ================================== -->
+    <section class="bg-light">
+
+        <div class="container">
+
+            <!-- row Start -->
+            <div class="row">
+
+                <div class="col-lg-8 col-md-7">
+                    <div class="edu_wraper border n-shadow">
+                        {% if success %}
+                            <div class="alert alert-success">{{ success }}</div>
+                        {% endif %}
+
+                        {% if question %}
+
+                            <h6>سوال شما:</h6>
+                            <p>{{ question.message }}</p>
+
+                            {% if question.is_read_by_admin %}
+                                <p class="text-success"><small>خوانده شده توسط ادمین.</small></p>
+                            {% endif %}
+
+                            {% if question.response %}
+                                <h6>پاسخ ادمین:</h6>
+                                <p>{{ question.response }}</p>
+                                {% if question.url %}
+                                    <audio controls class="full-width-audio">
+                                        <source src="{{ question.url }}" type="audio/mpeg">
+                                        مرورگر شما از تگ <code>audio</code> پشتیبانی نمی‌کند. لطفاً مرورگر خود را
+                                        به‌روزرسانی
+                                        کنید.
+                                    </audio>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <form id="main-contact-form" class="contact-form row"
+                                  action="{% url 'campaign_question_detail' campaign_id=campaign.id campaign_week_id=campaign_week.id %}"
+                                  method="post">
+                                {% csrf_token %}
+
+                                <div class="prc_wrap">
+
+                                    <div class="prc_wrap_header">
+                                        <h4 class="property_block_title"> ارسال سوال </h4>
+                                    </div>
+
+                                    <div class="prc_wrap-body">
+
+                                        <div class="form-group">
+                                            {{ form.title.label_tag }}
+                                            {{ form.title }}
+                                            {{ form.title.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form.mobile }}
+                                            {{ form.mobile.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form.message.label_tag }}
+                                            {{ form.message }}
+                                            {{ form.message.errors }}
+                                        </div>
+                                        <div class="form-outline mb-4 align-content-lg-center">
+
+                                            <label>{{ form.captcha_field.label_tag }}</label><br>
+                                            {{ form.captcha_field }}
+                                            {{ form.captcha_field.errors }}
+                                            <a class='btn-light  js-captcha-refresh '> <span class="ti-reload"></span>
+                                                تغییر تصویر
+                                            </a>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button class="btn btn-theme" type="submit">ثبت سوال</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                            {% comment %}<form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">ارسال</button>
+                        </form>{% endcomment %}
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 col-md-5">
+
+                    <div class="prc_wrap">
+
+                        <div class="prc_wrap_header">
+                            <h4 class="property_block_title">راه های ارتباطی</h4>
+                        </div>
+
+                        <div class="prc_wrap-body">
+                            <div class="contact-info">
+                                <p>
+                                    از این طریق با ما در ارتباط باشید
+                                </p>
+
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-email.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        پست الکترونیک
+                                        <span>{{ site_setting.email }}</span>
+                                    </div>
+                                </div>
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-telegram.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        تلگرام
+                                        <span>{{ site_setting.telegram }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-instagram.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        اینستاگرام
+                                        <span>{{ site_setting.instagram }}</span>
+                                    </div>
+                                </div>
+                                {% comment %}<div class="cn-info-detail">
+                                    <div class="social-network-logo">
+                                        <img src="{% static 'assets/img/logo-eitaa.png' %}" alt="">
+                                    </div>
+                                    <div class="social-network-name">
+                                        پیامرسان ایتا
+                                        <span>{{ site_setting.eitaa }}</span>
+                                    </div>
+                                </div>{% endcomment %}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /row -->
+
+        </div>
+
+    </section>
+    <!-- ============================ Agency List End ================================== -->
+    <script src="{% static 'assets/js/ks-captcha.js' %}"></script>
+
+{% endblock %}
+{% block header_ref_top %}
+    <script src="{% static 'bundle.js' %}"></script>
+    <script src="{% static 'bundle_sweetalert.js' %}"></script>
+{% endblock %}

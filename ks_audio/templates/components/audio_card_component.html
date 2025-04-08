@@ -22,9 +22,9 @@
                 </div>
             {% endif %}
 
-            <div class="number_visits"><i class="fa fa-eye"></i>
+            {% comment %}<div class="number_visits"><i class="fa fa-eye"></i>
                 {{ audio.audiovisit_set.count|add:audio.fake_visit_count }}
-            </div>
+            </div>{% endcomment %}
         </div>
 
         <div class="education_block_body">

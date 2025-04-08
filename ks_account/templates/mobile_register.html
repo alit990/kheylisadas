@@ -7,8 +7,7 @@
     <div class="text-center">
         <a href="{% url 'home_page' %}" class="margin-bottom-custom">
             {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
-                <img src="{{ im.url }}" class="img-fluid"
-                     alt="{{ setting.title_ks }}">
+                <img src="{{ im.url }}" class="img-fluid" alt="{{ setting.title_ks }}">
             {% endthumbnail %}
         </a>
         <h6 id="title_register" class="logs_title margin-top-custom">
@@ -30,25 +29,85 @@
             {{ form.as_p }}
             {% if form.non_field_errors %}
                 <p class="error-message">
-                    این شماره قبلا ثبت نام شده است. لطفا به صفحه <a href="{% url 'forget_pass_view' %}">فراموشی رمز
-                    عبور</a> مراجعه کنید.
+                    این شماره قبلا ثبت نام شده است.
+                    <br>
+                    <a href="{% url 'login_page' %}">
+                        <strong>ورود به سایت</strong>
+                    </a>
                 </p>
             {% endif %}
             <div class="text-center pt-1 mb-5 pb-1">
-                <button class=" btn-primary btn-block mb-3 btn btn-rounded" type="submit">
-                    ثبت نام
+                <button id="submit_button" class="btn btn-primary btn-block mb-3 btn-rounded submit-button"
+                        type="submit">
+                    <span id="buttonText">دریافت کد</span>
+                    <svg id="loadingAnimation" class="hidden-loading" width="24" height="24" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .spinner_qM83 {
+                                animation: spinner_8HQG 1.05s infinite
+                            }
+
+                            .spinner_oXPr {
+                                animation-delay: .1s
+                            }
+
+                            .spinner_ZTLf {
+                                animation-delay: .2s
+                            }
+
+                            @keyframes spinner_8HQG {
+                                0%, 57.14% {
+                                    animation-timing-function: cubic-bezier(0.33, .66, .66, 1);
+                                    transform: translate(0)
+                                }
+                                28.57% {
+                                    animation-timing-function: cubic-bezier(0.33, 0, .66, .33);
+                                    transform: translateY(-6px)
+                                }
+                                100% {
+                                    transform: translate(0)
+                                }
+                            }
+                        </style>
+                        <circle class="spinner_qM83" cx="4" cy="12" r="3" fill="white"/>
+                        <circle class="spinner_qM83 spinner_oXPr" cx="12" cy="12" r="3" fill="white"/>
+                        <circle class="spinner_qM83 spinner_ZTLf" cx="20" cy="12" r="3" fill="white"/>
+                    </svg>
                 </button>
             </div>
         </form>
     {% endif %}
     {% if form.error_code == 'duplicate_number' %}
-        <div class="alert alert-danger">
-            این شماره قبلا ثبت نام شده است. اگر نام کاربری و رمز ورود خود را نمی دانید، لطفا به صفحه
-            <a href="{% url 'forget_pass_view' %}">فراموشی رمز عبور</a>
-            مراجعه کنید.
+        <div class="alert alert-warning">
+                    این شماره قبلا ثبت نام شده است.
+                    <br>
+                    <a href="{% url 'login_page' %}">
+                        <strong>ورود به سایت</strong>
+                    </a>
         </div>
     {% endif %}
 
 
 {% endblock %}
-{% block account_text %} <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}
+{% block account_text %}
+    <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}
+
+{% block script_block %}
+    <script>
+        $(document).ready(function () {
+            $("#register_form").submit(function (event) {
+                var button = $("#submit_button");
+                var buttonText = $("#buttonText");
+                var loadingAnimation = $("#loadingAnimation");
+
+                button.prop("disabled", true);
+                button.css("background", "#808080"); // تغییر رنگ دکمه به توسی
+                buttonText.addClass("hidden-loading");
+                loadingAnimation.removeClass("hidden-loading").addClass("visible-loading");
+
+
+                $(this).off('submit').submit();
+            });
+        });
+    </script>
+{% endblock %}

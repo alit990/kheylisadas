@@ -55,6 +55,7 @@
     .banner-title-text {
         height: 290px;
     }
+
     .centered .banner-title {
         font-size: 25px;
     }
@@ -69,6 +70,7 @@
     .banner-title-text {
         height: 220px;
     }
+
     .centered .banner-title {
         font-size: 25px;
     }
@@ -91,6 +93,7 @@
         font-size: 10px;
     }
 }
+
 @media (max-width: 240px) {
     .banner-title-text {
         height: 190px;
@@ -384,6 +387,7 @@ span.payment_method.online {
     color: #21f33d;
     background: rgba(33, 150, 243, 0.1);
 }
+
 span.payment_method.gift {
     color: #7b19cb;
     background: rgba(33, 150, 243, 0.1);
@@ -434,10 +438,12 @@ div.vote-area {
     margin-top: 10px;
     border-radius: 3px;
 }
-.list_ed_detail2 a{
+
+.list_ed_detail2 a {
     text-decoration: underline;
     color: inherit;
 }
+
 .demo-audio {
     border: 1px solid #ccc !important;
     /*border-radius: 16px;*/
@@ -480,6 +486,7 @@ div.vote-area {
     /*color: #0c5460;*/
     font-size: 12px;
 }
+
 .input-captcha {
     width: min-content;
 }
@@ -702,9 +709,11 @@ div.vote-area {
     margin-bottom: 3px;
     width: fit-content; /* باکس به اندازه محتوا باشد */
 }
+
 .full-width-audio {
     width: 100%;
 }
+
 .full-width-link {
     display: block;
     width: 100%;
@@ -733,10 +742,32 @@ div.vote-area {
     background-color: #da0b4e; /* رنگ پس‌زمینه در حالت hover */
     color: white; /* رنگ متن در حالت hover */
 }
+
+.full-width-link.disabled {
+    pointer-events: none; /* غیر فعال کردن کلیک */
+    cursor: default; /* نشانگر پیش‌فرض موس */
+    color: gray !important; /* اطمینان از تغییر رنگ به خاکستری */
+    background-color: #e0e0e0 !important; /* پس‌زمینه خاکستری */
+}
+
+.full-width-link.disabled:hover .foot_features.foot_audio_duration {
+    background-color: inherit !important; /* جلوگیری از تغییر رنگ در هاور */
+    color: inherit !important; /* جلوگیری از تغییر رنگ متن در هاور */
+}
+
+/* اطمینان از اینکه رنگ لینک در حالت عادی تحت تأثیر قرار نمی‌گیرد */
+.full-width-link:not(.disabled):hover .foot_features.foot_audio_duration {
+    background-color: #da0b4e; /* رنگ پس‌زمینه صورتی در هاور */
+    color: white; /* رنگ متن در هاور */
+}
+
+
+
 .py-5 {
     padding-top: 3rem !important;
     padding-bottom: 0 !important; /* تغییر padding-bottom به صفر */
 }
+
 .single-line-truncate {
     white-space: nowrap;
     overflow: hidden;
@@ -752,6 +783,7 @@ div.vote-area {
     padding-right: 5px; /* فاصله از سمت راست برای تراز شدن با آیتم‌های زیر */
     margin-right: 5px; /* ایجاد فاصله اضافی از سمت راست */
 }
+
 .audio-chapters-container h6 small {
     color: darkgray;
 }
@@ -811,9 +843,11 @@ div.vote-area {
 .chapter-item-p {
     padding-right: 5px;
 }
+
 #player-container {
     position: relative;
 }
+
 #player-floating {
     position: fixed;
     bottom: 0; /* چسبیدن به پایین صفحه */
@@ -829,6 +863,7 @@ div.vote-area {
     transform: translateY(0); /* نمایش پلیر */
 }
 
+/* استایل دکمه close */
 .close-btn {
     position: absolute;
     top: -35px; /* موقعیت بالاتر از پلیر */
@@ -841,4 +876,176 @@ div.vote-area {
     height: 30px;
     cursor: pointer;
     z-index: 1001; /* بالاتر از پلیر */
+    transition: background 0.3s ease; /* اضافه کردن ترانزیشن برای تغییر رنگ */
 }
+
+.close-btn:hover {
+    background: #ff3a82; /* رنگ هاور صورتی */
+}
+
+.close-btn:active {
+    background: #da0b4e; /* رنگ کلیک سورمه ای */
+}
+
+.close-btn i {
+    color: white;
+}
+
+/* استایل دکمه audio-page */
+.audio-page-btn {
+    position: absolute;
+    top: -35px; /* موقعیت بالاتر از پلیر */
+    right: 50px; /* فاصله از دکمه close */
+    background: rgba(95, 95, 98, 0.75);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 1001; /* بالاتر از پلیر */
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease; /* اضافه کردن ترانزیشن برای تغییر رنگ */
+}
+
+.audio-page-btn:hover {
+    background: #ff3a82; /* رنگ هاور صورتی */
+}
+
+.audio-page-btn:active {
+    background: #da0b4e; /* رنگ کلیک سورمه ای */
+}
+
+.audio-page-btn i {
+    color: white;
+}
+
+/* اضافه کردن هینت موس */
+.close-btn::after,
+.audio-page-btn::after {
+    content: attr(data-hint); /* متن هینت را از attribute data-hint دریافت می‌کند */
+    position: absolute;
+    bottom: 100%; /* نمایش هینت بالای دکمه */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    font-size: 12px;
+}
+
+.close-btn:hover::after,
+.audio-page-btn:hover::after {
+    opacity: 1; /* نمایش هینت هنگام هاور */
+}
+
+#paymentButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loadingAnimation {
+    height: 1.5em; /* تنظیم اندازه بزرگتر */
+    width: 1.5em;
+    vertical-align: middle;
+}
+
+.hidden-loading {
+    display: none;
+}
+
+.visible-loading {
+    display: inline-block;
+}
+
+/*register and activation template*/
+.submit-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 100%; /* Make button fill the container */
+}
+
+.submit-button:disabled {
+    background-color: #808080; /* Grayed out color */
+    cursor: default;
+}
+
+.visible-loading {
+    display: block;
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+}
+
+/* .spinner svg {  No need for this rule anymore */
+/*     width: 100%; */
+/*     height: 100%; */
+/*     animation: rotate 2s linear infinite; */
+/* } */
+
+/* @keyframes rotate { No need for this either */
+/*     from { */
+/*         transform: rotate(0deg); */
+/*     } */
+/*     to { */
+/*         transform: rotate(360deg); */
+/*     } */
+/* } */
+/*captcha*/
+.captcha-container {
+    display: flex;
+    align-items: center;
+}
+
+.captcha-container input[type="text"] {
+    width: 100%;
+    max-width: 300px; /* بازگرداندن عرض به اندازه قبلی */
+    margin-right: 10px;
+}
+
+.captcha-container .btn-sm {
+    padding: 0.25rem 0.5rem; /* کوچک کردن اندازه دکمه */
+}
+
+@media (max-width: 768px) {
+    .captcha-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .captcha-container input[type="text"],
+    .captcha-container .js-captcha-refresh {
+        margin-top: 10px;
+        margin-right: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .captcha-container {
+        flex-direction: row;
+    }
+
+    .captcha-container .js-captcha-refresh {
+        margin-left: 10px;
+    }
+}
+

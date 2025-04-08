@@ -16,7 +16,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home_page' %}"> خانه </a></li>
-                                <li class="breadcrumb-item active" aria-current="page"> نتیجه پرداخت </li>
+                                <li class="breadcrumb-item active" aria-current="page"> نتیجه پرداخت</li>
                             </ol>
                         </nav>
                     </div>
@@ -30,7 +30,7 @@
 
     <!-- ============================ info Start ================================== -->
     <section class="pt-0">
-        <div class="container" >
+        <div class="container">
             {% if info %}
                 <div class="alert alert-info ">
                     {{ info }}
@@ -45,7 +45,11 @@
 
             {% if success %}
                 <div class="alert alert-success  ">
-                    {% include 'components/payment/success.html' with transation=transaction %}
+                    {% if c_transaction %}
+                        {% include 'components/payment/success.html' with transation=transaction c_transation=c_transaction %}
+                    {% else %}
+                        {% include 'components/payment/success.html' with transation=transaction %}
+                    {% endif %}
                 </div>
             {% endif %}
 

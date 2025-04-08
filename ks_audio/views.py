@@ -14,7 +14,7 @@ from ks_audio.models import Audio, AudioWeek, AudioCourse, AudioArticle, AudioVi
 from django.http import JsonResponse, HttpRequest, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
-from ks_category.models import AudioComment, CCDetail
+from ks_category.models import AudioComment, CCDetail, Category
 from ks_site.models import Avatar, SiteSetting
 from ks_subscription.models import Transaction
 from ks_vote.models import AudioVote, AudioPlaylist
@@ -206,7 +206,8 @@ class AudioDetailView(DetailView):
         context['has_video'] = has_video
         site_setting = SiteSetting.objects.filter(is_main_setting=True).first()
         context['site_setting'] = site_setting
-
+        categories = Category.objects.all()
+        context['categories'] = categories
         return context
 
 

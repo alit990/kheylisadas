@@ -7,8 +7,7 @@
     <div class="text-center">
         <a href="{% url 'home_page' %}" class="margin-bottom-custom">
             {% thumbnail setting.logo_ks "x40" quality=95 format="PNG" as im %}
-                <img src="{{ im.url }}" class="img-fluid"
-                     alt="{{ setting.title_ks }}">
+                <img src="{{ im.url }}" class="img-fluid" alt="{{ setting.title_ks }}">
             {% endthumbnail %}
         </a>
         <h5 id="title_register" class="logs_title margin-top-custom">
@@ -25,62 +24,123 @@
         <form id="activation_code_form" method="post" action="{% url 'activation_view' %}">
             {% csrf_token %}
             {{ form.as_p }}
-            {#            <button type="submit" class="btn btn-theme btn-rounded"> بررسی کد</button>#}
             <div class="text-center pt-1 mb-5 pb-1">
-                <button id="submit_button" class=" btn-primary btn-block   mb-3 btn  btn-rounded" type="submit">
-                    بررسی کد
+                <button id="submit_button" class="btn btn-primary btn-block mb-3 btn btn-rounded submit-button"
+                        type="submit">
+                    <span id="buttonText">بررسی کد و ثبت نام</span>
+                    <svg id="loadingAnimation" class="hidden-loading" width="24" height="24" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .spinner_qM83 {
+                                animation: spinner_8HQG 1.05s infinite
+                            }
+
+                            .spinner_oXPr {
+                                animation-delay: .1s
+                            }
+
+                            .spinner_ZTLf {
+                                animation-delay: .2s
+                            }
+
+                            @keyframes spinner_8HQG {
+                                0%, 57.14% {
+                                    animation-timing-function: cubic-bezier(0.33, .66, .66, 1);
+                                    transform: translate(0)
+                                }
+                                28.57% {
+                                    animation-timing-function: cubic-bezier(0.33, 0, .66, .33);
+                                    transform: translateY(-6px)
+                                }
+                                100% {
+                                    transform: translate(0)
+                                }
+                            }
+                        </style>
+                        <circle class="spinner_qM83" cx="4" cy="12" r="3" fill="white"/>
+                        <circle class="spinner_qM83 spinner_oXPr" cx="12" cy="12" r="3" fill="white"/>
+                        <circle class="spinner_qM83 spinner_ZTLf" cx="20" cy="12" r="3" fill="white"/>
+                    </svg>
                 </button>
             </div>
         </form>
         <p id="timer"></p>
-        <a id="retry_button" class="btn-primary btn-block mb-3 btn btn-rounded" href="{% url 'mobile_register_view' %}"
+        <a id="retry_button" class="btn btn-primary btn-block mb-3 btn btn-rounded"
+           href="{% url 'mobile_register_view' %}"
            style="display: none;">
             تلاش مجدد
         </a>
     {% endif %}
 
 {% endblock %}
-{% block account_text %} <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}
+{% block account_text %}
+    <p class="small mb-0 color-ks4">{{ setting.mobile_activation_text }}</p>{% endblock %}
 
 {% block script_block %}
     <script>
         $(document).ready(function () {
-            var form = $("#activation_code_form");
-            var submitButton = $("#submit_button");
-            var retryButton = $("#retry_button");
-            var mobileViewUrl = "{% url 'mobile_register_view' %}";
             var timerElement = $("#timer");
-
             var startTimeStr = "{{ start_time }}";
-            var startTime = new Date(startTimeStr);
-            var now = new Date();
-            var timePassed = Math.floor((now - startTime) / 1000);
-            var timeLeft = 180 - timePassed;
+            var mobileViewUrl = "{% url 'mobile_register_view' %}";
 
-            form.on('submit', function (event) {
-                if (form[0].checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    submitButton.hide();
-                    retryButton.show();
-                }
-                form.addClass('was-validated');
-            });
+            if (startTimeStr) {
+                var startTime = new Date(startTimeStr);
+                var now = new Date();
+                var timePassed = Math.floor((now - startTime) / 1000);
+                var timeLeft = 180 - timePassed;
 
-            var timerId = setInterval(function () {
-                timeLeft--;
-                var minutes = Math.floor(timeLeft / 60);
-                var seconds = timeLeft % 60;
+                var form = $("#activation_code_form");
+                var submitButton = $("#submit_button");
+                var retryButton = $("#retry_button");
+                var isProcessing = false; // Flag for processing
 
-                timerElement.text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+                form.on('submit', function (event) {
+                    event.preventDefault(); // Prevent default form submission
 
-                if (timeLeft <= 0) {
-                    clearInterval(timerId);
-                    form.prop('disabled', true);
-                    window.location.href = mobileViewUrl;
-                }
-            }, 1000);
+                    if (isProcessing) {
+                        return; // Do nothing if already processing
+                    }
+
+                    isProcessing = true; // Set processing flag
+
+                    if (form[0].checkValidity() === false) {
+                        event.stopPropagation();
+                        submitButton.hide();
+                        retryButton.show();
+                        isProcessing = false; // Reset flag if validation fails
+                        return; // Stop further execution
+                    }
+
+                    form.addClass('was-validated');
+
+                    // Disable button and show loading
+                    submitButton.prop("disabled", true);
+                    submitButton.css("background", "#808080");
+                    $("#buttonText").addClass("hidden-loading");
+                    $("#loadingAnimation").removeClass("hidden-loading").addClass("visible-loading");
+
+                    // Simulate form submission (AJAX is not used in this version)
+                    form.off('submit').submit(); // This will submit the form once
+
+                });
+
+
+                var timerId = setInterval(function () {
+                    timeLeft--;
+                    var minutes = Math.floor(timeLeft / 60);
+                    var seconds = timeLeft % 60;
+
+                    timerElement.text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);
+                        form.prop('disabled', true); //Disable form on timeout
+                        window.location.href = mobileViewUrl;
+                    }
+                }, 1000);
+            } else {
+                console.error("start_time is not in the session.");
+            }
         });
-
     </script>
 {% endblock %}
